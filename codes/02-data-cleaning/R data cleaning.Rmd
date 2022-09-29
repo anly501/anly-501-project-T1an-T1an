@@ -65,3 +65,7 @@ M5 = M5$M5
 market_data <- cbind(market_data, M20,M5)
 ```
 
+```{r}
+write.csv(market_data,"~/anly-501-project-T1an-T1an/data/01-modified-data/cleaned_currency.csv", row.names = FALSE)
+```
+
