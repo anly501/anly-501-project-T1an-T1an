@@ -1,0 +1,67 @@
+---
+title: "R data cleaning"
+author: "Jingda Yang"
+date: "2022-09-27"
+output: html_document
+---
+
+```{r}
+market_data <- read.csv("~/anly-501-project-T1an-T1an/data/00-raw-data/raw_data_ftxprop_market_data.csv")
+```
+
+```{r}
+head(market_data)
+```
+```{r}
+#remove unnecessary column
+market_data = subset(market_data, select = -c(time))
+```
+
+```{r}
+#modify column name start time
+market_data$date<-substr(market_data$startTime,1,10)
+market_data = subset(market_data, select = -c(startTime))
+market_data = market_data[,c(7,1,2,3,4,5,6)]
+market_data$date = as.Date(market_data$date )
+str(market_data)
+```
+
+```{r}
+library(tidyverse)
+library(reticulate)
+library(timetk)
+library(lubridate)
+# find M20
+
+M20 = market_data %>%
+  select(date, close)%>%
+  mutate(
+    date = ymd(date),
+    M20 = slidify_vec(.x = close,
+    .f = ~mean(.x, na.rm = TRUE),
+    .period = 20,
+    .align = 'right'
+  ))
+
+```
+```{r}
+# find M5
+M5 = market_data %>%
+  select(date, close)%>%
+  mutate(
+    date = ymd(date),
+    M5 = slidify_vec(.x = close,
+    .f = ~mean(.x, na.rm = TRUE),
+    .period = 5,
+    .align = 'right'
+  ))
+```
+
+```{r}
+# merge columns 
+options(scipen = 999)
+M20 = M20$M20
+M5 = M5$M5
+market_data <- cbind(market_data, M20,M5)
+```
+
