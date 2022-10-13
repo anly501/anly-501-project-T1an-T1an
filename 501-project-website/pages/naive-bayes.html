@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/501-project-website/styles.css">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Text Data: Naive-Bayes Python</h1>
+    <p>
+        <ul>
+            <li><a href='https://github.com/anly501/anly-501-project-T1an-T1an/tree/main/codes/04-naive-bayes'>Code for Naïve Bayes (NB) in Python with Labeled Text Data</a></li>
+            <p>
+                <p>
+                    Sentiment analysis is first performed on clean data. By using textblob package to analyze each twitter. And remove all unwanted data such as emoticons, punctuation, etc. <br />
+                    The stopwords are also removed. <br />
+                    Data tokenization is also conducted.<br />
+                    The number of token occurrences in each document is counted.<br />
+                    The figure below shows the distribution of positive and negative words.<br />
+                </p>
+
+                <td>
+                    <img src="../images/naive-bayes/count_pos_neg_py.png" width="430" height="400" title="Word Occurrences">
+                    
+                    
+              </td>
+              <br />
+              <p>
+                The tweets marked with a positive attitude are marked as 0 
+                and those marked with a negative attitude are marked as 1. In this way, Labeled Text Data is obtained.<br />
+                <br />
+                <br />
+                After training the NB model with the training data and testing the test data, 
+                The data set was first divided into a training set and a test set. 
+                The training set is 80% of the total data and the test set is 20% of the data set.<br />
+
+                the figure below represents the confusion matrix by using a heat-map, 
+                because it is more intuitive and concise.<br />
+              </p>
+                <td>
+                    <img src="../images/naive-bayes/heatmap_confu_matrix_py.png" width="450" height="400" title="confusion matrix _ heat-map">
+                </td>
+              <p>
+                The top left block represents True Positive: the predicted result is true and the actual value is also true.<br />
+
+                The lower right block represents True Negative: the predicted result is false and the actual value is also false.<br />
+
+                The bottom left block represents False Positive: the predicted result is true, but the actual value is false.<br />
+
+                The upper right block represents False Negative: the predicted value is false, but the actual value is true.<br />
+              </p>
+
+              <br />
+              <p>
+                Because the data set is unbalanced at the beginning. The number of positive words is much higher than the number of negative words
+                The prediction accuracy is 0.77.
+                From the figure below, we can see that our prediction accuracy is higher for positive attitudes twitter, but worse for negative attitudes twitter.
+                </p>
+              <td>
+                <img src="../images/naive-bayes/pred_matrix_py.png" width="500" height="200">
+                <p>
+                    The word cloud can help us to visualize the frequency of those words in different attitudes.<br />
+                    </p>
+          </td>
+
+                <p>
+            Negative Word cloud<br />
+            </p>
+            <td>
+                <img src="../images/naive-bayes/word_cloud_neg_word..png" width="1000" height="500">
+                
+          </td>
+                <p>
+            Positive Word cloud<br />
+            </p>
+
+            <td>
+            <img src="../images/naive-bayes/word_cloud_pos_word.png" width="1000" height="500">
+            
+                </td>
+
+            </p>
+        </ul>
+    </p>
+
+
+    <h1>Naive-Bayes Python</h1>
+    <p>
+        <li><a href='https://github.com/anly501/anly-501-project-T1an-T1an/tree/main/codes/04-naive-bayes'>Code for Naïve Bayes (NB) in R with Labeled Text Data</a></li>
+        <p>
+            First define a new label. I chose bitcoin. By using the formula: (close price - open price)/open price. 
+            This formula shows how the price of a cryptocurrency fluctuates during the day. 
+            If the result of the formula is greater than 0.3, 
+            a new column is added and the classification of bitcoin for that day is 1. 
+            If the result of the formula is less than 0.3, the classification of bitcoin for that day is 0. <br />
+            After processing the data in python, the data is exported and analyzed with r. 
+            The first 30 columns of the data had some values of NA, so those rows containing NA were removed.<br />
+        </p>
+        <p>
+            The number of each label was first counted in r, as shown in the histogram below. 
+        </p>
+        <td>
+            <img src="../images/naive-bayes/count_level_r.png" width="700" height="400">
+            
+      </td>
+
+        <p>
+            Paired plots were generated to provide a preliminary view of the relationship between all variables.
+        </p>
+        
+        <td>
+            <img src="../images/naive-bayes/pairs_plot_r.png" width="700" height="400">
+            
+      </td>
+
+        <p>
+            There are many packages in R to analyze the data using the NB algorithm. 
+            Here I used the package e1071. The data set was first divided into a training set and a test set. 
+            The training set is 80% of the total data and the test set is 20% of the data set.<br />
+            <br />
+            After classification by using the NB model, the confusion matrix is shown in the figure below. 
+            The accuracy of the model for label 0 is 0.82, which is a relatively good result. 
+            However, the accuracy for label 1 is only 0.18. The overall accuracy of the model is 0.5737.
+        </p>
+        <td>
+            <img src="../images/naive-bayes/confusion_matrix_r.png" width="500" height="400" >
+            
+      </td>
+
+    </p>
+
+</body>
+</html>

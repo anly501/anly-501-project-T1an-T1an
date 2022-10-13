@@ -1,0 +1,123 @@
+---
+title: "naive bayes r"
+author: "Jingda Yang"
+date: "2022-10-08"
+output: html_document
+---
+
+
+```{r}
+library(e1071)
+library(gmodels)
+library(dplyr)
+library(naivebayes)
+library(ggplot2)
+library(psych)
+```
+
+
+
+
+```{r}
+x <- read.csv("~/anly-501-project-T1an-T1an/data/01-modified-data/x_naive_bayes_r.csv")
+y <- read.csv("~/anly-501-project-T1an-T1an/data/01-modified-data/y_naive_bayes_r.csv", sep="")
+
+y = y %>% 
+  rename(
+    y = X0
+    )
+
+
+```
+
+
+```{r}
+# count each level
+df=cbind(x,y)
+df$y <- as.factor(df$y)
+class_count<-xtabs(~y, data=df)
+class_count<-as.data.frame(class_count)
+plt <- ggplot(class_count) + geom_bar(aes(x=y, y=Freq), stat="identity")+labs(
+    x = "count",
+    y = "Classification of data",
+    title = "Classification of each level (count)")+geom_text(aes(x = y, y = Freq, label = Freq))
+print(plt)
+```
+
+```{r}
+pairs.panels(df[-1], main = 'Paris Plot')
+```
+
+```{r}
+#set.seed(123)
+#split <- initial_split(df, prop = .8, strata = "y")
+#train <- training(split)
+#test  <- testing(split)
+```
+
+
+```{r}
+index = sample(2,nrow(df),prob = c(0.8,0.2),replace=TRUE) 
+set.seed(1234)
+
+
+
+#training set
+
+train = df[index==1,]
+
+test = df[index==2,]
+
+#test_data will be given as an input to the model to predict species
+
+test_data = test[1:8]
+#test_labels are the actual values of species of the test data
+
+test_label = test[,9]
+
+model=naiveBayes(train$y~., train)
+
+```
+
+
+```{r}
+set.seed(0)
+test_result=predict(model,test_data)
+test_result
+```
+
+```{r}
+CrossTable(x=test_label, y=test_result)
+```
+
+```{r}
+#https://www.projectpro.io/recipes/implement-naive-bayes-classification-r
+```
+
+```{r}
+#install.packages(pkgs = "caret", dependencies = c("Depends", "Imports"))
+#confusion matrix-train data
+library('caret')
+y_pred <- predict(model, newdata = test)
+cm <- table(test_label, y_pred)
+cm
+tp <- cm[2, 2]
+tn <- cm[1, 1]
+fp <- cm[2, 1]
+fn <- cm[1, 2]
+print(accuracy <- (tp + tn)/(tp + tn + fp + fn))
+print(sensitivity <- tp/(tp + fn))
+print(specificity <- tn/(tn + fp))
+```
+
+
+```{r}
+#https://rpubs.com/riazakhan94/naive_bayes_classifier_e1071
+```
+
+
+
+
+
+
+
