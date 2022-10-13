@@ -90,9 +90,7 @@ test_result
 CrossTable(x=test_label, y=test_result)
 ```
 
-```{r}
-#https://www.projectpro.io/recipes/implement-naive-bayes-classification-r
-```
+
 
 ```{r}
 #install.packages(pkgs = "caret", dependencies = c("Depends", "Imports"))
@@ -111,9 +109,7 @@ print(specificity <- tn/(tn + fp))
 ```
 
 
-```{r}
-#https://rpubs.com/riazakhan94/naive_bayes_classifier_e1071
-```
+
 
 
 
