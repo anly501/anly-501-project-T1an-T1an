@@ -327,7 +327,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 </section>
 <section id="baseline-model-for-comparison-feature-selection" class="level4">
-<h4 class="anchored" data-anchor-id="baseline-model-for-comparison-feature-selection">Baseline model for comparison &amp; Feature selection</h4>
+<h4 class="anchored" data-anchor-id="baseline-model-for-comparison-feature-selection">Baseline Model for Comparison &amp; Feature Selection</h4>
 <p>Random Classifer to prdict y_test:</p>
 <div class="cell" data-execution_count="7">
 <details>
@@ -378,37 +378,37 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <tbody>
     <tr>
       <th>0</th>
-      <td>0.856322</td>
-      <td>0.851429</td>
-      <td>0.853868</td>
+      <td>0.851190</td>
+      <td>0.817143</td>
+      <td>0.833819</td>
       <td>175.000000</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>0.187500</td>
+      <td>0.157895</td>
       <td>0.193548</td>
-      <td>0.190476</td>
+      <td>0.173913</td>
       <td>31.000000</td>
     </tr>
     <tr>
       <th>accuracy</th>
-      <td>0.752427</td>
-      <td>0.752427</td>
-      <td>0.752427</td>
-      <td>0.752427</td>
+      <td>0.723301</td>
+      <td>0.723301</td>
+      <td>0.723301</td>
+      <td>0.723301</td>
     </tr>
     <tr>
       <th>macro avg</th>
-      <td>0.521911</td>
-      <td>0.522488</td>
-      <td>0.522172</td>
+      <td>0.504543</td>
+      <td>0.505346</td>
+      <td>0.503866</td>
       <td>206.000000</td>
     </tr>
     <tr>
       <th>weighted avg</th>
-      <td>0.755674</td>
-      <td>0.752427</td>
-      <td>0.754037</td>
+      <td>0.746860</td>
+      <td>0.723301</td>
+      <td>0.734513</td>
       <td>206.000000</td>
     </tr>
   </tbody>
@@ -419,7 +419,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </section>
 <section id="feature-selection-model-tuning" class="level4">
-<h4 class="anchored" data-anchor-id="feature-selection-model-tuning">Feature selection &amp; Model tuning</h4>
+<h4 class="anchored" data-anchor-id="feature-selection-model-tuning">Feature Selection &amp; Model Tuning</h4>
 <p>I transformed the text data into vectors that the model can understand, by using the TF-IDF approach. The following code can be used to first fit the TG-IDF model across the data. This will help TF-IDF build a vocabulary that it learns from the data and will assign a unique integer to each word. I set the parameter max_features=5000, which means the vocabulary will have a maximum of 5000 unique words/features. I converted X_train，X_test to vectors X_train_Tfidf and X_test_Tfidf. After the transformation, the dataset can be fed into the SVM classification algorithm.</p>
 <div class="cell" data-execution_count="10">
 <details>
@@ -445,7 +445,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </section>
 <section id="final-results" class="level4">
-<h4 class="anchored" data-anchor-id="final-results">Final results</h4>
+<h4 class="anchored" data-anchor-id="final-results">Final Results</h4>
 <p>SVM with Linear kernels: The linear kernel, which produces linear classification bounds, is generally the most computationally efficient and requires the least data. linear function. Fit the classifier on the training data and predict on the test data. Set the classifier to be linear and C equal to 0.5.</p>
 <div class="cell" data-execution_count="12">
 <details>

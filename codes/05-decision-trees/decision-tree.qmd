@@ -64,7 +64,7 @@ plt.show()
 Figure 2 shows the distribution of the class labels. Theoretically, if our model is accurate enough, the distribution of the class labels of our predictions will be very close to figure 2.
 
 
-#### Baseline model for comparison
+#### Baseline Model for Comparison
 ```{python}
 y_0 = y[y['label'] == 0].count().values
 y_1 = y[y['label'] == 1].count().values
@@ -98,7 +98,7 @@ class_report_ran=pd.DataFrame(class_report_ran).transpose()
 class_report_ran
 ```
 
-#### Feature selection
+#### Feature Selection
 
 ```{python}
 #find features : Tree-based feature selection
@@ -152,7 +152,7 @@ print("y_test.shape		:",y_test.shape)
 
 
 
-#### Model tuning
+#### Model Tuning
 ```{python}
 
 from sklearn.metrics import mean_absolute_percentage_error
@@ -327,7 +327,7 @@ class_report_test
 ```
 
 
-#### Final results
+#### Final Results
 The accuracy after running the random classifier is 0.50.  From table 1, the final result is provided. The  model accuracy is 0.58, which is slightly higher than the accuracy from the random classifier, and the error rate is 0.42. This accuracy is not good enough because the price of crypocurrency changed dramatically in recent month which is quite difficult to predict.
 
 #### Conclusions

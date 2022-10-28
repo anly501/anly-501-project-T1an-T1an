@@ -199,7 +199,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p>Figure 2 shows the distribution of the class labels. Theoretically, if our model is accurate enough, the distribution of the class labels of our predictions will be very close to figure 2.</p>
 <section id="baseline-model-for-comparison" class="level4">
-<h4 class="anchored" data-anchor-id="baseline-model-for-comparison">Baseline model for comparison</h4>
+<h4 class="anchored" data-anchor-id="baseline-model-for-comparison">Baseline Model for Comparison</h4>
 <div class="cell" data-execution_count="4">
 <details>
 <summary>Code</summary>
@@ -232,8 +232,8 @@ The number of 1 in the label is [146]</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>-----GENERATING DATA-----
 unique entries: dict_keys([1, 0])
-count of labels: dict_values([146, 188])
-probability of labels: [0.43712575 0.56287425]</code></pre>
+count of labels: dict_values([148, 186])
+probability of labels: [0.44311377 0.55688623]</code></pre>
 </div>
 </div>
 <div class="cell" data-execution_count="6">
@@ -246,7 +246,7 @@ probability of labels: [0.43712575 0.56287425]</code></pre>
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>class_report_ran<span class="op">=</span>pd.DataFrame(class_report_ran).transpose()</span>
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>class_report_ran</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="40">
+<div class="cell-output cell-output-display" data-execution_count="6">
 <div id="tbl-planets" class="anchored">
 
 <div>
@@ -264,37 +264,37 @@ probability of labels: [0.43712575 0.56287425]</code></pre>
   <tbody>
     <tr>
       <th>0</th>
-      <td>0.537234</td>
-      <td>0.537234</td>
-      <td>0.537234</td>
+      <td>0.602151</td>
+      <td>0.595745</td>
+      <td>0.598930</td>
       <td>188.000000</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>0.404110</td>
-      <td>0.404110</td>
-      <td>0.404110</td>
+      <td>0.486486</td>
+      <td>0.493151</td>
+      <td>0.489796</td>
       <td>146.000000</td>
     </tr>
     <tr>
       <th>accuracy</th>
-      <td>0.479042</td>
-      <td>0.479042</td>
-      <td>0.479042</td>
-      <td>0.479042</td>
+      <td>0.550898</td>
+      <td>0.550898</td>
+      <td>0.550898</td>
+      <td>0.550898</td>
     </tr>
     <tr>
       <th>macro avg</th>
-      <td>0.470672</td>
-      <td>0.470672</td>
-      <td>0.470672</td>
+      <td>0.544319</td>
+      <td>0.544448</td>
+      <td>0.544363</td>
       <td>334.000000</td>
     </tr>
     <tr>
       <th>weighted avg</th>
-      <td>0.479042</td>
-      <td>0.479042</td>
-      <td>0.479042</td>
+      <td>0.551591</td>
+      <td>0.550898</td>
+      <td>0.551225</td>
       <td>334.000000</td>
     </tr>
   </tbody>
@@ -305,7 +305,7 @@ probability of labels: [0.43712575 0.56287425]</code></pre>
 </div>
 </section>
 <section id="feature-selection" class="level4">
-<h4 class="anchored" data-anchor-id="feature-selection">Feature selection</h4>
+<h4 class="anchored" data-anchor-id="feature-selection">Feature Selection</h4>
 <div class="cell" data-execution_count="7">
 <details>
 <summary>Code</summary>
@@ -326,9 +326,9 @@ probability of labels: [0.43712575 0.56287425]</code></pre>
 <span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>res <span class="op">=</span> [X_new[<span class="dv">0</span>],X_new[<span class="dv">1</span>]]</span>
 <span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>res</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="41">
-<pre><code>[array([0.33147595, 1.72230528, 0.161694  ]),
- array([0.66065113, 1.89393111, 0.062606  ])]</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="7">
+<pre><code>[array([0.66402251, 0.43397893, 1.72230528, 0.161694  ]),
+ array([ 0.62620066, -0.46276834,  1.89393111,  0.062606  ])]</code></pre>
 </div>
 </div>
 <p>After finding the best feature(s), only variable ‘close’ was chosen.</p>
@@ -375,7 +375,7 @@ y_test.shape        : (101, 1)</code></pre>
 </div>
 </section>
 <section id="model-tuning" class="level4">
-<h4 class="anchored" data-anchor-id="model-tuning">Model tuning</h4>
+<h4 class="anchored" data-anchor-id="model-tuning">Model Tuning</h4>
 <div class="cell" data-execution_count="10">
 <details>
 <summary>Code</summary>
@@ -560,7 +560,7 @@ hyperparam = 30
 <span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>graph.write_png(<span class="st">'../../501-project-website/images/decision-tree/decision-tree-currency.png'</span>)</span>
 <span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>Image(graph.create_png())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="49">
+<div class="cell-output cell-output-display" data-execution_count="15">
 <div id="fig-polar5" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="decision-tree_files/figure-html/fig-polar5-output-1.png" class="img-fluid figure-img"></p>
@@ -594,7 +594,7 @@ hyperparam = 30
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>class_report_test<span class="op">=</span>pd.DataFrame(class_report_test).transpose()</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>class_report_test</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="51">
+<div class="cell-output cell-output-display" data-execution_count="17">
 <div id="tbl-planets1" class="anchored">
 
 <div>
@@ -653,7 +653,7 @@ hyperparam = 30
 </div>
 </section>
 <section id="final-results" class="level4">
-<h4 class="anchored" data-anchor-id="final-results">Final results</h4>
+<h4 class="anchored" data-anchor-id="final-results">Final Results</h4>
 <p>The accuracy after running the random classifier is 0.50. From table 1, the final result is provided. The model accuracy is 0.58, which is slightly higher than the accuracy from the random classifier, and the error rate is 0.42. This accuracy is not good enough because the price of crypocurrency changed dramatically in recent month which is quite difficult to predict.</p>
 </section>
 <section id="conclusions" class="level4">

@@ -115,7 +115,7 @@ X_train, X_test, y_train, y_test = model_selection.train_test_split(data['text_f
 ```
 
 
-#### Baseline model for comparison & Feature selection
+#### Baseline Model for Comparison & Feature Selection
 Random Classifer to prdict y_test:
 ```{python}
 import random
@@ -147,7 +147,7 @@ class_report_test_random=pd.DataFrame(class_report_test_random).transpose()
 class_report_test_random
 ```
 
-#### Feature selection & Model tuning
+#### Feature Selection & Model Tuning
 
 I transformed the text data into vectors that the model can understand, by using the TF-IDF approach.
 The following code can be used to first fit the TG-IDF model across the data. This will help TF-IDF build a vocabulary that it learns from the data and will assign a unique integer to each word. I set the parameter max_features=5000, which means the vocabulary will have a maximum of 5000 unique words/features. I converted X_train，X_test to vectors X_train_Tfidf and X_test_Tfidf. After the transformation, the dataset can be fed into the SVM classification algorithm.
@@ -171,7 +171,7 @@ def confusion_plot(y_data,y_pred):
     print("POSITIVE PRECISION (Y=1):",precision_score(y_data,y_pred,pos_label=1))
 ```
 
-#### Final results
+#### Final Results
 
 SVM with Linear kernels: The linear kernel, which produces linear classification bounds, is generally the most computationally efficient and requires the least data. linear function. Fit the classifier on the training data and predict on the test data. Set the classifier to be linear and C equal to 0.5.
 
