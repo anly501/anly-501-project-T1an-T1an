@@ -7,9 +7,9 @@ jupyter: python3
 ---
 
 
-#### What is SVM(Support Vector Machine)? How it works?
+#### Methods: What is SVM(Support Vector Machine)? How it works?
 
-As a Data Science graduate student and a machine learning enthusiast, SVM is a method that I can not avoid in machine learning. For example, if I just have a bunch of data that needs to be solved by SVM method, either Matlab's SVM toolbox, or SciKitLearn in python can provide a convenient and quick solution.
+As a Data Science graduate student and a machine learning enthusiast, SVM is a helpful method in machine learning. For example, if I just have a bunch of data that needs to be solved by SVM method, either Matlab's SVM toolbox, or SciKitLearn in python can provide a convenient and quick solution.
 
 But if we want to understand SVM, we will begin with "KKT...", "Lagrangian ...", "Maximum interval" and so on, these terms tend to follow a whole bunch of heavenly formulas, making us feel dizzy for a while. Not to mention how to connect from one formula to another to understand SVM.
 
@@ -29,6 +29,7 @@ Library packages for preparing. I will use nltk package for text data cleaning a
 ```{python}
 import pandas as pd
 import numpy as np
+import seaborn as sns
 from nltk.tokenize import word_tokenize
 from nltk import pos_tag
 from nltk.corpus import stopwords
@@ -68,8 +69,15 @@ data=txt_data.iloc[:,[-2,-1]]
 data.head()
 ```
 
+```{python}
+#| label: fig-polar
+#| fig-cap: "Lable Distribution"
+sns.displot(data['label'])
+plt.show()
 
-*Step 4 -Normalized data*
+```
+
+*Normalized data*
 
 I had cleaned the data before, but when I looked at the data, I still need to change all the text to lower case. This is required as python interprets 'cat' and 'CAT' differently. And Tokenization: In this each entry in the data will be broken into set of words, which is more conducive to subsequent analysis, Remove Stop words and WordNetLemmatizer. the final cleaned data.
 
@@ -106,7 +114,40 @@ Twitter data will be split into two datasets, train data and test data. The trai
 X_train, X_test, y_train, y_test = model_selection.train_test_split(data['text_final'],data['label'],test_size=0.2,random_state=42)
 ```
 
-*Step 6 - Transfer text data to numerical feature vectors*
+
+#### Baseline model for comparison & Feature selection
+Random Classifer to prdict y_test:
+```{python}
+import random
+def generate_label_data(class_labels, weights,N=10000):
+    y=random.choices(class_labels, weights = weights, k = N)
+    return y
+```
+
+```{python}
+
+all_len=len(y_test)
+len_0=len(y_test[y_test==0])
+len_1=len(y_test[y_test==1])
+pro_label_y_0=len_0/all_len
+pro_label_y_1=len_1/all_len
+y=generate_label_data([0,1],[pro_label_y_0,pro_label_y_1],all_len)
+y_pred = y
+y_true = y_test
+```
+
+The accuracy after running the random classifier is 0.75.  
+
+Display the classification report for test data to random classifer.
+```{python}
+#| label: tbl-planets9
+#| tbl-cap: the classification report for test data-random classifer
+class_report_test_random=classification_report(y_true,y_pred, output_dict=True)
+class_report_test_random=pd.DataFrame(class_report_test_random).transpose()
+class_report_test_random
+```
+
+#### Feature selection & Model tuning
 
 I transformed the text data into vectors that the model can understand, by using the TF-IDF approach.
 The following code can be used to first fit the TG-IDF model across the data. This will help TF-IDF build a vocabulary that it learns from the data and will assign a unique integer to each word. I set the parameter max_features=5000, which means the vocabulary will have a maximum of 5000 unique words/features. I converted X_train，X_test to vectors X_train_Tfidf and X_test_Tfidf. After the transformation, the dataset can be fed into the SVM classification algorithm.
@@ -129,7 +170,8 @@ def confusion_plot(y_data,y_pred):
     print("POSITIVE RECALL (Y=1):",recall_score(y_data,y_pred,pos_label=1))
     print("POSITIVE PRECISION (Y=1):",precision_score(y_data,y_pred,pos_label=1))
 ```
-*Step 7 - Use SVM to predict the result*
+
+#### Final results
 
 SVM with Linear kernels: The linear kernel, which produces linear classification bounds, is generally the most computationally efficient and requires the least data. linear function. Fit the classifier on the training data and predict on the test data. Set the classifier to be linear and C equal to 0.5.
 
@@ -156,7 +198,7 @@ class_report_test
 Display Confusion Matrix for the test data.
 
 ```{python}
-#| label: fig-polar
+#| label: fig-polar1
 #| fig-cap: "confusion matrix for test data(linear)"
 
 cm_test=confusion_matrix(y_test,yp_test)
@@ -191,7 +233,7 @@ class_report_test_rbf
 Display Confusion Matrix for the test data.
 
 ```{python}
-#| label: fig-polar1
+#| label: fig-polar2
 #| fig-cap: "confusion matrix for test data(rbf)"
 cm_test_rbf=confusion_matrix(y_test,yp_test_rbf)
 disp_test_rbf = ConfusionMatrixDisplay(confusion_matrix=cm_test_rbf,display_labels=model_linear.classes_)
@@ -203,6 +245,8 @@ From the classification report for test data and the consusion matrix, the accur
 
 
 #### Conclusion
+
+From the above SVM model, we can see that the model is very effective in predicting sentiment analysis. After collecting a certain amount of data, the SVM model is more accurate than the NB model but is relatively time-consuming. 
 
 SVM is a very powerful model and performs well on a variety of datasets. SVM allows decision bounds to be complex, even if the data has only a few features. It performs well on data with few features and many features, but does not perform well for scaling the number of samples. Running SVM on data with up to 10,000 samples may perform well, but if the amount of data reaches 1,000,000 rows or even larger, there may be challenges in terms of runtime and memory usage. another disadvantage of SVM is that pre-processing the data and tuning the parameters requires great care. For example, random forests require little or no preprocessing.
 

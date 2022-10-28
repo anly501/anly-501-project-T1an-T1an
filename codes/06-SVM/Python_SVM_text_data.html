@@ -86,16 +86,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </style>
 
 
-<script src="hw4_text_data_files/libs/clipboard/clipboard.min.js"></script>
-<script src="hw4_text_data_files/libs/quarto-html/quarto.js"></script>
-<script src="hw4_text_data_files/libs/quarto-html/popper.min.js"></script>
-<script src="hw4_text_data_files/libs/quarto-html/tippy.umd.min.js"></script>
-<script src="hw4_text_data_files/libs/quarto-html/anchor.min.js"></script>
-<link href="hw4_text_data_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="hw4_text_data_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="hw4_text_data_files/libs/bootstrap/bootstrap.min.js"></script>
-<link href="hw4_text_data_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="hw4_text_data_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="Python_SVM_text_data_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Python_SVM_text_data_files/libs/quarto-html/quarto.js"></script>
+<script src="Python_SVM_text_data_files/libs/quarto-html/popper.min.js"></script>
+<script src="Python_SVM_text_data_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Python_SVM_text_data_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Python_SVM_text_data_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Python_SVM_text_data_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Python_SVM_text_data_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Python_SVM_text_data_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Python_SVM_text_data_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
@@ -180,7 +180,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>data<span class="op">=</span>txt_data.iloc[:,[<span class="op">-</span><span class="dv">2</span>,<span class="op">-</span><span class="dv">1</span>]]</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>data.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="20">
+<div class="cell-output cell-output-display" data-execution_count="3">
 <div id="tbl-planets" class="anchored">
 
 <div>
@@ -234,7 +234,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell-output cell-output-display">
 <div id="fig-polar" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
-<p><img src="hw4_text_data_files/figure-html/fig-polar-output-1.png" width="469" height="468" class="figure-img"></p>
+<p><img src="Python_SVM_text_data_files/figure-html/fig-polar-output-1.png" width="469" height="468" class="figure-img"></p>
 <p></p><figcaption class="figure-caption">Figure&nbsp;1: Lable Distribution</figcaption><p></p>
 </figure>
 </div>
@@ -265,7 +265,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>data.head(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="22">
+<div class="cell-output cell-output-display" data-execution_count="5">
 <div id="tbl-planets1" class="anchored">
 
 <div>
@@ -360,7 +360,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>class_report_test_random<span class="op">=</span>pd.DataFrame(class_report_test_random).transpose()</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>class_report_test_random</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="26">
+<div class="cell-output cell-output-display" data-execution_count="9">
 <div id="tbl-planets9" class="anchored">
 
 <div>
@@ -378,37 +378,37 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <tbody>
     <tr>
       <th>0</th>
-      <td>0.862069</td>
-      <td>0.857143</td>
-      <td>0.859599</td>
+      <td>0.856322</td>
+      <td>0.851429</td>
+      <td>0.853868</td>
       <td>175.000000</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>0.218750</td>
-      <td>0.225806</td>
-      <td>0.222222</td>
+      <td>0.187500</td>
+      <td>0.193548</td>
+      <td>0.190476</td>
       <td>31.000000</td>
     </tr>
     <tr>
       <th>accuracy</th>
-      <td>0.762136</td>
-      <td>0.762136</td>
-      <td>0.762136</td>
-      <td>0.762136</td>
+      <td>0.752427</td>
+      <td>0.752427</td>
+      <td>0.752427</td>
+      <td>0.752427</td>
     </tr>
     <tr>
       <th>macro avg</th>
-      <td>0.540409</td>
-      <td>0.541475</td>
-      <td>0.540911</td>
+      <td>0.521911</td>
+      <td>0.522488</td>
+      <td>0.522172</td>
       <td>206.000000</td>
     </tr>
     <tr>
       <th>weighted avg</th>
-      <td>0.765259</td>
-      <td>0.762136</td>
-      <td>0.763683</td>
+      <td>0.755674</td>
+      <td>0.752427</td>
+      <td>0.754037</td>
       <td>206.000000</td>
     </tr>
   </tbody>
@@ -475,7 +475,7 @@ POSITIVE PRECISION (Y=1): 0.5161290322580645</code></pre>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>class_report_test<span class="op">=</span>pd.DataFrame(class_report_test).transpose()</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>class_report_test</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="30">
+<div class="cell-output cell-output-display" data-execution_count="13">
 <div id="tbl-planets2" class="anchored">
 
 <div>
@@ -544,7 +544,7 @@ POSITIVE PRECISION (Y=1): 0.5161290322580645</code></pre>
 <div class="cell-output cell-output-display">
 <div id="fig-polar1" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
-<p><img src="hw4_text_data_files/figure-html/fig-polar1-output-1.png" width="497" height="422" class="figure-img"></p>
+<p><img src="Python_SVM_text_data_files/figure-html/fig-polar1-output-1.png" width="497" height="422" class="figure-img"></p>
 <p></p><figcaption class="figure-caption">Figure&nbsp;2: confusion matrix for test data(linear)</figcaption><p></p>
 </figure>
 </div>
@@ -579,7 +579,7 @@ POSITIVE PRECISION (Y=1): 0.5483870967741935</code></pre>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>class_report_test_rbf<span class="op">=</span>pd.DataFrame(class_report_test_rbf).transpose()</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>class_report_test_rbf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="33">
+<div class="cell-output cell-output-display" data-execution_count="16">
 <div id="tbl-planets3" class="anchored">
 
 <div>
@@ -648,7 +648,7 @@ POSITIVE PRECISION (Y=1): 0.5483870967741935</code></pre>
 <div class="cell-output cell-output-display">
 <div id="fig-polar2" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
-<p><img src="hw4_text_data_files/figure-html/fig-polar2-output-1.png" width="497" height="422" class="figure-img"></p>
+<p><img src="Python_SVM_text_data_files/figure-html/fig-polar2-output-1.png" width="497" height="422" class="figure-img"></p>
 <p></p><figcaption class="figure-caption">Figure&nbsp;3: confusion matrix for test data(rbf)</figcaption><p></p>
 </figure>
 </div>

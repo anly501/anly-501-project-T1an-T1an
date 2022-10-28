@@ -5,7 +5,7 @@ format:
     code-fold: true
 jupyter: python3
 ---
-### Decision Tree
+### Method: Decision Tree
 
 A decision tree is a predictive model used in machine learning; it depicts the mapping relationship between object attributes and object values. Each leaf node in the tree corresponds to the value of the item represented by the path from the root node to that leaf node, whereas each diverging path in the tree represents a potential attribute value. Data mining methods that typically employ decision trees include data analysis and prediction.
 
@@ -23,8 +23,10 @@ import sklearn
 from sklearn import tree
 from sklearn.metrics import classification_report, confusion_matrix
 import warnings
+import random
+from collections import Counter
 warnings.filterwarnings('ignore')
-
+from sklearn.metrics import precision_recall_fscore_support
 from sklearn.tree import DecisionTreeClassifier # Import Decision Tree Classifier
 from sklearn.model_selection import train_test_split # Import train_test_split function
 from sklearn import metrics #Import scikit-learn metrics module for accuracy calculation
@@ -60,6 +62,41 @@ plt.show()
 ```
 
 Figure 2 shows the distribution of the class labels. Theoretically, if our model is accurate enough, the distribution of the class labels of our predictions will be very close to figure 2.
+
+
+#### Baseline model for comparison
+```{python}
+y_0 = y[y['label'] == 0].count().values
+y_1 = y[y['label'] == 1].count().values
+print('The number of 0 in the label is', y_0)
+print('The number of 1 in the label is', y_1)
+```
+
+```{python}
+def generate_label_data(class_labels, weights,N=334):
+    
+
+    y=random.choices(class_labels, weights = weights, k = N)
+    print("-----GENERATING DATA-----")
+    print("unique entries:",Counter(y).keys())  
+    print("count of labels:",Counter(y).values()) # counts the elements' frequency
+    print("probability of labels:",np.fromiter(Counter(y).values(), dtype=float)/len(y)) # counts the elements' frequency
+    return y
+
+#TEST
+y_ram=generate_label_data([0,1],[0.56,0.44],334)
+```
+
+```{python}
+#| label: tbl-planets
+#| tbl-cap: Classification Report Matrix
+from sklearn.metrics import accuracy_score
+y_pred = y_ram
+y_true = y
+class_report_ran=classification_report(y_true,y_pred, output_dict=True)
+class_report_ran=pd.DataFrame(class_report_ran).transpose()
+class_report_ran
+```
 
 #### Feature selection
 
@@ -112,6 +149,8 @@ print("y_train.shape		:",y_train.shape)
 print("X_test.shape		:",X_test.shape)
 print("y_test.shape		:",y_test.shape)
 ```
+
+
 
 #### Model tuning
 ```{python}
@@ -280,7 +319,7 @@ def confusion_plot(y_data,y_pred):
 *Classification Report Matrix*
 ```{python}
 
-#| label: tbl-planets
+#| label: tbl-planets1
 #| tbl-cap: Classification Report Matrix
 class_report_test=classification_report(y_test,yp_test, output_dict=True)
 class_report_test=pd.DataFrame(class_report_test).transpose()
@@ -289,7 +328,7 @@ class_report_test
 
 
 #### Final results
-From table 1, the final result is provided. The  model accuracy is 0.58, and the error rate is 0.42. This accuracy is not good enough because the price of crypocurrency changed dramatically in recent month which is quite difficult to predict.
+The accuracy after running the random classifier is 0.50.  From table 1, the final result is provided. The  model accuracy is 0.58, which is slightly higher than the accuracy from the random classifier, and the error rate is 0.42. This accuracy is not good enough because the price of crypocurrency changed dramatically in recent month which is quite difficult to predict.
 
 #### Conclusions
 Over the past year, the price of cryptocurrencies has been very volatile, so the accuracy of our model is not very high. Epidemic factors and changes in graphics card prices also have uncontrollable price movements on cryptocurrencies.
