@@ -1,0 +1,300 @@
+---
+title: "Decision Tree for Currency Data"
+format:
+  html:
+    code-fold: true
+jupyter: python3
+---
+### Decision Tree
+
+A decision tree is a predictive model used in machine learning; it depicts the mapping relationship between object attributes and object values. Each leaf node in the tree corresponds to the value of the item represented by the path from the root node to that leaf node, whereas each diverging path in the tree represents a potential attribute value. Data mining methods that typically employ decision trees include data analysis and prediction.
+
+My data contains multiple columns with numerical values, such as open price, close price, volumn, etc. Our labels are divided into 0 and 1. 1 means that the price of the cryptocurrency moved more than 0.3 on the day, and 0 means that the price of the cryptocurrency moved less than 0.3.
+
+Since the data sample is not very large, decision trees can be used to analyze small and medium-sized data. Technical teams and stakeholders may easily understand a decision tree model since it is so obvious.
+
+*Library packages*
+```{python}
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import sklearn
+from sklearn import tree
+from sklearn.metrics import classification_report, confusion_matrix
+import warnings
+warnings.filterwarnings('ignore')
+
+from sklearn.tree import DecisionTreeClassifier # Import Decision Tree Classifier
+from sklearn.model_selection import train_test_split # Import train_test_split function
+from sklearn import metrics #Import scikit-learn metrics module for accuracy calculation
+```
+
+```{python}
+#| label: fig-polar
+#| fig-cap: "Heatmap"
+cur = pd.read_csv('../../data/01-modified-data/x_naive_bayes_r.csv')
+corr = cur.corr()
+# INSERT CODE TO SHOW A HEAT MAP FOR THE X FEATURES
+
+sns.set_theme(style="white")
+f, ax = plt.subplots(figsize=(11, 9))  # Set up the matplotlib figure
+cmap = sns.diverging_palette(230, 20, as_cmap=True) 	# Generate a custom diverging colormap
+
+
+
+sns.heatmap(corr,  cmap=cmap, vmin=-1, vmax=1, center=0,
+        square=True, linewidths=.5, cbar_kws={"shrink": .5})
+plt.show();
+```
+
+```{python}
+#| label: fig-polar1
+#| fig-cap: "Distribution of Class Labels"
+y = pd.read_csv('../../data/01-modified-data/y_naive_bayes_r.csv')
+y.rename(columns={'0':'label'}, inplace=True)
+
+
+sns.displot(y)
+plt.show()
+```
+
+Figure 2 shows the distribution of the class labels. Theoretically, if our model is accurate enough, the distribution of the class labels of our predictions will be very close to figure 2.
+
+#### Feature selection
+
+```{python}
+#find features : Tree-based feature selection
+from sklearn.ensemble import ExtraTreesClassifier
+from sklearn.datasets import load_iris
+from sklearn.feature_selection import SelectFromModel
+
+cur.shape
+
+clf = ExtraTreesClassifier(n_estimators=50)
+clf = clf.fit(cur, y)
+clf.feature_importances_  
+
+model = SelectFromModel(clf, prefit=True)
+X_new = model.transform(cur)
+X_new.shape
+res = [X_new[0],X_new[1]]
+res
+```
+
+After finding the best feature(s), only variable 'close' was chosen.
+
+
+```{python}
+#| label: fig-polar2
+#| fig-cap: "Pairplot"
+feature_cols = ['close']
+X = cur[feature_cols]
+df = pd.concat([X,y], axis = 1)
+
+sns.pairplot(df)
+plt.show()
+```
+
+
+
+
+*Split dataset into training set and test set*
+```{python}
+np.random.seed(1234)
+from sklearn.model_selection import train_test_split
+# Split dataset into training set and test set
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1) # 70% training and 30% test
+
+print("x_train.shape		:",X_train.shape)
+print("y_train.shape		:",y_train.shape)
+
+print("X_test.shape		:",X_test.shape)
+print("y_test.shape		:",y_test.shape)
+```
+
+#### Model tuning
+```{python}
+
+from sklearn.metrics import mean_absolute_percentage_error
+from sklearn.metrics import mean_absolute_error
+from sklearn.tree import DecisionTreeClassifier
+
+
+# HYPER PARAMETER SEARCH FOR OPTIMAL NUMBER OF NEIGHBORS 
+hyper_param=[]
+train_error=[]
+test_error=[]
+
+# LOOP OVER HYPER-PARAM
+for i in range(1,40):
+    # INITIALIZE MODEL 
+    model = DecisionTreeClassifier(max_depth=i)
+
+    # TRAIN MODEL 
+    model.fit(X_train,y_train)
+
+    # OUTPUT PREDICTIONS FOR TRAINING AND TEST SET 
+    yp_train = model.predict(X_train)
+    yp_test = model.predict(X_test)
+
+    # shift=1+np.min(y_train) #add shift to remove division by zero 
+    err1=mean_absolute_error(y_train, yp_train) 
+    err2=mean_absolute_error(y_test, yp_test) 
+    
+    # err1=100.0*np.mean(np.absolute((yp_train-y_train)/y_train))
+    # err2=100.0*np.mean(np.absolute((yp_test-y_test)/y_test))
+
+    hyper_param.append(i)
+    train_error.append(err1)
+    test_error.append(err2)
+
+    if(i==1 or i%10==0):
+        print("hyperparam =",i)
+        print(" train error:",err1)
+        print(" test error:" ,err2)
+```
+
+
+```{python}
+#| label: fig-polar3
+#| fig-cap: "MAE vs Dept of Tree"
+# Generate plot
+
+plt.plot(hyper_param,train_error ,linewidth=2, color='k')
+plt.plot(hyper_param,test_error ,linewidth=2, color='b')
+
+plt.xlabel("Depth of tree (max depth)")
+plt.ylabel("Training (black) and test (blue) MAE (error)")
+
+i=1
+print(hyper_param[i],train_error[i],test_error[i])
+
+```
+
+
+```{python}
+#| label: fig-polar4
+#| fig-cap: "Testing&Training Avvuracy vs Dept of Tree"
+# Setup arrays to store train and test accuracies
+dep = np.arange(1, 15)
+train_accuracy = np.empty(len(dep))
+test_accuracy = np.empty(len(dep))
+
+# Loop over different values of k
+for i, k in enumerate(dep):
+    # Setup a Decision Tree Classifier
+    clf = tree.DecisionTreeClassifier(max_depth=k)
+
+    # Fit the classifier to the training data
+    clf.fit(X_train, y_train)
+
+    #Compute accuracy on the training set
+    train_accuracy[i] = clf.score(X_train, y_train)
+
+    #Compute accuracy on the testing set
+    test_accuracy[i] = clf.score(X_test, y_test)
+
+# Generate plot
+
+plt.title('clf: Varying depth of tree')
+plt.plot(dep, test_accuracy, label = 'Testing Accuracy')
+plt.plot(dep, train_accuracy, label = 'Training Accuracy')
+plt.legend()
+plt.xlabel('Depth of tree')
+plt.ylabel('Accuracy')
+plt.show()
+```
+
+From fig4 and fig5, the model has the best accuracy when max_depth = 10.
+
+```{python}
+# Create Decision Tree classifer object
+clf = DecisionTreeClassifier(criterion="gini", max_depth=10)
+
+# Train Decision Tree Classifer
+clf = clf.fit(X_train,y_train)
+
+#Predict the response for test dataset
+y_pred = clf.predict(X_test)
+score = metrics.accuracy_score(y_test, y_pred)
+# Model Accuracy, how often is the classifier correct?
+print("Accuracy:",round(score,2))
+```
+
+
+
+*Training & Testing errors*
+```{python}
+# INITIALIZE MODEL 
+model = DecisionTreeClassifier(criterion="gini", max_depth=10)
+model.fit(X_train,y_train)                     # TRAIN MODEL 
+
+
+# OUTPUT PREDICTIONS FOR TRAINING AND TEST SET 
+yp_train = model.predict(X_train)
+yp_test = model.predict(X_test)
+
+err1=mean_absolute_error(y_train, yp_train) 
+err2=mean_absolute_error(y_test, yp_test) 
+    
+print(" train error:",round(err1,2))
+print(" test error:" ,round(err2,2))
+```
+
+
+*Plots of the Decision Tree*
+
+```{python}
+#| label: fig-polar5
+#| fig-cap: "Decision Tree"
+from sklearn.tree import export_graphviz
+from six import StringIO  
+from IPython.display import Image  
+import pydotplus
+
+dot_data = StringIO()
+export_graphviz(model, out_file=dot_data,  
+                filled=True, rounded=True,
+                special_characters=True,feature_names = feature_cols,class_names=['0','1'])
+graph = pydotplus.graph_from_dot_data(dot_data.getvalue())
+graph.write_png('../../501-project-website/images/decision-tree/decision-tree-currency.png')
+Image(graph.create_png())
+```
+
+```{python}
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import precision_score
+from sklearn.metrics import recall_score
+
+
+def confusion_plot(y_data,y_pred):
+    
+    print("ACCURACY:", accuracy_score(y_data,y_pred))
+    print("NEGATIVE RECALL (Y=0):",recall_score(y_data,y_pred,pos_label=0))
+    print("NEGATIVE PRECISION (Y=0):",precision_score(y_data,y_pred,pos_label=0))
+    print("POSITIVE RECALL (Y=1):",recall_score(y_data,y_pred,pos_label=1))
+    print("POSITIVE PRECISION (Y=1):",precision_score(y_data,y_pred,pos_label=1))
+```
+
+*Classification Report Matrix*
+```{python}
+
+#| label: tbl-planets
+#| tbl-cap: Classification Report Matrix
+class_report_test=classification_report(y_test,yp_test, output_dict=True)
+class_report_test=pd.DataFrame(class_report_test).transpose()
+class_report_test
+```
+
+
+#### Final results
+From table 1, the final result is provided. The  model accuracy is 0.58, and the error rate is 0.42. This accuracy is not good enough because the price of crypocurrency changed dramatically in recent month which is quite difficult to predict.
+
+#### Conclusions
+Over the past year, the price of cryptocurrencies has been very volatile, so the accuracy of our model is not very high. Epidemic factors and changes in graphics card prices also have uncontrollable price movements on cryptocurrencies.
+
+
+There is a difference between cryptocurrencies and stocks. We can predict the stock market through company annual reports, market data and government policies, but the entire cryptocurrency market can fluctuate dramatically even by a single tweet. This trend also indicates that cryptocurrencies are not a good investment.
+
+
