@@ -1,0 +1,16 @@
+---
+title: "Data Gathering "
+format: 
+  html:
+    smooth-scroll: true
+    theme: 
+      light: cosmo
+      dark: darkly 
+execute:
+  echo: false
+jupyter: python3
+---
+
+## Data from Python API : FTX Exchange
+
+## Data from R API : Twitter

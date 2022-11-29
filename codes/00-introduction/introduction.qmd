@@ -1,0 +1,73 @@
+---
+title: "Project Introduction"
+format: 
+  html:
+    smooth-scroll: true
+    theme: 
+      light: cosmo
+      dark: darkly 
+execute:
+  echo: false
+jupyter: python3
+---
+
+```{python}
+from PIL import Image
+myImage = Image.open('../../501-project-website/images/introduction/intro.png')
+myImage
+```
+
+## Introduction
+
+Cryptocurrency is a fully digital currency with no government to issue it, and no banks need to manage accounts and verify transactions. Satoshi Nakamoto invented Bitcoin in the world in 2009. Bitcoin is the first implemented example of a cryptocurrency. And now there are thousands more on exchange with traditional currencies such as Ethereum, Tether, and Shib. The backbone underlying cryptocurrency is a system of decentralized trust-less verification based on ledgers in blocks, digital signatures, and cryptographic hash functions. As cryptocurrency becomes more prevalent in our lives, it raises many issues that need to be researched and discussed. Cryptocurrencies have some unique properties. Some of the advantages of cryptocurrencies are security, secrecy, extremely low transaction fees, and extremely fast transaction speeds. Then there are some disadvantages such as the amount of computing power and social resources that are used to acquire cryptocurrencies. Since cryptocurrency is too powerful for secrecy and privacy, it provides natural protection against criminal acts. The price of cryptocurrencies is highly volatile so it is almost impossible to predict the price of cryptocurrencies. The attitude towards cryptocurrencies also varies greatly from country to country.
+
+I am going to analyze the cryptocurrency market today through data and try to give readers without a background an understanding of the emerging market of cryptocurrency. As a high-risk gamble which could pay off, combined with the volatility of today's financial markets, should the average person invest in cryptocurrencies? Are cryptocurrencies still the place where 'everyone can make money as rumors say? On the academic side, decades-long research in the field of cryptography has been launched on digital currencies, mainly focusing on distributed ledgers and Byzantine protocols. What makes academic crypto so special and so successful is not that it uses any cutting-edge technology, but that it incorporates ideas from many previously unrelated fields of research.
+
+For this project, in addition to researching the cryptocurrency market today, I hope to provide advice for readers who want to invest in the cryptocurrency market, such as a comparison of today's exchanges. With the recent big events in the market (Luna on May 27th and the Merge of ETH), I want to analyze the main reasons behind them and the impact they had on the rest of the market, in the context of how the companies issuing cryptocurrencies managed them and how the exchanges responded to them. After the event, I plan to use data to analyze the impact of the event from the perspective of different issuing companies, exchanges, and users.
+
+## Question and Conjecture about Topic
+
+* Is cryptocurrency a good investment at the moment?
+
+   + The purpose is to study the market trend of cryptocurrencies on the market to help make investment decisions. This report uses the DataFocus system, which data records information related to all historical daily prices (open, high, low, close, market cap) of all cryptocurrencies listed on FTX. The cases are mainly analyzed from coins, prices, and time combined with some indicators to analyze the fluctuations and trends of each cryptocurrency.
+
+* Is the epidemic having an impact on cryptocurrency market prices?
+
+   + The global epidemic of new crowns has already affected the price of cryptocurrencies. But what impact has the epidemic had on user activity? To get this answer, I took an in-depth look at the top 10 coins on the FTX exchange based on the daily changes in volumn for different coins on the exchange. Whether these volume counts ever showed a large trend. In other words, have transactions spiked or plummeted at the same time over a certain period of time? By analyzing the correlation between the number of active addresses of these projects, it may be possible to summarize a broader picture of cryptocurrency user activity.
+
+* What is the attitude of different countries towards cryptocurrencies?
+
+   + Each country has passed or is in the process of developing its own crypto legislation. This is where entrepreneurs get confused. What happens to their financial gains when they sell their crypto digital currencies? China has permanently banned crypto digital currencies within its borders, while other countries act as tax havens or are friendly to crypto digital currencies. When a country announces a ban on cryptocurrencies or introduces laws related to cryptocurrencies, does it have an impact on market prices?
+
+* Which is more valuable: Bitcoin, gold or S&P 500 stocks?
+
+   + Increased levels of investor liquidity and a preference for new technologies may be driving price movements in both stocks and bitcoin. As a result, Bitcoin is unlikely to provide protection in the event of a financial collapse or stock market decline, something that has been considered one of Bitcoin's potential advantages. Further, the recent price correlation with gold has been slightly negative. While it is difficult to draw any conclusions based on robust statistical methods, in part because of the limited amount of data, it is hard to ignore that the charts of the Bitcoin price and the S&P 500 index over the past few months show a strong positive correlation.
+
+* What did Terra do to make the price of Luna drop 99.7% in May?
+
+   + Users bought a large number of algorithmic stablecoins UST because of the 20% deposit rate given by Anchor, so in fact a large number of USTs are getting interest on Anchor and are not in circulation, it is the liquidity injected into USTs by the ever-burning Luna that keeps the UST price stable. terra pulled 150 million USTs from the pool due to the company's plan. resulting in a brief drop in UST liquidity. Financial institutions began a massive UST selling program, resulting in $2 billion of USTs flowing out of Anchor that day. A large number of USTs suddenly appeared in the market and the balance of supply and demand was broken, causing the price of USTs to start to come off with the dollar, many people exchanged their USTs in hand for Luna, which also led to an increase in the supply of Luna, and many users started to panic and exchanged their USTs in hand for Luna, causing the price of Luna to plummet 99% to almost zero.
+
+* Will Luna's price recover?
+
+   + LUNA price is currently auctioned at $1.55 (Nov. 28, 2022). Terra's LUNA price can rebound up to 160%.
+
+* Can the price of bitcoin be an indicator of market trends?
+
+   + Questions will be answered in the exploring data screen
+
+* What is the impact of exchange fees on cryptocurrency trading volume?
+
+   + Questions will be answered in the exploring data screen
+
+* How volatile are cryptocurrencies?
+
+   + Most users who use Binance.US will be charged a fee and have withdrawal limits. The fees are based on the user's 30-day trading volume and you will generally see a 0.1% spot transaction fee and a 0.5% fee when buying or selling cryptocurrencies. If you use Binance's cryptocurrency BNB, you will receive a 25% discount on any fees. Traders with more than $10 million in trading volume (and at least 1,500 BNBs) are no longer charged a market maker fee, which cascades down from here.
+
+   + The maker/receiver fee for using Coinbase services is based on the current pricing tier at the time the order is placed, not on the post-trade tier. In addition, Coinbase recalculates pricing tiers hourly and is based on total transaction volume. While there are no account fees, Coinbase does charge miner fees.
+
+   + However, the intense competition among exchanges will result in each exchange's transaction fees being at an average level for users and will not have an impact on trading volume.
+
+
+* What are the most popular exchanges?
+
+   + According to coinmarketcap's ranking of major exchanges by trading volume, after FTX declared bankruptcy, the largest exchange is binance, with 80% of the market, followed by coinbase.

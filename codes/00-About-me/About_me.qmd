@@ -1,0 +1,61 @@
+---
+title: "About me "
+format: 
+  html:
+    smooth-scroll: true
+    theme: 
+      light: cosmo
+      dark: darkly 
+execute:
+  echo: false
+jupyter: python3
+
+---
+```{python}
+from PIL import Image
+myImage = Image.open('../../501-project-website/images/about-me/about_me.png')
+myImage
+```
+
+## Introduction
+
+Hi everyone! My name is Jingda Yang, and I am a new graduate student at DSAN. My undergraduate major is Applied Mathematics and Statistics at the University of Georgia. I hope DSAN can help me understand the latest information from many industries and novel technologies. In this program, I want to improve my programming language skills and gain In-depth knowledge of machine learning and NLP. After graduation, I would like to be a Data Science or Software Development Engineer in the future. In my free time, I love playing video games and am captivated by anime. I also enjoy playing basketball and exploring delicious food.
+
+## The topic of the portfolio project
+
+I finally chose the cryptocurrency topic, Cryptocurrencies are classified as digital currencies, alternative currencies, and virtual currencies. As a decentralized currency, it thrives without excessive government regulation or influence, while the cryptocurrency economy is monitored by peer-to-peer internet protocols. The individual units that make up a cryptocurrency are strings of encrypted data that are encoded to represent a unit.
+
+There is no denying that 2022 has been almost catastrophic for virtual currencies, whose prices have fallen by more than 50% for many. Whether it was LUNA in May, a digital currency that had a market cap of $41 billion and was sought after by hundreds of thousands of people overseas, suddenly and without warning plunged off a cliff continuously, with the price dropping from nearly $90 a piece to less than $0.00015 a piece today in just a few days. or the Ether merger in September, when cryptocurrency investors increased their shorting of Ether. Or in November when the three major exchanges FTX declared bankruptcy within a week. (The FTX market data I used at the beginning of the project is no longer up-to-date due to exchange bankruptcies.) Cryptocurrencies in 2022 are more like a microcosm of the 2008 financial crisis.
+
+The logic behind every dramatic shakeup in the cryptocurrency market. First, the market is extremely pessimistic. Market sentiment pessimism reaches an extreme level, leading to increased market uncertainty. Second, there is a panic net outflow of retail funds. Data analysis on the cryptocurrency market can help me understand the whole mechanism of how the decentralized market works. I will analyze the root causes of the events and the changes of each indicator for the market bo by using the market price fluctuations of BTC and ETH from FTX and the user discussions on Twitter about each big event. And make predictions for the future cryptocurrency market through statistical models.
+
+
+## The definition of "data science"
+
+I think of data science as a cyberpunk version of Sherlock Holmes. Through math, computer science, statistics, data, and other skills trees, to analyze the trend of things and internal principles, make accurate predictions and give the best suggestions, and the results obtained through data analysis can be understood by people in other fields.
+
+Data science makes it possible to take data literally and go through the knowledge of statistical derivation, computational programming processes, data management strategies, related domain knowledge, and theories to gain the ability to get conclusions in work-based learning. Data science is about “Nones-One-Many”, creating the most appropriate solution to a problem.
+
+Data science encompasses machine learning that falls into the domain of prediction: "given an instance X with a particular feature, infer Y". These predictions may be about the future (predicting whether this room is occupied) or about predicting features that are less obvious to the computer (predicting whether this image is a cat or a dog). By providing some training data and then seeing if the data scientist can make an accurate prediction.
+
+Data science can also use logistic regression to gain insight into the relationships involved. For a sales company, the more affluent people are, the more likely they are to buy more expensive products, so the company should change its marketing strategy and make a prediction: the user has a 53% chance of buying our product, so we should market to them more. Overall, data science helps us gain insight and understanding, and use machine learning to make predictions. It helps us to stay on the right path of research and exploration.
+
+
+
+## Technical report vs Data science story"
+
+The three key differences between a technical report versus a data science story are Audience, depth of content, and breadth of data. First of all, the audiences of the two are different.
+
+1. Technical report readers are more inclined to those who have professional knowledge, while Data Science story for everyone who is interested in this story.
+
+2. The depth of content behind data science stories is to engage the audience to read through data and visualizations that are more story-oriented. However, technical reports are more focused on releasing data and results, focusing on the reasons behind the data and technical guidance of data analysis
+
+3. The data science story is aimed at a certain topic, and the data selection is more targeted. The data service story. The technical report uses a wider range of data and a longer time horizon.
+
+## Visual storytelling
+
+Visual storytelling can make complex data stories easier to understand, thus conveying a more powerful message to the audience. It visually interacts with the reader to reveal all the connections, patterns, and trends presented in the data, and it covers a large amount of information in a format that is easy for the viewer to understand. Visualizations break down data into a digestible format that can be better understood by viewers. This will ultimately increase the impact of the message and help get the message across.
+
+Visual storytelling is economical because you can convey more information in less time. Images can capture attention faster than text, so authors have a platform to communicate their message, either through visual storytelling entirely or through a combination of visual, audio and text content.
+
+In addition to its ability to capture the user's attention, visual storytelling improves readability and makes long forms of content seem less confusing. visual storytelling also leaves a more lasting impression on the audience. About 65% of people are visual learners, which means that for most of us, information is more likely to be remembered if we see it. In data science, visual storytelling is the best way to help your audience understand your message.

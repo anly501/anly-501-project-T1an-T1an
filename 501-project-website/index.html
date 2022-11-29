@@ -8,86 +8,90 @@
 
 <!-- Bootstrap css -->
 <link rel="stylesheet" href="./navstyle.css" class="stylesheet">
-</head>
-<body>
-    <div class="main-menu">
-        <nav id='menu'>
-            <input type='checkbox' id='responsive-menu' onclick='updatemenu()'><label></label>
-            <ul>
-              <li><a href='./index.html'>About Me</a></li>
-              <li><a href='https://github.com/anly501/anly-501-project-T1an-T1an/tree/main/codes/01-data-gathering'>Code</a></li>
-              <li><a href='./data_resource.html'>Data</a></li>  
-              <li><a href='./pages/introduction.html'>Introduction</a></li>                                       
-              <li><a href='./pages/data_gathering.html'>Data Gathering</a></li>
-              <li><a href='./pages/data_cleaning.html'>Data Cleaning</a></li>
-              <li><a href='./pages/data_EDA.html'>Exploring Data</a></li>
-              <li><a href='./pages/naive-bayes.html'>Naïve Bayes</a></li>
-              <li><a href='./pages/decision-tree.html'>Decision Trees</a></li>
-              <li><a href='./pages/Python_SVM_text_data.html'>SVM</a></li>
-              <li><a href='./pages/clustering.html''>Clustering</a></li>
-              <li><a href='.http://'>ARM and Networking</a></li>
-              <li><a href='.http://'>Conclusions</a></li>
-            <!-- Dropdown menu if needed in the future -->
-              <!-- <li><a class='dropdown-arrow' href='http://'>Services</a>
-                <ul class='sub-menus'>
-                  <li><a href='http://'>Services 1</a></li>
-                  <li><a href='http://'>Services 2</a></li>
-                  <li><a href='http://'>Services 3</a></li>
-                </ul>
-              </li> -->
+<script src="https://kit.fontawesome.com/628c8d2499.js" crossorigin="anonymous"></script>
 
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" type="text/css" />
+<nav id="menu">
+    <div class="menu-item">
+        <div class="menu-text">
+          <a href='./pages/About_me.html'>About Me</a>
+        </div>
+    </div>
+    <div class="menu-item">
+        <div class="menu-text">
+          <a href='https://github.com/anly501/anly-501-project-T1an-T1an/tree/main/codes/01-data-gathering'>Code</a>
+        </div>
+    </div> 
 
-              <li><a href='http://'>Contact Us</a></li>
-            </ul>
-          </nav>
-        
+    <div class="menu-item">
+        <div class="menu-text">
+          <a href='./data_resource.html'>Data</a>
+        </div>
+    </div>  
+
+    <div class="menu-item">
+        <div class="menu-text">
+          <a href='./pages/introduction.html'>Introduction</a>
+        </div>
     </div>
 
-    <table>
-        <!--TABLE ROW-1-->
-       <tr>
-          <!--ROW-1 COL-1-->
-          <!-- <td>
-                <img src="insert picture.jpeg" width="320" height="300">
-          </td> -->
-          
-          <!--ROW-1 COL-2-->
-          <td>
-                
-            <h2 style="text-align:left; color:rgb(24, 24, 158);">Introduction</h2>
-            <p  style="font-size:18px;"> Hi everyone! My name is Jingda Yang, and I am a new graduate student at DSAN. My undergraduate major is Applied Mathematics and Statistics at the University of Georgia. I hope DSAN can help me understand the latest information from many industries and novel technologies. In this program, I want to improve my programming language skills and gain In-depth knowledge of machine learning and NLP. After graduation, I would like to be a DS or SDE in the future. In my free time, I love playing video games and am captivated by anime. I also enjoy playing basketball and exploring delicious food.</p>
-            
-            <h2 style="text-align:left; color:rgb(24, 24, 158);">The topic of the portfolio project</h2>
-            <p  style="font-size:18px;">I am interested in “Sports”. I also hesitate in “Finance and Economics” and “Education” two topics, </p>
-            <p  style="font-size:18px;">As for the topic of “Finance and Economics”, I did a project during my undergraduate study, which was to help people to determine the decisive factors depressed people with a local company in Australia through data analysis acceptance of PST service and provided data-supported decisions based on the research results. Providing statistical guidance to a company on the other side of the globe shows me how closely data is connected to the world and why people need the power to analyze data. In terms of getting data, I'm going to get data from Yahoo Finance and FactSet, and some other financial data sites. Besides the financial field, I also want to try different topics to challenge myself and learn how other fields use data tools to do data-driven decisions. </p>
+    <div class="menu-item">
+      <div class="menu-text">
+        <a href='./pages/data_gathering.html'>Data Gathering</a>
+      </div>
+    </div>
 
-            <h2 style="text-align:left; color:rgb(24, 24, 158);">The definition of "data science"  </h2>
-            <p  style="font-size:18px;">I think of data science as a cyberpunk version of Sherlock Holmes. Through math, computer science, statistics, data, and other skills trees, to analyze the trend of things and internal principles, make accurate predictions, and give the best suggestions, and the results obtained through data analysis can be understood by people in other fields.
+    <div class="menu-item">
+      <div class="menu-text">
+        <a href='./pages/data_cleaning.html'>Data Cleaning</a>
+      </div>
+    </div>
 
-            </p>
+    <div class="menu-item">
+      <div class="menu-text">
+        <a href='./pages/data_EDA.html'>Exploring Data</a>
+      </div>
+    </div>
 
-            <h2 style="text-align:left; color:rgb(24, 24, 158);">Technical report vs Data science story" </h2>
-            <p  style="font-size:18px;">The three key differences between a technical report versus a data science story are Audience, depth of content, and breadth of data. First of all, the audiences of the two are different. <br />
-            <br />1. Technical report readers are more inclined to those who have professional knowledge, while Data Science story for everyone who is interested in this story.<br />
-            <br />2. The depth of content behind data science stories is to engage the audience to read through data and visualizations that are more story-oriented. However, technical reports are more focused on releasing data and results, focusing on the reasons behind the data and technical guidance of data analysis<br />
-            <br />3. The data science story is aimed at a certain topic, and the data selection is more targeted. The data service story. The technical report uses a wider range of data and a longer time horizon.</p>
+    <div class="menu-item">
+      <div class="menu-text">
+        <a href='./pages/decision-tree.html'>Decision Trees</a>
+      </div>
+    </div>
 
+    <div class="menu-item">
+      <div class="menu-text">
+        <a href='./pages/Python_SVM_text_data.html'>SVM</a>
+      </div>
+    </div>
 
+    <div class="menu-item">
+      <div class="menu-text">
+        <a href='./pages/clustering.html''>Clustering</a>
+      </div>
+    </div>
 
-            <h2 style="text-align:left; color:rgb(24, 24, 158);">Visual storytelling</h2>
-            <p  style="font-size:18px;">Visual storytelling can make complex data stories easier to understand, thus conveying a more powerful message to the audience. It visually interacts with the reader to reveal all the connections, patterns, and trends presented in the data, and it covers a large amount of information in a format that is easy for the viewer to understand. Visualizations break down data into a digestible format that can be better understood by viewers. This will ultimately increase the impact of the message and help get the message across.</p>
-          </td>
-             
-             
-       </tr>
-    
-        <!--ROW-2-->
-       
-       
-    </table>
-    
-    
+    <div class="menu-item">
+      <div class="menu-text">
+        <a href='.http://'>ARM and Networking</a>
+      </div>
+    </div>
 
-</body>
-</html>
+    <div class="menu-item">
+      <div class="menu-text">
+        <a href='.http://'>Conclusions</a>
+      </div>
+    </div>
+</nav>
+<div class="profile_inner">
+  <img src="../501-project-website/images/about-me/selfie.jpeg" alt="Selfie"
+      height="150" width="150" />
+<div class="content">
+      <div class="title">
+Jingda Yang </div>
+<p>
+  Hello World</p>
+</div>
 
