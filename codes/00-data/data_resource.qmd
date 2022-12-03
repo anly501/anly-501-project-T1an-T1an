@@ -1,0 +1,24 @@
+---
+title: "DATA "
+format: 
+  html:
+    smooth-scroll: true
+    theme: 
+      light: cosmo
+      dark: darkly 
+execute:
+  echo: false
+jupyter: python3
+
+---
+
+```{python}
+from PIL import Image
+myImage = Image.open('../../501-project-website/images/data/data.jpeg')
+myImage
+```
+*Picture from Passionate in marketing*
+
+#####  [Data from Python API : FTX Exchange](https://github.com/anly501/anly-501-project-T1an-T1an/tree/main/data/00-raw-data)
+
+##### [Data from R API : Twitter](https://github.com/anly501/anly-501-project-T1an-T1an/tree/main/data/00-raw-data)

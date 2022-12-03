@@ -12,10 +12,12 @@ jupyter: python3
 ---
 
 ```{python}
+
 from PIL import Image
 myImage = Image.open('../../501-project-website/images/introduction/intro.png')
 myImage
 ```
+*Picture from CREDIT*
 
 ## Introduction
 

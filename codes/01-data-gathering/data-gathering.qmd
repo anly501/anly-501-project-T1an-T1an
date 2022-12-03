@@ -10,7 +10,157 @@ execute:
   echo: false
 jupyter: python3
 ---
+```{python}
+from PIL import Image
+myImage = Image.open('../../501-project-website/images/data-gathering/data-gathering.png')
+myImage
+```
+*Picture from Freeonlinesurveys*
 
 ## Data from Python API : FTX Exchange
 
+### About FTX Dataset
+
+#### Context
+
+This dataset consists of FTX spot prices for BTC,ETH and contract prices for other popular coins (popular coins are ranked according to [Coinmarketcap](https://coinmarketcap.com/). The data spans over 1 year(from September 1, 2021 to September 1, 2022). The data includes daily data of opening price, the est price, the lowest price, closing price and trading volume for each cryptocurrency.
+
+#### Code and Methodology
+
+:::{.callout-warning}
+Waring : FTX has filed for bankruptcy. Please do not try to use the API to obtain any information about FTX.
+:::
+
+```{python}
+#| label: fig-1
+#| fig-cap: FTX Web (BTC price)
+from PIL import Image
+myImage1 = Image.open('../../501-project-website/images/data-gathering/btc_ftx.png')
+myImage1
+```
+
+As you can see from the structure of the FTX web page, it is very difficult for users to get market data in exchange. Because FTX is an exchange with real-time price movements, the prices of all coins are presented in a graph. Unlike yahoo finance, which gives users the option to access historical market data on web page. The most convenient option for users is to get FTX's API to automatically grab market data.
+
+FTX API is a method that allows us to automatically trade cryptocurrencies on FTX via code. The price data can be obtained by calling the required REST API endpoint. Import the request package using python, enter the relevant URL according to the official API doc instructions, and set the start timestamp and end timestamp. By rewriting the desired market name, get the new path url, and finally enter a file composed of Json. The file contains information about a particular currency on the FTX exchange. The data is then arranged in a pandas data framework to better observe and understand the data. I used the same approach to get market information for spot and swap.
+
+#### Contents
+The dataset has one CSV files (7 columns and 3000+ rows)
+
+* raw_data_ftxprop_market_data.csv
+  + startTime: (date)
+  + open: (Price of the currency at 0:00 UTC each day)
+  + high: (Maximum price within 24 hours of UTC time per day)
+  + low: (Lowest price within 24 hours of UTC time per day)
+  + close: (Price of the currency at 23:59 UTC each day)
+  + volume: (Trading volume within 24 hours per day at UTC time)
+  + exchange:
+    - AVAX/USD
+    - BTC/USD
+    - DAI/USD
+    - DOGE/USD
+    - DOT/USD
+    - ETH/USD
+    - LINK/USD
+    - SOL/USD
+    - UNI/USD
+    - XRP/USD
+
+* Data includes:
+  + Timestamp from Sep 2021- Sep 2022
+  + 3439 price data
+  + 10 spot pairs
+
+
+#### Review Dataset
+
+**FTX DATASET**
+```{python}
+#| label: tbl-1
+#| tbl-cap: FTX Raw Dataset
+import numpy as np
+import pandas as pd
+pd.set_option('display.float_format',lambda x: '%.3f' % x)
+
+ftx=pd.read_csv('../../data/00-raw-data/raw_data_ftxprop_market_data.csv')
+ftx=ftx.drop(['time'],axis=1)
+ftx.head(5)
+```
+
+Because the current FTX has filed for bankruptcy in November, a week after the website was hacked. So ftx exchange linked may contain a Trojan horse virus. To avoid the potential danger, I used the Huobi exchange BTC/USDT instead of the previous web links.
+
+To learn more about original data of BTC price from FTX exchange, please see [BTC price from Huobi exchange](https://futures.huobi.com/en-us/linear_swap/exchange/#contract_code=BTC-USDT&contract_type=swap&type=cross) instead. 
+
+#### Inspiration
+* What is the difference between the highest and lowest price of the currency between one year?
+
+* Do price changes on the day have an impact on trading volume?
+
+* Is it possible to predict future price trends from prices over time?
+
 ## Data from R API : Twitter
+
+### About Twitter Dataset
+
+#### Context
+
+This dataset consists of comments obtained from Twitter's API. These data were obtained on September 5, 2022, and the data include the content of users' comments on the search topic, retweeted comments, the number of retweets and likes. It also includes data such as the latitude and longitude of the user when sending the message, and the user name.
+
+#### Code and Methodology
+
+Use R to connect to a Twitter user query endpoint using JSON returned from the Twitter API.
+With the user query endpoint, Twitter allows the ability to use user objects to determine the correlation between the number of a person's followers and the sentiment score of their bio. Twitter allows the use of user objects to determine the correlation between the number of a person's followers and the sentiment score of their bio. User objects can also be used to map a group of accounts based on their publicly listed position in the account profile. First, a developer account needs to be registered before getting the Twitter data. After that create a project and use it to generate the credentials needed to use the Twitter API.
+
+After getting the consumerKey, consumerSecret, Bearer_Token, access_Token, access_Secret. Use R to import ggplot2, lubridate, tidyverse, quantmod, selectr, xml2, rtweet, wordcloud2, tm, dplyr, twitteR, ROAuth, jsonlite,writexl
+
+Get a link to Twitter through `setup_twitter_oauth`, then use `twitteR::searchTwitter` to enter the desired search terms, get the number of entries and the date the tweet was posted, and export to xlsx format, which is the raw data from twitter.
+
+### Contents
+
+The dataset has one CSV files (15 columns and 1000 rows)
+
+* rawdata_twitter.csv
+  + text(User Comments)											
+  + favorited (Whether this status has been favorited)
+  + favoriteCount(Number of times this tweet was favorite)
+  + replyToSN (Screen name of the user this is in reply to)
+  + created (When this status was created)
+  + truncated (Whether this status was truncated)
+  + replyToSID (ID of the user this was in reply to)
+  + id (ID of this status)
+  + statusSource
+  + screenName (Screen name of the user who posted this status)
+  + retweetCount(The number of times this status has been retweeted)
+  + isRetweet (Whether this status was Retweet)
+  + retweeted (TRUE if this status has been retweeted)
+  + longitude (The longitude  of the status)
+  + latitude (The latitude  of the status)
+*Source from twitteR (version 1.1.9)*
+
+* Data includes:
+  + Timestamp from 2022-09-05
+  + 1000 data
+
+
+
+### Review Dataset
+
+**Twitter DATASET**
+```{python}
+#| label: fig-2
+#| fig-cap: Twitter Raw Dataset
+
+from PIL import Image
+myImage2 = Image.open('../../501-project-website/images/data-gathering/twitter_data.png')
+myImage2
+```
+
+By observing the obtained Twitter data, raw data most of the column is not helpful for sentiment analysis, only the first column of text data should be kept.When using R to output a csv file of tweet data, it always reports an error for reading the csv directly using python due to the special nature of tweet data. Because 'utf-8' codec can't decode byte , JSON files are more suitable for data cleaning and sentiment analysis afterwards than csv files. However, after obtaining the data, JSON format is more difficult to perform preliminary data observation compared to csv format. So in the data cleaning interface afterwards, JSON files will be used directly for the next data processing step. 
+
+To learn more about Twitter dataset see [Key words related to ETH](https://github.com/anly501/anly-501-project-T1an-T1an/tree/main/data/00-raw-data)
+
+#### Inspiration
+* Is the public's sentiment about the topic positive or negative?
+
+* How to clean out irrelevant text information？
+
+* Is it possible to predict future topic trends?
