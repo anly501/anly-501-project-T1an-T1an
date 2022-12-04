@@ -1,0 +1,389 @@
+---
+title: "Data Gathering "
+format: 
+  html:
+    code-fold: true
+    smooth-scroll: true
+    theme: 
+      light: cosmo
+      dark: darkly 
+execute:
+  echo: false
+jupyter: python3
+engine: knitr
+---
+
+
+
+## Text Data: Naive-Bayes Python:
+
+
+#### Code Website
+
+[Code for Naïve Bayes (NB) in Python with Labeled Text Data](https://github.com/anly501/anly-501-project-T1an-T1an/tree/main/codes/04-naive-bayes)
+
+#### Context
+It is important for sentiment analysis of tweets. Text data is unstructured data. Unlike structured data, one cannot immediately get preliminary information from unstructured data. Sentiment analysis of tweets can be used to initially determine the user's evaluation of a particular thing.
+
+Sentiment analysis, sometimes referred to as opinion mining, is a technique used in natural language processing (NLP) to determine if data is positive, negative, or neutral. Sentiment analysis on text data is popular among companies to monitor how their brands and products are perceived by consumers through online reviews and to better understand their target market and target population.
+
+Sentiment analysis is first performed on clean data. By using textblob package to analyze each twitter. And remove all unwanted data such as emoticons, punctuation, etc.
+The stopwords are also removed.
+Data tokenization is also conducted.
+The number of token occurrences in each document is counted.
+The figure below shows the distribution of positive and negative words.
+
+#### Code and Methodology
+
+```{python}
+#| tags: [hide-output]
+import re
+import time
+import string
+import warnings
+import nltk
+
+from nltk.tokenize import sent_tokenize, word_tokenize
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
+from nltk.stem import WordNetLemmatizer
+from nltk.stem.porter import *
+from nltk.classify import NaiveBayesClassifier
+from wordcloud import WordCloud
+
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import f1_score, confusion_matrix, accuracy_score
+from sklearn.svm import SVC
+from sklearn.naive_bayes import GaussianNB
+
+# To mock web-browser and scrap tweets
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+
+# To consume Twitter's API
+import tweepy
+from tweepy import OAuthHandler 
+
+# To identify the sentiment of text
+from textblob import TextBlob
+from textblob.sentiments import NaiveBayesAnalyzer
+from textblob.np_extractors import ConllExtractor
+
+import os
+from sklearn.feature_extraction.text import CountVectorizer
+import numpy as np
+import json
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+from nltk.tokenize import TweetTokenizer
+from nltk.corpus import stopwords#python -m nltk.downloader stopwords
+import string
+
+import nltk
+from nltk.corpus import stopwords
+from  nltk.stem import SnowballStemmer
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.metrics import classification_report
+nltk.download('omw-1.4', quiet=True)
+# ignoring all the warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
+warnings.filterwarnings("ignore", category=FutureWarning)
+# downloading stopwords corpus
+nltk.download('stopwords', quiet=True)
+nltk.download('wordnet', quiet=True)
+nltk.download('vader_lexicon', quiet=True)
+nltk.download('averaged_perceptron_tagger', quiet=True)
+nltk.download('movie_reviews', quiet=True)
+nltk.download('punkt', quiet=True)
+nltk.download('conll2000', quiet=True)
+nltk.download('brown', quiet=True)
+stopwords = set(stopwords.words("english"))
+
+tweets_df=pd.read_csv('../../data/01-modified-data/twitter_text_data.csv')
+tweets_df=tweets_df.rename(columns = {'text':'tweets'})
+#tweets_df
+```
+
+```{python}
+#| tags: [hide-output]
+def fetch_sentiment_using_textblob(text):
+    analysis = TextBlob(text)
+    return 'pos' if analysis.sentiment.polarity >= 0 else 'neg'
+
+sentiments_using_textblob = tweets_df.tweets.apply(lambda tweet: fetch_sentiment_using_textblob(tweet))
+pd.DataFrame(sentiments_using_textblob.value_counts())
+tweets_df['attitude'] = sentiments_using_textblob
+```
+
+```{python}
+#| tags: [hide-output]
+#data cleaning 
+def remove_pattern(text, pattern_regex):
+    r = re.findall(pattern_regex, text)
+    for i in r:
+        text = re.sub(i, '', text)
+    
+    return text 
+```
+
+```{python}
+#| tags: [hide-output]
+tweets_df['clean_tweets'] = np.vectorize(remove_pattern)(tweets_df['tweets'], "@[\w]*: | *RT*")
+tweets_df['final_tweets'] = tweets_df['clean_tweets'].str.replace("[^a-zA-Z# ]", "")
+stopwords_set = set(stopwords)
+cleaned_tweets = []
+
+
+for index, row in tweets_df.iterrows():
+    
+    words_without_stopwords = [word for word in row.final_tweets.split() if not word in stopwords_set and '#' not in word.lower()]
+    
+    cleaned_tweets.append(' '.join(words_without_stopwords))
+    
+tweets_df['final_tweets'] = cleaned_tweets
+tokenized_tweet = tweets_df['final_tweets'].apply(lambda x: x.split())
+word_lemmatizer = WordNetLemmatizer()
+
+tokenized_tweet = tokenized_tweet.apply(lambda x: [word_lemmatizer.lemmatize(i) for i in x])
+for i, tokens in enumerate(tokenized_tweet):
+    tokenized_tweet[i] = ' '.join(tokens)
+
+tweets_df['final_tweets'] = tokenized_tweet
+```
+
+```{python}
+#| tags: [hide-output]
+cleaned_tweets = []
+
+for index, row in tweets_df.iterrows():
+    # Here we are filtering out all the words that contains link
+    words_without_links = [word for word in row.final_tweets.split() if 'http' not in word]
+    cleaned_tweets.append(' '.join(words_without_links))
+
+tweets_df['final_tweets'] = cleaned_tweets
+```
+
+```{python}
+#| echo: true
+#| label: fig-1
+#| fig-cap: histogram of Twitter Text Data
+sns.countplot(tweets_df['attitude'],label='Count').set(title='Attitude histogram')
+```
+
+
+The figure-1 shows that the majority of tweets have a positive attitude towards cryptocurrencies, even though the overall price of cryptocurrencies is on a downward trend and there is instability in it.
+
+The tweets marked with a positive attitude are marked as 0 and those marked with a negative attitude are marked as 1. In this way, Labeled Text Data is obtained.
+
+
+```{python}
+tweets_df['label']=np.where(tweets_df['attitude']=='pos',0,1)
+#tweets_df.to_csv (r'..//../data/01-modified-data/cleaned_twitter.csv', index = False, header=True)
+```
+
+```{python}
+vectorizer = CountVectorizer()
+X = vectorizer.fit_transform(tweets_df['final_tweets'])
+X=X.toarray()
+y=tweets_df['label']
+```
+
+```{python}
+#seperate dataset to train and test data
+import random
+x_train,x_test,y_train,y_test=train_test_split(X,y,test_size=0.2,random_state=66)
+```
+
+```{python}
+#separate data two training data and test data
+import random
+x_train,x_test,y_train,y_test=train_test_split(X,y,test_size=0.2,random_state=66)
+```
+
+```{python}
+model = MultinomialNB()
+model.fit(x_train, y_train)
+yp_test=model.predict(x_test)
+cm_matrix=confusion_matrix(y_test,yp_test)
+cm_matrix
+```
+
+
+After training the NB model with the training data and testing the test data, The data set was first divided into a training set and a test set. The training set is 80% of the total data and the test set is 20% of the data set.
+the figure below represents the confusion matrix by using a heat-map, because it is more intuitive and concise.
+
+```{python}
+#| echo: true
+#| label: fig-2
+#| fig-cap: Heatmap Result of Text Data
+print(f'Accuracy Score - {accuracy_score(y_test, yp_test)}')
+f, ax1 = plt.subplots(figsize = (12, 10))
+ax1=sns.heatmap(cm_matrix,cmap="RdBu",annot=True,square=True,cbar_kws={'shrink': 0.6})
+plt.show()
+```
+
+
+The top left block represents True Positive: the predicted result is true and the actual value is also true.
+The lower right block represents True Negative: the predicted result is false and the actual value is also false.
+The bottom left block represents False Positive: the predicted result is true, but the actual value is false.
+The upper right block represents False Negative: the predicted value is false, but the actual value is true.
+
+Because the data set is unbalanced at the beginning. The number of positive words is much higher than the number of negative words The prediction accuracy is 0.77. From the figure below, we can see that our prediction accuracy is higher for positive attitudes twitter, but worse for negative attitudes twitter.
+
+
+```{python}
+#| echo: true
+#| label: tbl-1
+#| tbl-cap: Accuracy Result Table
+print(classification_report(y_test,yp_test))
+#report_summ = classification_report(y_test,yp_test)
+#report_summ = pd.DataFrame(report_summ)
+```
+
+
+#### World Clouds
+The word cloud can help us to visualize the frequency of those words in different attitudes.
+
+
+```{python}
+#| echo: true
+#| label: fig-3
+#| fig-cap: World Cloud :Positive Word
+#pos word
+postive_words = ' '.join([text for text in tweets_df['final_tweets'][tweets_df.attitude == 'pos']])
+wordcloud = WordCloud(width=800, height=500, random_state=21, max_font_size=100, relative_scaling=0.5).generate(postive_words)
+plt.figure(figsize=(10, 10))
+plt.imshow(wordcloud)
+plt.show()
+```
+
+```{python}
+#| echo: true
+#| label: fig-4
+#| fig-cap: World Cloud :Negative Word
+#neg word
+negitve_words = ' '.join([text for text in tweets_df['final_tweets'][tweets_df.attitude == 'neg']])
+wordcloud = WordCloud(width=800, height=500, random_state=21, max_font_size=100, relative_scaling=0.5).generate(negitve_words)
+plt.figure(figsize=(10, 10))
+plt.imshow(wordcloud)
+plt.show()
+```
+
+
+
+## Currency Data: Naive-Bayes Python:
+
+#### Code Website
+
+[Code for Naïve Bayes (NB) in Python with Currency Data](https://github.com/anly501/anly-501-project-T1an-T1an/tree/main/codes/04-naive-bayes)
+
+
+
+
+```{r}
+library(e1071)
+library(gmodels)
+library(dplyr)
+library(naivebayes)
+library(ggplot2)
+library(psych)
+```
+
+```{r}
+x <- read.csv("~/anly-501-project-T1an-T1an/data/01-modified-data/x_naive_bayes_r.csv")
+y <- read.csv("~/anly-501-project-T1an-T1an/data/01-modified-data/y_naive_bayes_r.csv", sep="")
+
+y = y %>% 
+  rename(
+    y = X0
+    )
+
+
+```
+
+```{r}
+# count each level
+df=cbind(x,y)
+df$y <- as.factor(df$y)
+class_count<-xtabs(~y, data=df)
+class_count<-as.data.frame(class_count)
+plt <- ggplot(class_count) + geom_bar(aes(x=y, y=Freq), stat="identity")+labs(
+    x = "count",
+    y = "Classification of data",
+    title = "Classification of each level (count)")+geom_text(aes(x = y, y = Freq, label = Freq))
+print(plt)
+```
+
+```{r}
+pairs.panels(df[-1], main = 'Paris Plot')
+```
+
+```{r}
+#set.seed(123)
+#split <- initial_split(df, prop = .8, strata = "y")
+#train <- training(split)
+#test  <- testing(split)
+```
+
+```{r}
+index = sample(2,nrow(df),prob = c(0.8,0.2),replace=TRUE) 
+set.seed(1234)
+
+
+
+#training set
+
+train = df[index==1,]
+
+test = df[index==2,]
+
+#test_data will be given as an input to the model to predict species
+
+test_data = test[1:8]
+#test_labels are the actual values of species of the test data
+
+test_label = test[,9]
+
+model=naiveBayes(train$y~., train)
+
+```
+
+```{r}
+set.seed(0)
+test_result=predict(model,test_data)
+test_result
+```
+
+```{r}
+CrossTable(x=test_label, y=test_result)
+```
+
+```{r}
+#install.packages(pkgs = "caret", dependencies = c("Depends", "Imports"))
+#confusion matrix-train data
+library('caret')
+y_pred <- predict(model, newdata = test)
+cm <- table(test_label, y_pred)
+cm
+tp <- cm[2, 2]
+tn <- cm[1, 1]
+fp <- cm[2, 1]
+fn <- cm[1, 2]
+print(accuracy <- (tp + tn)/(tp + tn + fp + fn))
+print(sensitivity <- tp/(tp + fn))
+print(specificity <- tn/(tn + fp))
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```

@@ -2,37 +2,41 @@
 title: "Data Cleaning "
 format: 
   html:
+    code-fold: true
+    code-tools: true
     smooth-scroll: true
     theme: 
       light: cosmo
       dark: darkly 
-execute:
-  echo: false
+
 jupyter: python3
 ---
 
 ```{python}
+import warnings
+warnings.filterwarnings('ignore')
+
 from PIL import Image
 myImage = Image.open('../../501-project-website/images/data_cleaning/data_cleaning.png')
 myImage
 ```
 *Picture from Obviously.ai*
 
-Data cleansing is the process of correcting or removing corrupt, incorrect, or unnecessary data from a data set prior to data analysis. Data cleansing turns your messy, potentially problematic data into clean data. r is an excellent tool for working with data. Packages like tidyverse make complex data manipulation almost effortless. Also, since R is a common language for statistics, it is very easy to use R for further calculations on financial type data. Compared to R, Python is more convenient for working with NLP data. In this paper, we use the datasets FTX dataset and Twitter dataset and clean these two datasets using R and python respectively.
+Data cleansing is the process of correcting or removing, incorrect, or unnecessary data from a data set prior to data analysis. Data cleansing turns some messy, potentially problematic data into clean data. r is an excellent tool for working with data. Packages like tidyverse make complex data manipulation almost effortless. Also, since R is a common language for statistics, it is very easy to use R for further calculations on financial type data. Compared to R, Python is more convenient for working with NLP data. In this part,  FTX dataset and the Twitter dataset are chosen and cleaned by using R and python respectively.
 
 ## Data Cleaning by R
 
 ### Purpose 
 
-Before starting to clean up the data using R, the final perfect data should achieve no erroneous values; Eliminate Redundancy; Data is reliable and valid; Temporal data remain coherent; Missing values are treated correctly; Data remains complete after cleaning.
+Before starting to clean up the data using R, the final perfect data should achieve no erroneous values; Eliminate Redundancy; Data should be reliable and valid; Time data, like date, remain coherent; Missing values are treated correctly; Data should remain complete after cleaning.
 
 ### Code and Methodology
 
-In this article each of the steps in FTX dataset cleaning will be presented in order.
+In this part, each of the steps in FTX dataset cleaning will be presented in order.
 
 #### Step 1: Observe the dataset
 
-An important "pre-data cleanup" step is domain knowledge. One needs to know what each variable means, which variables are important, or which values may need to be cleaned. Or for later data analysis, what variables can be added on by calculating between the original data variables. 
+An important "pre-data cleaning" step is domain knowledge. One needs to know what each variable means, which variables are important, which values may need to be cleaned for later data analysis, and which new variables should be added by calculating among the original data variables. 
 
 Open R studio, import the FTX dataset, use `head()` to look at the first few rows of data, The initial data looks like the picture below：
 ```{python}
@@ -47,11 +51,11 @@ myImage1
 
 #### Step 2:  Check for data irregularities
 
-This dataset has irregularities, which include accuracy issues such as invalid values and outliers. For example, the time format of the `StartTime` column is `yyyy-mm-ddThh:mm:ss+ms:µs`. Such a timestamp format is not conducive to time analysis. Also, since the expectation for the `StartTime` column to be taken at 0:00 UTC each day when getting the data, this column only needs to take the date data, not the time data. You need to remove the time data and change the timestamp format to `yyyy-mm-dd`. Also, the `StartTime` and `time` columns belong to data duplication, and the `time`  column uses the millionseconde method to record time, which needs to be deleted from the `time`  column.
+This dataset has irregularities, which include accuracy issues such as invalid values and outliers. For example, the time format of the `StartTime` column is `yyyy-mm-ddThh:mm:ss+ms:µs`. Such a timestamp format is not conducive to time analysis. Also, since the expectation for the `StartTime` column to be taken at 0:00 UTC each day when getting the data, this column only needs to take the date data, not the exact time data. All exact time data like hours, minutes need to be removed, and change the timestamp format to `yyyy-mm-dd`. Also, the `StartTime` and `time` columns belong to data duplication, and the `time`  column uses the unit: millisecond to record time, which needs to be deleted from the `time`  column.
 
-In the original dataset, there are two columns that contain time information. Obviously, the second column about time is unnecessary, so I removed it. Meanwhile, the first time column contains a lot of unnecessary information. I removed the extra information by splitting and deleting it. With these steps, I got the initial cleaned-up data. The data type of the column date was also modified from char to date. 
+In the original dataset, there are two columns that contain time information. Obviously, the second column about time is unnecessary, so this column is removed. Meanwhile, the first time column contains a lot of unnecessary information. I removed the extra information by splitting and deleting it. With these steps, I got the initial cleaned-up data. The data type of the column date was also modified from char to date.  
 
-After modifing these two colums, the initial data looks more clean and neat. See Below:
+After modifing these two colums, the initial data looks more clean and neat. See Figure-2 below:
 ```{python}
 #| label: fig-2
 #| fig-cap: FTX Dataset first clean
@@ -64,7 +68,7 @@ myImage2
 
 #### Step 3: Add Columns and Deal with Missing Values 
 
-However, the analysis requires price stability over time, so a rolling average needs to be calculated to get the 20-day or 5-day closing prices for different types of cryptocurrencies. the 20-day average closing price is the variable `M20` and the 5-day average closing price is the variable `M5`. these two variables can be used as important indicators to determine the stability of cryptocurrency prices. It is not recommended to directly delete or add new values to the `NA` values for each cryptocurrency as a result of calculating the `M20` and `M5` columns. Since M20 is the average of cryptocurrency closing prices over a 20-day period, the values from the first row to the 19th row are NA. Similarly, in M5, the values from the first row to the fifth row are NA. the analysis will require other variables for the calculation, and the missing values will be directly ignored and will not affect the subsequent analysis process. From the table below, all the values required so far can be obtained. 
+However, the analysis requires price stability over time, so a rolling average needs to be calculated to get the 20-day or 5-day closing prices for different types of cryptocurrencies. the 20-day average closing price is the variable `M20` and the 5-day average closing price is the variable `M5`. these two variables can be used as important indicators to determine the stability of cryptocurrency prices. It is not recommended to directly delete or add new values to the `NA` values for each cryptocurrency as a result of calculating the `M20` and `M5` columns. Since M20 is the average of cryptocurrency closing prices over a 20-day period, the values from the first row to the 19th row are NA. Similarly, in M5, the values from the first row to the fifth row are NA. the analysis will require other variables for the calculation, and the missing values will be directly ignored and will not affect the subsequent analysis process. From the table-1 below, all the values required so far can be obtained. 
 
 ```{python}
 #| label: tbl-1
@@ -78,7 +82,7 @@ ftx.tail(5)
 ```
 
 
-To learn more about code see [R code for data cleaning](https://github.com/anly501/anly-501-project-T1an-T1an/tree/main/codes/02-data-cleaning)
+To learn more about code, see [R code for data cleaning](https://github.com/anly501/anly-501-project-T1an-T1an/tree/main/codes/02-data-cleaning)
 
 ## Data Cleaning by Python
 
@@ -104,7 +108,7 @@ np.set_printoptions(threshold=np.inf)
 ```
 
 #### Step 1: Observe the dataset
-The initial data from twitter is a dataset in json format. The json file was later converted to a more readable Dataframe using the pandas library. By looking at it, we can see that this dataset does contain a lot of information, but some of it is not unwanted. Only `text` is the most important category. Therefore, all other information was removed except for the `text`.
+The initial data from twitter is a dataset in json format. The json file was later converted to a more readable Dataframe using the pandas package. By looking at it, we can see that this dataset does contain a lot of information, but some of it is not unwanted. Only `text` is the most important category. Therefore, all other information was removed except for the `text`.
 
 ```{python}
 #| label: fig-3
@@ -114,7 +118,7 @@ myImage3 = Image.open('../../501-project-website/images/data_cleaning/raw_twitte
 myImage3
 ```
 
-First, read the datasets, not all the data categories in the datasets are useful for sentiment analysis, only the text column needs to be focused on cleaning up, in this case, the categories the other columns are in are not important for analysis. Keeping these unneeded categories will take up unnecessary space and may also slow down the runtime. A Dataframe that retains only the `text` column is shown below.
+First, read the datasets, not all the data categories in the datasets are useful for sentiment analysis, only the text column needs to be focused on cleaning up, in this case, the categories the other columns are in are not important for analysis. Keeping these unneeded categories will take up unnecessary space and may also slow down the runtime. A Dataframe that retains only the `text` column is shown in table-2 below.
 
 ```{python}
 #| label: tbl-2
@@ -129,7 +133,7 @@ data.head(5)
 
 #### Step 2: Removing Stop Words and Normalizing Words
 
-After removing the irrelevant columns, splitting each tweet into individual words. Then removing capitalization that would confuse a computer model, change all uppercase letters of the text to lowercase.  The data below shows the first 30 characters, and by looking at them we can see that there is still a fair amount of noise - because NLP converts @, URLs, punctuation, and emojis to Unicode, making them unhelpful for analysis, we further standardize by eliminating Unicode characters.
+After removing the irrelevant columns and splitting each tweet into individual words. Then removing capitalization that would confuse a computer model, change all uppercase letters of the text to lowercase.  The data below shows the first 30 characters, and by looking at them we can see that there is still a fair amount of noise - because NLP converts @, URLs, punctuation, and emojis to Unicode, making them unhelpful for analysis, we further standardize by eliminating Unicode characters.
 
 ```{python}
 
@@ -149,7 +153,7 @@ tokens_sub=tokens[1:30]
 print(tokens_sub)
 ```
 
-In all words, some words and punctuation are redundant, so I removed punctuation and words with less than three letters by imporint stopwords. In this way, a previously complex, multi-element text is transformed into a series of keywords prepared for text analysis.
+In all words, some words and punctuation are redundant, so I removed punctuation and words with less than three letters by import stopwords. In this way, a previously complex, multi-element text is transformed into a series of keywords prepared for text analysis.
 
 
 ```{python}
@@ -173,7 +177,7 @@ print(tokens_cl_sub)
 ```
 
 #### Step 3: Vectorizing Text 
-The most basic form of analysis on textual data is to take out the word frequency. A single tweet is too small of an entity to find out the distribution of words, hence, the analysis of the frequency of words would be done on all tweets. The number of occurrences of different keywords is shown below.
+The most basic form of analysis of textual data is to take out the word frequency. A single tweet is too small of an entity to find out the distribution of words, hence, the analysis of the frequency of words would be done on all tweets. The number of occurrences of different keywords is shown in tablt-3 below.
 
 ```{python}
 #| label: tbl-3
@@ -207,4 +211,4 @@ corr=df1.corr()
 corr.head()
 ```
 
-To learn more about code see [R code for data cleaning](https://github.com/anly501/anly-501-project-T1an-T1an/tree/main/codes/02-data-cleaning)
+To learn more about code, see [R code for data cleaning](https://github.com/anly501/anly-501-project-T1an-T1an/tree/main/codes/02-data-cleaning)

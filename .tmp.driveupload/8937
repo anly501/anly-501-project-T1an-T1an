@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.242">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Data Gathering</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="data-gathering_files/libs/clipboard/clipboard.min.js"></script>
+<script src="data-gathering_files/libs/quarto-html/quarto.js"></script>
+<script src="data-gathering_files/libs/quarto-html/popper.min.js"></script>
+<script src="data-gathering_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="data-gathering_files/libs/quarto-html/anchor.min.js"></script>
+<link href="data-gathering_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="data-gathering_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="data-gathering_files/libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="data-gathering_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="data-gathering_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="data-gathering_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="data-gathering_files/libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<style>html{ scroll-behavior: smooth; }</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Data Gathering</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<div class="cell" data-execution_count="1">
+<div class="cell-output cell-output-display" data-execution_count="1">
+<p><img src="data-gathering_files/figure-html/cell-2-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p><em>Picture from Freeonlinesurveys</em></p>
+<section id="data-from-python-api-ftx-exchange" class="level2">
+<h2 class="anchored" data-anchor-id="data-from-python-api-ftx-exchange">Data from Python API : FTX Exchange</h2>
+<section id="about-ftx-dataset" class="level3">
+<h3 class="anchored" data-anchor-id="about-ftx-dataset">About FTX Dataset</h3>
+<section id="context" class="level4">
+<h4 class="anchored" data-anchor-id="context">Context</h4>
+<p>This dataset consists of FTX spot prices for BTC,ETH and contract prices for other popular coins (popular coins are ranked according to <a href="https://coinmarketcap.com/">Coinmarketcap</a>. The data spans over 1 year(from September 1, 2021 to September 1, 2022). The data includes daily data of opening price, the est price, the lowest price, closing price and trading volume for each cryptocurrency.</p>
+</section>
+<section id="code-and-methodology" class="level4">
+<h4 class="anchored" data-anchor-id="code-and-methodology">Code and Methodology</h4>
+<div class="callout-warning callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Waring : FTX has filed for bankruptcy. Please do not try to use the API to obtain any information about FTX.</p>
+</div>
+</div>
+<div class="cell" data-execution_count="2">
+<div class="cell-output cell-output-display" data-execution_count="2">
+<div id="fig-1" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="data-gathering_files/figure-html/fig-1-output-1.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1: FTX Web (BTC price)</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>From the structure of the FTX web page, it is very difficult for users to get market data in exchange. Because FTX is an exchange with keep moving real-time prices, the prices of all coins are presented in a bar. Unlike yahoo finance, which gives users the option to access historical market data on the web page. The most convenient option for users to get FTX’s API data is to grab market data automatically.</p>
+<p>Obtaining FTX data by API is a method that allows us to automatically trade cryptocurrencies on FTX via code. The price data can be obtained by calling the required REST API endpoint. Import the request package using python, enter the relevant URL according to the official API doc instructions, and set the start timestamp and end timestamp. By rewriting the desired market name, get the new path url, and finally get a file composed of json. The file contains information about a particular currency on the FTX exchange. The data is then arranged in a pandas packages data framework to better observe and understand the data. I also used the same approach to get market information for spots and swaps.</p>
+</section>
+<section id="contents" class="level4">
+<h4 class="anchored" data-anchor-id="contents">Contents</h4>
+<p>The dataset has one CSV files (7 columns and 3000+ rows)</p>
+<ul>
+<li>raw_data_ftxprop_market_data.csv
+<ul>
+<li>startTime: (date)</li>
+<li>open: (Price of the currency at 0:00 UTC each day)</li>
+<li>high: (Maximum price within 24 hours of UTC time per day)</li>
+<li>low: (Lowest price within 24 hours of UTC time per day)</li>
+<li>close: (Price of the currency at 23:59 UTC each day)</li>
+<li>volume: (Trading volume within 24 hours per day at UTC time)</li>
+<li>coin pair:
+<ul>
+<li>AVAX/USD</li>
+<li>BTC/USD</li>
+<li>DAI/USD</li>
+<li>DOGE/USD</li>
+<li>DOT/USD</li>
+<li>ETH/USD</li>
+<li>LINK/USD</li>
+<li>SOL/USD</li>
+<li>UNI/USD</li>
+<li>XRP/USD</li>
+</ul></li>
+</ul></li>
+<li>Data includes:
+<ul>
+<li>Timestamp from Sep 2021- Sep 2022</li>
+<li>3439 price data</li>
+<li>10 spot pairs</li>
+</ul></li>
+</ul>
+</section>
+<section id="review-dataset" class="level4">
+<h4 class="anchored" data-anchor-id="review-dataset">Review Dataset</h4>
+<p><strong>FTX DATASET</strong></p>
+<div class="cell" data-execution_count="3">
+<div class="cell-output cell-output-display" data-execution_count="3">
+<div id="tbl-1" class="anchored">
+
+<div>
+
+<table class="dataframe table table-sm table-striped"><caption>Table&nbsp;1:  FTX Raw Dataset </caption>
+  <thead>
+    <tr>
+      <th></th>
+      <th>startTime</th>
+      <th>open</th>
+      <th>high</th>
+      <th>low</th>
+      <th>close</th>
+      <th>volume</th>
+      <th>exchange</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2021-09-01T00:00:00+00:00</td>
+      <td>47121.000</td>
+      <td>49131.000</td>
+      <td>46521.000</td>
+      <td>48846.000</td>
+      <td>484495675.810</td>
+      <td>BTC/USD</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2021-09-02T00:00:00+00:00</td>
+      <td>48846.000</td>
+      <td>50407.000</td>
+      <td>48623.000</td>
+      <td>49273.000</td>
+      <td>602599224.708</td>
+      <td>BTC/USD</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2021-09-03T00:00:00+00:00</td>
+      <td>49273.000</td>
+      <td>51083.000</td>
+      <td>48340.000</td>
+      <td>50024.000</td>
+      <td>781215394.637</td>
+      <td>BTC/USD</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2021-09-04T00:00:00+00:00</td>
+      <td>50025.000</td>
+      <td>50564.000</td>
+      <td>49387.000</td>
+      <td>49936.000</td>
+      <td>360255343.979</td>
+      <td>BTC/USD</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2021-09-05T00:00:00+00:00</td>
+      <td>49936.000</td>
+      <td>51928.000</td>
+      <td>49463.000</td>
+      <td>51807.000</td>
+      <td>435352720.465</td>
+      <td>BTC/USD</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<p>Because the current FTX has filed for bankruptcy in November, a week after the website was hacked. So FTX exchange linked may contain a Trojan horse virus of fraud information. To avoid the potential danger, I used the Huobi exchange BTC/USDT instead of the previous web links.</p>
+<p>To learn more about original data of BTC price from FTX exchange, please see <a href="https://futures.huobi.com/en-us/linear_swap/exchange/#contract_code=BTC-USDT&amp;contract_type=swap&amp;type=cross">BTC price from Huobi exchange</a> instead.</p>
+</section>
+<section id="inspiration" class="level4">
+<h4 class="anchored" data-anchor-id="inspiration">Inspiration</h4>
+<ul>
+<li><p>What is the difference between the highest and lowest price of the currency within one year?</p></li>
+<li><p>Do price changes on the day have an impact on trading volume?</p></li>
+<li><p>Is it possible to predict future price trends from prices over time?</p></li>
+</ul>
+</section>
+</section>
+</section>
+<section id="data-from-r-api-twitter" class="level2">
+<h2 class="anchored" data-anchor-id="data-from-r-api-twitter">Data from R API : Twitter</h2>
+<section id="about-twitter-dataset" class="level3">
+<h3 class="anchored" data-anchor-id="about-twitter-dataset">About Twitter Dataset</h3>
+<section id="context-1" class="level4">
+<h4 class="anchored" data-anchor-id="context-1">Context</h4>
+<p>This dataset consists of many comments about cryptocurrency obtained from Twitter’s API. These data were obtained on September 5, 2022, and the dataset includes the content of users’ comments on the search topic, retweeted comments, and the number of retweets and likes. It also contains data such as the latitude and longitude of the users when sending the message, and the user’s name.</p>
+</section>
+<section id="code-and-methodology-1" class="level4">
+<h4 class="anchored" data-anchor-id="code-and-methodology-1">Code and Methodology</h4>
+<p>Use R to connect to a Twitter user query endpoint using JSON returned from the Twitter API. With the user query endpoint, Twitter allows the ability to use user objects to determine the correlation between the number of a person’s followers and the sentiment score of their bio. Twitter allows the use of user objects to determine the correlation between the number of a person’s followers and the sentiment score of their biography. User objects can also be used to map a group of accounts based on their publicly listed position in the account profile. First, a developer account needs to be registered before getting the Twitter data. After that create a project and use it to generate the credentials required to use the Twitter API.</p>
+<p>After getting the consumerKey, consumerSecret, Bearer_Token, access_Token, access_Secret. Use R to import ggplot2, lubridate, tidyverse, quantmod, selectr, xml2, rtweet, wordcloud2, tm, dplyr, twitteR, ROAuth, jsonlite,writexl</p>
+<p>Get a link to Twitter through <code>setup_twitter_oauth</code>, then use <code>twitteR::searchTwitter</code> to enter the desired search terms, get the number of entries and the date the tweet was posted, and export to xlsx format, which is the raw data from twitter.</p>
+</section>
+</section>
+<section id="contents-1" class="level3">
+<h3 class="anchored" data-anchor-id="contents-1">Contents</h3>
+<p>The dataset has one CSV files (15 columns and 1000 rows)</p>
+<ul>
+<li>rawdata_twitter.csv
+<ul>
+<li>text(User Comments)<br>
+</li>
+<li>favorited (Whether this status has been favorited)</li>
+<li>favoriteCount(Number of times this tweet was favorite)</li>
+<li>replyToSN (Screen name of the user this is in reply to)</li>
+<li>created (When this status was created)</li>
+<li>truncated (Whether this status was truncated)</li>
+<li>replyToSID (ID of the user this was in reply to)</li>
+<li>id (ID of this status)</li>
+<li>statusSource</li>
+<li>screenName (Screen name of the user who posted this status)</li>
+<li>retweetCount(The number of times this status has been retweeted)</li>
+<li>isRetweet (Whether this status was Retweet)</li>
+<li>retweeted (TRUE if this status has been retweeted)</li>
+<li>longitude (The longitude of the status)</li>
+<li>latitude (The latitude of the status) <em>Source from twitteR (version 1.1.9)</em></li>
+</ul></li>
+<li>Data includes:
+<ul>
+<li>Timestamp from 2022-09-05</li>
+<li>1000 data</li>
+</ul></li>
+</ul>
+</section>
+<section id="review-dataset-1" class="level3">
+<h3 class="anchored" data-anchor-id="review-dataset-1">Review Dataset</h3>
+<p><strong>Twitter DATASET</strong></p>
+<div class="cell" data-execution_count="4">
+<div class="cell-output cell-output-display" data-execution_count="4">
+<div id="fig-2" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="data-gathering_files/figure-html/fig-2-output-1.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;2: Twitter Raw Dataset</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>By observing the obtained Twitter data, most of the columns in the raw data is not helpful for sentiment analysis. Only the first column of text data should be kept.When using R to output a csv file of tweet data, it always reports an error for reading the csv directly using python due to the special nature of tweet data. Because ‘utf-8’ codec can’t decode byte , JSON files are more suitable for data cleaning and sentiment analysis afterwards than csv files. However, after obtaining the data, JSON format is more difficult to perform preliminary data observation compared to csv format. So in the data cleaning interface afterwards, JSON files will be used directly for the next data processing step.</p>
+<p>To learn more about Twitter dataset see <a href="https://github.com/anly501/anly-501-project-T1an-T1an/tree/main/data/00-raw-data">Key words related to ETH</a></p>
+<section id="inspiration-1" class="level4">
+<h4 class="anchored" data-anchor-id="inspiration-1">Inspiration</h4>
+<ul>
+<li><p>Is the public’s sentiment about the topic positive or negative?</p></li>
+<li><p>How to clean out irrelevant text information？</p></li>
+<li><p>Is it possible to predict future topic trends?</p></li>
+</ul>
+</section>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+<script src="data-gathering_files/libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

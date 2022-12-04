@@ -1,0 +1,278 @@
+---
+title: "Clustering Methods"
+format:
+  html:
+    code-fold: true
+    code-tools: true
+jupyter: python3
+---
+```{python}
+#| echo: false
+from PIL import Image
+myImage = Image.open('../../501-project-website/images/clustering/cover.png')
+myImage
+```
+*Picture from data.org*
+
+
+## Introduction
+The initial data set contains the opening price, the closing price, the average closing price over 5 days, the average closing price over 20 days, the 30-day ROI, the daily trading volume, and the label: whether the price of the cryptocurrency changed by more than 30% in one day. If the price change is greater than 30%, the label is 1; if the price change is less than 30%, the label is 1. This section mainly uses clustering methods to sort the data, so the label will be removed. 
+
+Here I want to explore the overall distribution of daily price difference and daily volume, so a new column named diff_price is used to represent the price difference between the daily open and close prices, and volume is chosen as the second feature.
+
+## Theory
+### K-means
+K-means is the most commonly used Euclidean distance-based clustering algorithm. When we put the data points in the coordinate system, K-means considers that the closer the distance between two targets, the greater the similarity. When using this method, it is very important to determine the number of groups into which the data are to be divided. The K-value needs to be set manually, and different K-values yield different results. Some of the more common methods for finding the appropriate K-value are the elbow method, the Gap statistic, and the silhouette. These methods can help us to find the best K value directly to help the classification to get better classification results. However, KMeans is easily affected by outliers.
+
+### DBSCAN  
+DBSCAN is another clustering method. In DBSAN method, a cluster is a collection of points that is dense in one area and is isolated from other areas of high density by low density areas. DBSCAN is a density based method and sometomes this method is very useful if the whole dataset is not regular and noise and outliers are present.
+
+DBS can takes two parameters: eps and min_samples. Eps means the greatest distance that must separate two samples for either to be considered nearby. min_samples means the quantity of samples required for a location Starting with an unvisited point, all nearby points within eps are found.
+
+Compared with the K-means method, DBSCAN does not require prior information about the number of clusters, can find any shaped clusters, and can identify noise points.
+
+### Hierarchical Clustering  
+Hierarchical Clustering can divide the dataset at different levels to form a tree-like clustering structure. 
+
+Aggregative Clustering is a commonly used hierarchical clustering algorithm. The principle of this method is that each object is initially considered as a cluster, and then these clusters are merged step by step according to some rules, and so on until a preset number of clusters is reached. The key step here is how to calculate the distance between clusters. Aggregative Clustering is also a distance-based clustering algorithm.
+## Methods
+### Data selection:
+
+In the previous analysis, the cleaned data set was already be divided into two parts. X data set represents all cleaned dataset except label and y data set represents the label column. Hence in the clustering part, only X is choosen becasuse clustering method does not need a exact label, but the label column can be used to check the accuracy at the end. 
+
+#### Step 1: Import necessary packages
+```{python}
+import pandas as pd
+import numpy as np
+from sklearn.cluster import KMeans
+from sklearn.cluster import DBSCAN
+from sklearn.cluster import AgglomerativeClustering
+from sklearn.cluster import mean_shift
+from sklearn.cluster import Birch
+from scipy.spatial.distance import cdist
+import sklearn
+import seaborn as sns
+import matplotlib.pyplot as plt
+import sklearn.cluster as cluster
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+
+import  scipy.cluster.hierarchy as sch
+from scipy.cluster.hierarchy import linkage, dendrogram
+import matplotlib.pyplot as plt
+from sklearn.cluster import MeanShift, estimate_bandwidth
+```
+
+This article uses scikit-learn, a machine learning package in python. scikit-learn has a powerful implementation of k-means clustering in Python.
+
+
+#### Step 2: Import necessary dataset
+```{python}
+
+X = pd.read_csv('../../data/01-modified-data/x_naive_bayes_r.csv')
+```
+
+After importing the X-class data previously using Navie bayes, we can start the analysis.
+
+#### Step 3: Creat new features
+```{python}
+
+X['diff_price'] = abs(X['open'] - X['close'])
+
+# X['diff_price'] = X['diff_price'].astype(float)
+X = X[['diff_price', 'volume']]
+
+```
+
+Here I introduce `diff_price` as a new feature, `diff_price` is obtained by subtracting the absolute value of `close` from `open` on a daily basis.
+
+#### Step 4: Hyper-parameter tuning
+
+##### Hyper-parameter tuning for K-Means, elbow method
+```{python}
+
+#| label: tbl-planets
+#| tbl-cap: Cluster	Distortions	and Inertias
+from sklearn.cluster import KMeans
+i = 11
+distortions = []
+inertias = []
+for i in range(1,i):
+    k_means = KMeans(n_clusters= i, init='k-means++',n_init=10, max_iter=300, tol=0.0001, verbose=0, random_state=42, 
+    copy_x=True)
+    k_means.fit(X)
+    distortions.append(sum(np.min(cdist(X, k_means.cluster_centers_,'euclidean'), axis=1))/len(X))
+    nertias = inertias.append(k_means.inertia_)
+    result_matrix = pd.DataFrame.from_records({'Cluster':np.arange(1, i+1),'Distortions':distortions, 'Inertias':inertias })
+result_matrix
+```
+
+```{python}
+#| label: fig-charts
+#| fig-cap: Elbow Method:Find the Optimal Group Size
+#| fig-subcap: 
+#|   - "Distortions"
+#|   - "Inertias"
+#| layout-ncol: 1
+fig, (ax1, ax2) = plt.subplots(2, 1)
+ax1.plot(result_matrix['Distortions'],'tab:green')
+ax1.set_ylabel('Distortions')
+ax1.set_title('Elbow Method:Find the Optimal Group Size')
+
+ax2.plot(result_matrix['Inertias'],'tab:orange')
+ax2.set_ylabel('Inertias')
+ax2.set_xlabel('Number of Cluster')
+```
+
+```{python}
+
+def plot(X,color_vector):
+    fig, ax = plt.subplots()
+    ax.scatter(X.iloc[:,0], X.iloc[:,1],c=color_vector, cmap="viridis") #, alpha=0.5) #, c=y
+    ax.set(xlabel='The Difference Between the Opening and Closing Prices', ylabel='Volume',
+    title='Cluster data')
+    ax.grid()
+    # fig.savefig("test.png")
+    plt.show()
+```
+
+From the figure 1, K= 3 is the “elbow” of this graph if we choose 'elbow method'. 
+
+```{python}
+
+#| label: fig-polar2
+#| fig-cap: K-Means:Cluster data
+model = sklearn.cluster.KMeans(n_clusters=2).fit(X)
+labels=model.predict(X)
+plot(X,labels)
+```
+
+From the results, the effect of clustering is relatively satisfactory, but it only divides the data into two major categories, and for some special outliner data are also grouped into the same category, which is not conducive to the analysis of special cases.
+
+
+##### Hyper-parameter tuning for K-Means, silhouette method
+```{python}
+def maximize_silhouette(X,algo="birch",nmax=20,i_plot=False):
+
+    # PARAM
+    i_print=False
+
+    #FORCE CONTIGUOUS
+    X=np.ascontiguousarray(X) 
+
+    # LOOP OVER HYPER-PARAM
+    params=[]; sil_scores=[]
+    sil_max=-10
+    for param in range(2,nmax+1):
+        if(algo=="birch"):
+            model = sklearn.cluster.Birch(n_clusters=param).fit(X)
+            labels=model.predict(X)
+
+        if(algo=="ag"):
+            model = sklearn.cluster.AgglomerativeClustering(n_clusters=param).fit(X)
+            labels=model.labels_
+
+        if(algo=="dbscan"):
+            param=0.5*(param-1)
+            model = sklearn.cluster.DBSCAN(eps=param,min_samples = 2).fit(X)
+            labels=model.labels_
+
+        if(algo=="kmeans"):
+            model = sklearn.cluster.KMeans(n_clusters=param).fit(X)
+            labels=model.predict(X)
+
+        try:
+            sil_scores.append(sklearn.metrics.silhouette_score(X,labels))
+            params.append(param)
+        except:
+            continue 
+
+        if(i_print): print(param,sil_scores[-1])
+        
+        if(sil_scores[-1]>sil_max):
+             opt_param=param
+             sil_max=sil_scores[-1]
+             opt_labels=labels
+
+    print("OPTIMAL PARAMETER =",opt_param)
+
+    if(i_plot):
+        fig, ax = plt.subplots()
+        ax.plot(params, sil_scores, "-o")  
+        ax.set(xlabel='Hyper-parameter', ylabel='Silhouette')
+        plt.show()
+
+    return opt_labels
+```
+
+```{python}
+
+#| label: fig-polar3
+#| fig-cap: Silhouette Method:Find the Optimal Group Size
+opt_labels=maximize_silhouette(X,algo="kmeans",nmax=15, i_plot=True)
+```
+From the Figure 3, K= 2 if we choose 'Silhouette Method'.
+
+##### K-Means:Final results
+```{python}
+
+#| label: fig-polar4
+#| fig-cap: Silhouette Method:Find the Optimal Group Size
+plot(X,opt_labels)
+```
+
+From the results, the effect of clustering is relatively satisfactory, but it only divides the data into two major categories, and for some special outliner data are also grouped into the same category, which is not conducive to the analysis of special cases.
+
+##### Hyper-parameter tuning for AgglomerativeClustering, silhouette method
+```{python}
+#| label: fig-polar5
+#| fig-cap: Silhouette Method:Find the Optimal parameter
+opt_labels=maximize_silhouette(X,algo="ag",nmax=15, i_plot=True)
+```
+##### AgglomerativeClustering:Final results
+```{python}
+#| label: fig-polar6
+#| fig-cap: AgglomerativeClustering:Cluster data
+plot(X,opt_labels)
+```
+
+As seen in Figure 6, there is a linear relationship between price differences and trading volume. As the difference between the opening price and the closing price increases, the trading volume of the cryptocurrency for the day increases slightly.
+
+The Agglomerative Clustering results(figure 6) show some obvious outliers, and by looking at the dates of these data points one can infer whether there were any major events that occurred on that day.
+
+##### Hyper-parameter tuning for DBSCAN, silhouette method
+```{python}
+#| label: fig-polar7
+#| fig-cap: Silhouette Method:Find the Optimal parameter
+opt_labels=maximize_silhouette(X,algo="dbscan",nmax=15, i_plot=True)
+```
+
+From the Figure 7, K= 2 if we choose 'Silhouette Method'.
+
+##### DBSCAN:Final results
+```{python}
+#| label: fig-polar8
+#| fig-cap: DBSCAN:Cluster data
+plot(X,opt_labels)
+```
+
+From the results, the effect of clustering is not very satisfactory, and there is no clear boundary for all classified data, just dividing the outliner into a new group.
+
+## Results
+The optimal number of clusters for K-means is 2, so the method divides the entire data set into two groups. DBSCAN also divides the dataset into two groups, but one of them contains only one data point. These two classification methods are not particularly good. In figure 4 and figure 8, there are some obvious outliers and noises. However, K-means divides these outliers into a cluster with the data points below that match the market pattern, which can lead to incorrect analysis and judgment of the market volume.
+
+AgglomerativeClustering divides the data sets into 3 groups. This is an ideal result. Because this method clearly groups outliers from the dataset into a new group, it allows us to clearly identify unusual trades in the market from the grouping.
+
+
+## Conclusions
+```{python}
+#| label: fig-polar9
+#| fig-cap: BTC-Market Price
+from PIL import Image
+myImage = Image.open('..//../501-project-website/images/clustering/volumn.png')
+myImage
+```
+
+
+From figure 9, we can have the inference that the greater the variation in market prices during a day, the greater the volume of trading. Price variation is positively correlated with volume. The volatility of the market price over a certain period of time is determined by the traders who are bidding at the time. The greater the difference between the highest and lowest prices, the more people are making more demand for trades in that time period.A larger price range leads to more trading opportunities and the chance to make higher profits. People will be more likely to trade for higher profits.
+

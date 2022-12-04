@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.242">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Clustering Methods</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="clustering_2_files/libs/clipboard/clipboard.min.js"></script>
+<script src="clustering_2_files/libs/quarto-html/quarto.js"></script>
+<script src="clustering_2_files/libs/quarto-html/popper.min.js"></script>
+<script src="clustering_2_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="clustering_2_files/libs/quarto-html/anchor.min.js"></script>
+<link href="clustering_2_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="clustering_2_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="clustering_2_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="clustering_2_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="clustering_2_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title">Clustering Methods</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<div class="cell" data-execution_count="1">
+<div class="cell-output cell-output-display" data-execution_count="1">
+<p><img src="clustering_2_files/figure-html/cell-2-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p><em>Picture from data.org</em></p>
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>The initial data set contains the opening price, the closing price, the average closing price over 5 days, the average closing price over 20 days, the 30-day ROI, the daily trading volume, and the label: whether the price of the cryptocurrency changed by more than 30% in one day. If the price change is greater than 30%, the label is 1; if the price change is less than 30%, the label is 1. This section mainly uses clustering methods to sort the data, so the label will be removed.</p>
+<p>Here I want to explore the overall distribution of daily price difference and daily volume, so a new column named diff_price is used to represent the price difference between the daily open and close prices, and volume is chosen as the second feature.</p>
+</section>
+<section id="theory" class="level2">
+<h2 class="anchored" data-anchor-id="theory">Theory</h2>
+<section id="k-means" class="level3">
+<h3 class="anchored" data-anchor-id="k-means">K-means</h3>
+<p>K-means is the most commonly used Euclidean distance-based clustering algorithm. When we put the data points in the coordinate system, K-means considers that the closer the distance between two targets, the greater the similarity. When using this method, it is very important to determine the number of groups into which the data are to be divided. The K-value needs to be set manually, and different K-values yield different results. Some of the more common methods for finding the appropriate K-value are the elbow method, the Gap statistic, and the silhouette. These methods can help us to find the best K value directly to help the classification to get better classification results. However, KMeans is easily affected by outliers.</p>
+</section>
+<section id="dbscan" class="level3">
+<h3 class="anchored" data-anchor-id="dbscan">DBSCAN</h3>
+<p>DBSCAN is another clustering method. In DBSAN method, a cluster is a collection of points that is dense in one area and is isolated from other areas of high density by low density areas. DBSCAN is a density based method and sometomes this method is very useful if the whole dataset is not regular and noise and outliers are present.</p>
+<p>DBS can takes two parameters: eps and min_samples. Eps means the greatest distance that must separate two samples for either to be considered nearby. min_samples means the quantity of samples required for a location Starting with an unvisited point, all nearby points within eps are found.</p>
+<p>Compared with the K-means method, DBSCAN does not require prior information about the number of clusters, can find any shaped clusters, and can identify noise points.</p>
+</section>
+<section id="hierarchical-clustering" class="level3">
+<h3 class="anchored" data-anchor-id="hierarchical-clustering">Hierarchical Clustering</h3>
+<p>Hierarchical Clustering can divide the dataset at different levels to form a tree-like clustering structure.</p>
+<p>Aggregative Clustering is a commonly used hierarchical clustering algorithm. The principle of this method is that each object is initially considered as a cluster, and then these clusters are merged step by step according to some rules, and so on until a preset number of clusters is reached. The key step here is how to calculate the distance between clusters. Aggregative Clustering is also a distance-based clustering algorithm. ## Methods ### Data selection:</p>
+<p>In the previous analysis, the cleaned data set was already be divided into two parts. X data set represents all cleaned dataset except label and y data set represents the label column. Hence in the clustering part, only X is choosen becasuse clustering method does not need a exact label, but the label column can be used to check the accuracy at the end.</p>
+<section id="step-1-import-necessary-packages" class="level4">
+<h4 class="anchored" data-anchor-id="step-1-import-necessary-packages">Step 1: Import necessary packages</h4>
+<div class="cell" data-execution_count="2">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.cluster <span class="im">import</span> KMeans</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.cluster <span class="im">import</span> DBSCAN</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.cluster <span class="im">import</span> AgglomerativeClustering</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.cluster <span class="im">import</span> mean_shift</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.cluster <span class="im">import</span> Birch</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.spatial.distance <span class="im">import</span> cdist</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sklearn</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sklearn.cluster <span class="im">as</span> cluster</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="im">import</span>  scipy.cluster.hierarchy <span class="im">as</span> sch</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.cluster.hierarchy <span class="im">import</span> linkage, dendrogram</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.cluster <span class="im">import</span> MeanShift, estimate_bandwidth</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>This article uses scikit-learn, a machine learning package in python. scikit-learn has a powerful implementation of k-means clustering in Python.</p>
+</section>
+<section id="step-2-import-necessary-dataset" class="level4">
+<h4 class="anchored" data-anchor-id="step-2-import-necessary-dataset">Step 2: Import necessary dataset</h4>
+<div class="cell" data-execution_count="3">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> pd.read_csv(<span class="st">'../../data/01-modified-data/x_naive_bayes_r.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>After importing the X-class data previously using Navie bayes, we can start the analysis.</p>
+</section>
+<section id="step-3-creat-new-features" class="level4">
+<h4 class="anchored" data-anchor-id="step-3-creat-new-features">Step 3: Creat new features</h4>
+<div class="cell" data-execution_count="4">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>X[<span class="st">'diff_price'</span>] <span class="op">=</span> <span class="bu">abs</span>(X[<span class="st">'open'</span>] <span class="op">-</span> X[<span class="st">'close'</span>])</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># X['diff_price'] = X['diff_price'].astype(float)</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> X[[<span class="st">'diff_price'</span>, <span class="st">'volume'</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Here I introduce <code>diff_price</code> as a new feature, <code>diff_price</code> is obtained by subtracting the absolute value of <code>close</code> from <code>open</code> on a daily basis.</p>
+</section>
+<section id="step-4-hyper-parameter-tuning" class="level4">
+<h4 class="anchored" data-anchor-id="step-4-hyper-parameter-tuning">Step 4: Hyper-parameter tuning</h4>
+<section id="hyper-parameter-tuning-for-k-means-elbow-method" class="level5">
+<h5 class="anchored" data-anchor-id="hyper-parameter-tuning-for-k-means-elbow-method">Hyper-parameter tuning for K-Means, elbow method</h5>
+<div class="cell" data-execution_count="5">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.cluster <span class="im">import</span> KMeans</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>i <span class="op">=</span> <span class="dv">11</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>distortions <span class="op">=</span> []</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>inertias <span class="op">=</span> []</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>,i):</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    k_means <span class="op">=</span> KMeans(n_clusters<span class="op">=</span> i, init<span class="op">=</span><span class="st">'k-means++'</span>,n_init<span class="op">=</span><span class="dv">10</span>, max_iter<span class="op">=</span><span class="dv">300</span>, tol<span class="op">=</span><span class="fl">0.0001</span>, verbose<span class="op">=</span><span class="dv">0</span>, random_state<span class="op">=</span><span class="dv">42</span>, </span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    copy_x<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    k_means.fit(X)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    distortions.append(<span class="bu">sum</span>(np.<span class="bu">min</span>(cdist(X, k_means.cluster_centers_,<span class="st">'euclidean'</span>), axis<span class="op">=</span><span class="dv">1</span>))<span class="op">/</span><span class="bu">len</span>(X))</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    nertias <span class="op">=</span> inertias.append(k_means.inertia_)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    result_matrix <span class="op">=</span> pd.DataFrame.from_records({<span class="st">'Cluster'</span>:np.arange(<span class="dv">1</span>, i<span class="op">+</span><span class="dv">1</span>),<span class="st">'Distortions'</span>:distortions, <span class="st">'Inertias'</span>:inertias })</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>result_matrix</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<div id="tbl-planets" class="anchored">
+
+<div>
+
+<table class="dataframe table table-sm table-striped"><caption>Table&nbsp;1:  Cluster Distortions and Inertias </caption>
+  <thead>
+    <tr>
+      <th></th>
+      <th>Cluster</th>
+      <th>Distortions</th>
+      <th>Inertias</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>0.683819</td>
+      <td>335.929398</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2</td>
+      <td>0.497201</td>
+      <td>157.271515</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>0.354513</td>
+      <td>73.410891</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4</td>
+      <td>0.277462</td>
+      <td>45.721519</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>5</td>
+      <td>0.262121</td>
+      <td>33.342440</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>6</td>
+      <td>0.200005</td>
+      <td>21.178622</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>7</td>
+      <td>0.178320</td>
+      <td>16.060883</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>8</td>
+      <td>0.166358</td>
+      <td>12.399892</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>9</td>
+      <td>0.136583</td>
+      <td>8.845045</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>10</td>
+      <td>0.122835</td>
+      <td>7.010465</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>fig, (ax1, ax2) <span class="op">=</span> plt.subplots(<span class="dv">2</span>, <span class="dv">1</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>ax1.plot(result_matrix[<span class="st">'Distortions'</span>],<span class="st">'tab:green'</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>ax1.set_ylabel(<span class="st">'Distortions'</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>ax1.set_title(<span class="st">'Elbow Method:Find the Optimal Group Size'</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>ax2.plot(result_matrix[<span class="st">'Inertias'</span>],<span class="st">'tab:orange'</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>ax2.set_ylabel(<span class="st">'Inertias'</span>)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>ax2.set_xlabel(<span class="st">'Number of Cluster'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div id="fig-charts" class="cell quarto-layout-panel" data-execution_count="6">
+<figure class="figure">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div id="fig-charts-1" class="quarto-figure quarto-figure-center anchored" style="flex-basis: 100.0%;justify-content: center;">
+<figure class="figure">
+<pre><code>Text(0.5, 0, 'Number of Cluster')</code></pre>
+<p></p><figcaption class="figure-caption">(a) Distortions</figcaption><p></p>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="cell-output cell-output-display quarto-layout-cell quarto-layout-cell-subref" style="flex-basis: 100.0%;justify-content: center;">
+<div id="fig-charts-2" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="clustering_2_files/figure-html/fig-charts-output-2.png" class="img-fluid figure-img" data-ref-parent="fig-charts" width="593"></p>
+<p></p><figcaption class="figure-caption">(b) Inertias</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1: Elbow Method:Find the Optimal Group Size</figcaption><p></p>
+</figure>
+</div>
+</div>
+<div class="cell" data-execution_count="7">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot(X,color_vector):</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    ax.scatter(X.iloc[:,<span class="dv">0</span>], X.iloc[:,<span class="dv">1</span>],c<span class="op">=</span>color_vector, cmap<span class="op">=</span><span class="st">"viridis"</span>) <span class="co">#, alpha=0.5) #, c=y</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    ax.<span class="bu">set</span>(xlabel<span class="op">=</span><span class="st">'The Difference Between the Opening and Closing Prices'</span>, ylabel<span class="op">=</span><span class="st">'Volume'</span>,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    title<span class="op">=</span><span class="st">'Cluster data'</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    ax.grid()</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># fig.savefig("test.png")</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>From the figure 1, K= 3 is the “elbow” of this graph if we choose ‘elbow method’.</p>
+<div class="cell" data-execution_count="8">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> sklearn.cluster.KMeans(n_clusters<span class="op">=</span><span class="dv">2</span>).fit(X)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>labels<span class="op">=</span>model.predict(X)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>plot(X,labels)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="fig-polar2" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="clustering_2_files/figure-html/fig-polar2-output-1.png" width="576" height="442" class="figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;2: K-Means:Cluster data</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>From the results, the effect of clustering is relatively satisfactory, but it only divides the data into two major categories, and for some special outliner data are also grouped into the same category, which is not conducive to the analysis of special cases.</p>
+</section>
+<section id="hyper-parameter-tuning-for-k-means-silhouette-method" class="level5">
+<h5 class="anchored" data-anchor-id="hyper-parameter-tuning-for-k-means-silhouette-method">Hyper-parameter tuning for K-Means, silhouette method</h5>
+<div class="cell" data-execution_count="9">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> maximize_silhouette(X,algo<span class="op">=</span><span class="st">"birch"</span>,nmax<span class="op">=</span><span class="dv">20</span>,i_plot<span class="op">=</span><span class="va">False</span>):</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># PARAM</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    i_print<span class="op">=</span><span class="va">False</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">#FORCE CONTIGUOUS</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    X<span class="op">=</span>np.ascontiguousarray(X) </span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># LOOP OVER HYPER-PARAM</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    params<span class="op">=</span>[]<span class="op">;</span> sil_scores<span class="op">=</span>[]</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    sil_max<span class="op">=-</span><span class="dv">10</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> param <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>,nmax<span class="op">+</span><span class="dv">1</span>):</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span>(algo<span class="op">==</span><span class="st">"birch"</span>):</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>            model <span class="op">=</span> sklearn.cluster.Birch(n_clusters<span class="op">=</span>param).fit(X)</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>            labels<span class="op">=</span>model.predict(X)</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span>(algo<span class="op">==</span><span class="st">"ag"</span>):</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>            model <span class="op">=</span> sklearn.cluster.AgglomerativeClustering(n_clusters<span class="op">=</span>param).fit(X)</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>            labels<span class="op">=</span>model.labels_</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span>(algo<span class="op">==</span><span class="st">"dbscan"</span>):</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>            param<span class="op">=</span><span class="fl">0.5</span><span class="op">*</span>(param<span class="op">-</span><span class="dv">1</span>)</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>            model <span class="op">=</span> sklearn.cluster.DBSCAN(eps<span class="op">=</span>param,min_samples <span class="op">=</span> <span class="dv">2</span>).fit(X)</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>            labels<span class="op">=</span>model.labels_</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span>(algo<span class="op">==</span><span class="st">"kmeans"</span>):</span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>            model <span class="op">=</span> sklearn.cluster.KMeans(n_clusters<span class="op">=</span>param).fit(X)</span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>            labels<span class="op">=</span>model.predict(X)</span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>        <span class="cf">try</span>:</span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>            sil_scores.append(sklearn.metrics.silhouette_score(X,labels))</span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>            params.append(param)</span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a>        <span class="cf">except</span>:</span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a>            <span class="cf">continue</span> </span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span>(i_print): <span class="bu">print</span>(param,sil_scores[<span class="op">-</span><span class="dv">1</span>])</span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span>(sil_scores[<span class="op">-</span><span class="dv">1</span>]<span class="op">&gt;</span>sil_max):</span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>             opt_param<span class="op">=</span>param</span>
+<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a>             sil_max<span class="op">=</span>sil_scores[<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a>             opt_labels<span class="op">=</span>labels</span>
+<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"OPTIMAL PARAMETER ="</span>,opt_param)</span>
+<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(i_plot):</span>
+<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a>        fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a>        ax.plot(params, sil_scores, <span class="st">"-o"</span>)  </span>
+<span id="cb9-48"><a href="#cb9-48" aria-hidden="true" tabindex="-1"></a>        ax.<span class="bu">set</span>(xlabel<span class="op">=</span><span class="st">'Hyper-parameter'</span>, ylabel<span class="op">=</span><span class="st">'Silhouette'</span>)</span>
+<span id="cb9-49"><a href="#cb9-49" aria-hidden="true" tabindex="-1"></a>        plt.show()</span>
+<span id="cb9-50"><a href="#cb9-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-51"><a href="#cb9-51" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> opt_labels</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell" data-execution_count="10">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>opt_labels<span class="op">=</span>maximize_silhouette(X,algo<span class="op">=</span><span class="st">"kmeans"</span>,nmax<span class="op">=</span><span class="dv">15</span>, i_plot<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>OPTIMAL PARAMETER = 2</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div id="fig-polar3" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="clustering_2_files/figure-html/fig-polar3-output-2.png" width="606" height="422" class="figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;3: Silhouette Method:Find the Optimal Group Size</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>From the Figure 3, K= 2 if we choose ‘Silhouette Method’.</p>
+</section>
+<section id="k-meansfinal-results" class="level5">
+<h5 class="anchored" data-anchor-id="k-meansfinal-results">K-Means:Final results</h5>
+<div class="cell" data-execution_count="11">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>plot(X,opt_labels)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="fig-polar4" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="clustering_2_files/figure-html/fig-polar4-output-1.png" width="576" height="442" class="figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;4: Silhouette Method:Find the Optimal Group Size</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>From the results, the effect of clustering is relatively satisfactory, but it only divides the data into two major categories, and for some special outliner data are also grouped into the same category, which is not conducive to the analysis of special cases.</p>
+</section>
+<section id="hyper-parameter-tuning-for-agglomerativeclustering-silhouette-method" class="level5">
+<h5 class="anchored" data-anchor-id="hyper-parameter-tuning-for-agglomerativeclustering-silhouette-method">Hyper-parameter tuning for AgglomerativeClustering, silhouette method</h5>
+<div class="cell" data-execution_count="12">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>opt_labels<span class="op">=</span>maximize_silhouette(X,algo<span class="op">=</span><span class="st">"ag"</span>,nmax<span class="op">=</span><span class="dv">15</span>, i_plot<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>OPTIMAL PARAMETER = 3</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div id="fig-polar5" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="clustering_2_files/figure-html/fig-polar5-output-2.png" width="597" height="422" class="figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;5: Silhouette Method:Find the Optimal parameter</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="agglomerativeclusteringfinal-results" class="level5">
+<h5 class="anchored" data-anchor-id="agglomerativeclusteringfinal-results">AgglomerativeClustering:Final results</h5>
+<div class="cell" data-execution_count="13">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>plot(X,opt_labels)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="fig-polar6" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="clustering_2_files/figure-html/fig-polar6-output-1.png" width="576" height="442" class="figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;6: AgglomerativeClustering:Cluster data</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>As seen in Figure 6, there is a linear relationship between price differences and trading volume. As the difference between the opening price and the closing price increases, the trading volume of the cryptocurrency for the day increases slightly.</p>
+<p>The Agglomerative Clustering results(figure 6) show some obvious outliers, and by looking at the dates of these data points one can infer whether there were any major events that occurred on that day.</p>
+</section>
+<section id="hyper-parameter-tuning-for-dbscan-silhouette-method" class="level5">
+<h5 class="anchored" data-anchor-id="hyper-parameter-tuning-for-dbscan-silhouette-method">Hyper-parameter tuning for DBSCAN, silhouette method</h5>
+<div class="cell" data-execution_count="14">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>opt_labels<span class="op">=</span>maximize_silhouette(X,algo<span class="op">=</span><span class="st">"dbscan"</span>,nmax<span class="op">=</span><span class="dv">15</span>, i_plot<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>OPTIMAL PARAMETER = 1.5</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div id="fig-polar7" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="clustering_2_files/figure-html/fig-polar7-output-2.png" width="597" height="422" class="figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;7: Silhouette Method:Find the Optimal parameter</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>From the Figure 7, K= 2 if we choose ‘Silhouette Method’.</p>
+</section>
+<section id="dbscanfinal-results" class="level5">
+<h5 class="anchored" data-anchor-id="dbscanfinal-results">DBSCAN:Final results</h5>
+<div class="cell" data-execution_count="15">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>plot(X,opt_labels)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="fig-polar8" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="clustering_2_files/figure-html/fig-polar8-output-1.png" width="576" height="442" class="figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;8: DBSCAN:Cluster data</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>From the results, the effect of clustering is not very satisfactory, and there is no clear boundary for all classified data, just dividing the outliner into a new group.</p>
+</section>
+</section>
+</section>
+</section>
+<section id="results" class="level2">
+<h2 class="anchored" data-anchor-id="results">Results</h2>
+<p>The optimal number of clusters for K-means is 2, so the method divides the entire data set into two groups. DBSCAN also divides the dataset into two groups, but one of them contains only one data point. These two classification methods are not particularly good. In figure 4 and figure 8, there are some obvious outliers and noises. However, K-means divides these outliers into a cluster with the data points below that match the market pattern, which can lead to incorrect analysis and judgment of the market volume.</p>
+<p>AgglomerativeClustering divides the data sets into 3 groups. This is an ideal result. Because this method clearly groups outliers from the dataset into a new group, it allows us to clearly identify unusual trades in the market from the grouping.</p>
+</section>
+<section id="conclusions" class="level2">
+<h2 class="anchored" data-anchor-id="conclusions">Conclusions</h2>
+<div class="cell" data-execution_count="16">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> PIL <span class="im">import</span> Image</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>myImage <span class="op">=</span> Image.<span class="bu">open</span>(<span class="st">'..//../501-project-website/images/clustering/volumn.png'</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>myImage</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="16">
+<div id="fig-polar9" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="clustering_2_files/figure-html/fig-polar9-output-1.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;9: BTC-Market Price</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>From figure 9, we can have the inference that the greater the variation in market prices during a day, the greater the volume of trading. Price variation is positively correlated with volume. The volatility of the market price over a certain period of time is determined by the traders who are bidding at the time. The greater the difference between the highest and lowest prices, the more people are making more demand for trades in that time period.A larger price range leads to more trading opportunities and the chance to make higher profits. People will be more likely to trade for higher profits.</p>
+<!-- -->
+
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb20" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Clustering Methods"</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="co">    code-fold: true</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="an">jupyter:</span><span class="co"> python3</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> PIL <span class="im">import</span> Image</span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>myImage <span class="op">=</span> Image.<span class="bu">open</span>(<span class="st">'../../501-project-website/images/clustering/cover.png'</span>)</span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>myImage</span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>*Picture from data.org*</span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a><span class="fu">## Introduction</span></span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a>The initial data set contains the opening price, the closing price, the average closing price over 5 days, the average closing price over 20 days, the 30-day ROI, the daily trading volume, and the label: whether the price of the cryptocurrency changed by more than 30% in one day. If the price change is greater than 30%, the label is 1; if the price change is less than 30%, the label is 1. This section mainly uses clustering methods to sort the data, so the label will be removed. </span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a>Here I want to explore the overall distribution of daily price difference and daily volume, so a new column named diff_price is used to represent the price difference between the daily open and close prices, and volume is chosen as the second feature.</span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a><span class="fu">## Theory</span></span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a><span class="fu">### K-means</span></span>
+<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a>K-means is the most commonly used Euclidean distance-based clustering algorithm. When we put the data points in the coordinate system, K-means considers that the closer the distance between two targets, the greater the similarity. When using this method, it is very important to determine the number of groups into which the data are to be divided. The K-value needs to be set manually, and different K-values yield different results. Some of the more common methods for finding the appropriate K-value are the elbow method, the Gap statistic, and the silhouette. These methods can help us to find the best K value directly to help the classification to get better classification results. However, KMeans is easily affected by outliers.</span>
+<span id="cb20-28"><a href="#cb20-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-29"><a href="#cb20-29" aria-hidden="true" tabindex="-1"></a><span class="fu">### DBSCAN  </span></span>
+<span id="cb20-30"><a href="#cb20-30" aria-hidden="true" tabindex="-1"></a>DBSCAN is another clustering method. In DBSAN method, a cluster is a collection of points that is dense in one area and is isolated from other areas of high density by low density areas. DBSCAN is a density based method and sometomes this method is very useful if the whole dataset is not regular and noise and outliers are present.</span>
+<span id="cb20-31"><a href="#cb20-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-32"><a href="#cb20-32" aria-hidden="true" tabindex="-1"></a>DBS can takes two parameters: eps and min_samples. Eps means the greatest distance that must separate two samples for either to be considered nearby. min_samples means the quantity of samples required for a location Starting with an unvisited point, all nearby points within eps are found.</span>
+<span id="cb20-33"><a href="#cb20-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-34"><a href="#cb20-34" aria-hidden="true" tabindex="-1"></a>Compared with the K-means method, DBSCAN does not require prior information about the number of clusters, can find any shaped clusters, and can identify noise points.</span>
+<span id="cb20-35"><a href="#cb20-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-36"><a href="#cb20-36" aria-hidden="true" tabindex="-1"></a><span class="fu">### Hierarchical Clustering  </span></span>
+<span id="cb20-37"><a href="#cb20-37" aria-hidden="true" tabindex="-1"></a>Hierarchical Clustering can divide the dataset at different levels to form a tree-like clustering structure. </span>
+<span id="cb20-38"><a href="#cb20-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-39"><a href="#cb20-39" aria-hidden="true" tabindex="-1"></a>Aggregative Clustering is a commonly used hierarchical clustering algorithm. The principle of this method is that each object is initially considered as a cluster, and then these clusters are merged step by step according to some rules, and so on until a preset number of clusters is reached. The key step here is how to calculate the distance between clusters. Aggregative Clustering is also a distance-based clustering algorithm.</span>
+<span id="cb20-40"><a href="#cb20-40" aria-hidden="true" tabindex="-1"></a><span class="fu">## Methods</span></span>
+<span id="cb20-41"><a href="#cb20-41" aria-hidden="true" tabindex="-1"></a><span class="fu">### Data selection:</span></span>
+<span id="cb20-42"><a href="#cb20-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-43"><a href="#cb20-43" aria-hidden="true" tabindex="-1"></a>In the previous analysis, the cleaned data set was already be divided into two parts. X data set represents all cleaned dataset except label and y data set represents the label column. Hence in the clustering part, only X is choosen becasuse clustering method does not need a exact label, but the label column can be used to check the accuracy at the end. </span>
+<span id="cb20-44"><a href="#cb20-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-45"><a href="#cb20-45" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Step 1: Import necessary packages</span></span>
+<span id="cb20-48"><a href="#cb20-48" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb20-49"><a href="#cb20-49" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb20-50"><a href="#cb20-50" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb20-51"><a href="#cb20-51" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.cluster <span class="im">import</span> KMeans</span>
+<span id="cb20-52"><a href="#cb20-52" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.cluster <span class="im">import</span> DBSCAN</span>
+<span id="cb20-53"><a href="#cb20-53" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.cluster <span class="im">import</span> AgglomerativeClustering</span>
+<span id="cb20-54"><a href="#cb20-54" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.cluster <span class="im">import</span> mean_shift</span>
+<span id="cb20-55"><a href="#cb20-55" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.cluster <span class="im">import</span> Birch</span>
+<span id="cb20-56"><a href="#cb20-56" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.spatial.distance <span class="im">import</span> cdist</span>
+<span id="cb20-57"><a href="#cb20-57" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sklearn</span>
+<span id="cb20-58"><a href="#cb20-58" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb20-59"><a href="#cb20-59" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb20-60"><a href="#cb20-60" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sklearn.cluster <span class="im">as</span> cluster</span>
+<span id="cb20-61"><a href="#cb20-61" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb20-62"><a href="#cb20-62" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
+<span id="cb20-63"><a href="#cb20-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-64"><a href="#cb20-64" aria-hidden="true" tabindex="-1"></a><span class="im">import</span>  scipy.cluster.hierarchy <span class="im">as</span> sch</span>
+<span id="cb20-65"><a href="#cb20-65" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.cluster.hierarchy <span class="im">import</span> linkage, dendrogram</span>
+<span id="cb20-66"><a href="#cb20-66" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb20-67"><a href="#cb20-67" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.cluster <span class="im">import</span> MeanShift, estimate_bandwidth</span>
+<span id="cb20-68"><a href="#cb20-68" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-69"><a href="#cb20-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-70"><a href="#cb20-70" aria-hidden="true" tabindex="-1"></a>This article uses scikit-learn, a machine learning package in python. scikit-learn has a powerful implementation of k-means clustering in Python.</span>
+<span id="cb20-71"><a href="#cb20-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-72"><a href="#cb20-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-73"><a href="#cb20-73" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Step 2: Import necessary dataset</span></span>
+<span id="cb20-76"><a href="#cb20-76" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb20-77"><a href="#cb20-77" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> pd.read_csv(<span class="st">'../../data/01-modified-data/x_naive_bayes_r.csv'</span>)</span>
+<span id="cb20-78"><a href="#cb20-78" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-79"><a href="#cb20-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-80"><a href="#cb20-80" aria-hidden="true" tabindex="-1"></a>After importing the X-class data previously using Navie bayes, we can start the analysis.</span>
+<span id="cb20-81"><a href="#cb20-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-82"><a href="#cb20-82" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Step 3: Creat new features</span></span>
+<span id="cb20-85"><a href="#cb20-85" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb20-86"><a href="#cb20-86" aria-hidden="true" tabindex="-1"></a>X[<span class="st">'diff_price'</span>] <span class="op">=</span> <span class="bu">abs</span>(X[<span class="st">'open'</span>] <span class="op">-</span> X[<span class="st">'close'</span>])</span>
+<span id="cb20-87"><a href="#cb20-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-88"><a href="#cb20-88" aria-hidden="true" tabindex="-1"></a><span class="co"># X['diff_price'] = X['diff_price'].astype(float)</span></span>
+<span id="cb20-89"><a href="#cb20-89" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> X[[<span class="st">'diff_price'</span>, <span class="st">'volume'</span>]]</span>
+<span id="cb20-90"><a href="#cb20-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-91"><a href="#cb20-91" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-92"><a href="#cb20-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-93"><a href="#cb20-93" aria-hidden="true" tabindex="-1"></a>Here I introduce <span class="in">`diff_price`</span> as a new feature, <span class="in">`diff_price`</span> is obtained by subtracting the absolute value of <span class="in">`close`</span> from <span class="in">`open`</span> on a daily basis.</span>
+<span id="cb20-94"><a href="#cb20-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-95"><a href="#cb20-95" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Step 4: Hyper-parameter tuning</span></span>
+<span id="cb20-96"><a href="#cb20-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-97"><a href="#cb20-97" aria-hidden="true" tabindex="-1"></a><span class="fu">##### Hyper-parameter tuning for K-Means, elbow method</span></span>
+<span id="cb20-100"><a href="#cb20-100" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb20-101"><a href="#cb20-101" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: tbl-planets</span></span>
+<span id="cb20-102"><a href="#cb20-102" aria-hidden="true" tabindex="-1"></a><span class="co">#| tbl-cap: Cluster Distortions and Inertias</span></span>
+<span id="cb20-103"><a href="#cb20-103" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.cluster <span class="im">import</span> KMeans</span>
+<span id="cb20-104"><a href="#cb20-104" aria-hidden="true" tabindex="-1"></a>i <span class="op">=</span> <span class="dv">11</span></span>
+<span id="cb20-105"><a href="#cb20-105" aria-hidden="true" tabindex="-1"></a>distortions <span class="op">=</span> []</span>
+<span id="cb20-106"><a href="#cb20-106" aria-hidden="true" tabindex="-1"></a>inertias <span class="op">=</span> []</span>
+<span id="cb20-107"><a href="#cb20-107" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>,i):</span>
+<span id="cb20-108"><a href="#cb20-108" aria-hidden="true" tabindex="-1"></a>    k_means <span class="op">=</span> KMeans(n_clusters<span class="op">=</span> i, init<span class="op">=</span><span class="st">'k-means++'</span>,n_init<span class="op">=</span><span class="dv">10</span>, max_iter<span class="op">=</span><span class="dv">300</span>, tol<span class="op">=</span><span class="fl">0.0001</span>, verbose<span class="op">=</span><span class="dv">0</span>, random_state<span class="op">=</span><span class="dv">42</span>, </span>
+<span id="cb20-109"><a href="#cb20-109" aria-hidden="true" tabindex="-1"></a>    copy_x<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb20-110"><a href="#cb20-110" aria-hidden="true" tabindex="-1"></a>    k_means.fit(X)</span>
+<span id="cb20-111"><a href="#cb20-111" aria-hidden="true" tabindex="-1"></a>    distortions.append(<span class="bu">sum</span>(np.<span class="bu">min</span>(cdist(X, k_means.cluster_centers_,<span class="st">'euclidean'</span>), axis<span class="op">=</span><span class="dv">1</span>))<span class="op">/</span><span class="bu">len</span>(X))</span>
+<span id="cb20-112"><a href="#cb20-112" aria-hidden="true" tabindex="-1"></a>    nertias <span class="op">=</span> inertias.append(k_means.inertia_)</span>
+<span id="cb20-113"><a href="#cb20-113" aria-hidden="true" tabindex="-1"></a>    result_matrix <span class="op">=</span> pd.DataFrame.from_records({<span class="st">'Cluster'</span>:np.arange(<span class="dv">1</span>, i<span class="op">+</span><span class="dv">1</span>),<span class="st">'Distortions'</span>:distortions, <span class="st">'Inertias'</span>:inertias })</span>
+<span id="cb20-114"><a href="#cb20-114" aria-hidden="true" tabindex="-1"></a>result_matrix</span>
+<span id="cb20-115"><a href="#cb20-115" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-116"><a href="#cb20-116" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-119"><a href="#cb20-119" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb20-120"><a href="#cb20-120" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-charts</span></span>
+<span id="cb20-121"><a href="#cb20-121" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: Elbow Method:Find the Optimal Group Size</span></span>
+<span id="cb20-122"><a href="#cb20-122" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-subcap: </span></span>
+<span id="cb20-123"><a href="#cb20-123" aria-hidden="true" tabindex="-1"></a><span class="co">#|   - "Distortions"</span></span>
+<span id="cb20-124"><a href="#cb20-124" aria-hidden="true" tabindex="-1"></a><span class="co">#|   - "Inertias"</span></span>
+<span id="cb20-125"><a href="#cb20-125" aria-hidden="true" tabindex="-1"></a><span class="co">#| layout-ncol: 1</span></span>
+<span id="cb20-126"><a href="#cb20-126" aria-hidden="true" tabindex="-1"></a>fig, (ax1, ax2) <span class="op">=</span> plt.subplots(<span class="dv">2</span>, <span class="dv">1</span>)</span>
+<span id="cb20-127"><a href="#cb20-127" aria-hidden="true" tabindex="-1"></a>ax1.plot(result_matrix[<span class="st">'Distortions'</span>],<span class="st">'tab:green'</span>)</span>
+<span id="cb20-128"><a href="#cb20-128" aria-hidden="true" tabindex="-1"></a>ax1.set_ylabel(<span class="st">'Distortions'</span>)</span>
+<span id="cb20-129"><a href="#cb20-129" aria-hidden="true" tabindex="-1"></a>ax1.set_title(<span class="st">'Elbow Method:Find the Optimal Group Size'</span>)</span>
+<span id="cb20-130"><a href="#cb20-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-131"><a href="#cb20-131" aria-hidden="true" tabindex="-1"></a>ax2.plot(result_matrix[<span class="st">'Inertias'</span>],<span class="st">'tab:orange'</span>)</span>
+<span id="cb20-132"><a href="#cb20-132" aria-hidden="true" tabindex="-1"></a>ax2.set_ylabel(<span class="st">'Inertias'</span>)</span>
+<span id="cb20-133"><a href="#cb20-133" aria-hidden="true" tabindex="-1"></a>ax2.set_xlabel(<span class="st">'Number of Cluster'</span>)</span>
+<span id="cb20-134"><a href="#cb20-134" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-135"><a href="#cb20-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-138"><a href="#cb20-138" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb20-139"><a href="#cb20-139" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot(X,color_vector):</span>
+<span id="cb20-140"><a href="#cb20-140" aria-hidden="true" tabindex="-1"></a>    fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb20-141"><a href="#cb20-141" aria-hidden="true" tabindex="-1"></a>    ax.scatter(X.iloc[:,<span class="dv">0</span>], X.iloc[:,<span class="dv">1</span>],c<span class="op">=</span>color_vector, cmap<span class="op">=</span><span class="st">"viridis"</span>) <span class="co">#, alpha=0.5) #, c=y</span></span>
+<span id="cb20-142"><a href="#cb20-142" aria-hidden="true" tabindex="-1"></a>    ax.<span class="bu">set</span>(xlabel<span class="op">=</span><span class="st">'The Difference Between the Opening and Closing Prices'</span>, ylabel<span class="op">=</span><span class="st">'Volume'</span>,</span>
+<span id="cb20-143"><a href="#cb20-143" aria-hidden="true" tabindex="-1"></a>    title<span class="op">=</span><span class="st">'Cluster data'</span>)</span>
+<span id="cb20-144"><a href="#cb20-144" aria-hidden="true" tabindex="-1"></a>    ax.grid()</span>
+<span id="cb20-145"><a href="#cb20-145" aria-hidden="true" tabindex="-1"></a>    <span class="co"># fig.savefig("test.png")</span></span>
+<span id="cb20-146"><a href="#cb20-146" aria-hidden="true" tabindex="-1"></a>    plt.show()</span>
+<span id="cb20-147"><a href="#cb20-147" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-148"><a href="#cb20-148" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-149"><a href="#cb20-149" aria-hidden="true" tabindex="-1"></a>From the figure 1, K= 3 is the “elbow” of this graph if we choose 'elbow method'. </span>
+<span id="cb20-150"><a href="#cb20-150" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-153"><a href="#cb20-153" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb20-154"><a href="#cb20-154" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-polar2</span></span>
+<span id="cb20-155"><a href="#cb20-155" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: K-Means:Cluster data</span></span>
+<span id="cb20-156"><a href="#cb20-156" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> sklearn.cluster.KMeans(n_clusters<span class="op">=</span><span class="dv">2</span>).fit(X)</span>
+<span id="cb20-157"><a href="#cb20-157" aria-hidden="true" tabindex="-1"></a>labels<span class="op">=</span>model.predict(X)</span>
+<span id="cb20-158"><a href="#cb20-158" aria-hidden="true" tabindex="-1"></a>plot(X,labels)</span>
+<span id="cb20-159"><a href="#cb20-159" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-160"><a href="#cb20-160" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-161"><a href="#cb20-161" aria-hidden="true" tabindex="-1"></a>From the results, the effect of clustering is relatively satisfactory, but it only divides the data into two major categories, and for some special outliner data are also grouped into the same category, which is not conducive to the analysis of special cases.</span>
+<span id="cb20-162"><a href="#cb20-162" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-163"><a href="#cb20-163" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-164"><a href="#cb20-164" aria-hidden="true" tabindex="-1"></a><span class="fu">##### Hyper-parameter tuning for K-Means, silhouette method</span></span>
+<span id="cb20-167"><a href="#cb20-167" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb20-168"><a href="#cb20-168" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> maximize_silhouette(X,algo<span class="op">=</span><span class="st">"birch"</span>,nmax<span class="op">=</span><span class="dv">20</span>,i_plot<span class="op">=</span><span class="va">False</span>):</span>
+<span id="cb20-169"><a href="#cb20-169" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-170"><a href="#cb20-170" aria-hidden="true" tabindex="-1"></a>    <span class="co"># PARAM</span></span>
+<span id="cb20-171"><a href="#cb20-171" aria-hidden="true" tabindex="-1"></a>    i_print<span class="op">=</span><span class="va">False</span></span>
+<span id="cb20-172"><a href="#cb20-172" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-173"><a href="#cb20-173" aria-hidden="true" tabindex="-1"></a>    <span class="co">#FORCE CONTIGUOUS</span></span>
+<span id="cb20-174"><a href="#cb20-174" aria-hidden="true" tabindex="-1"></a>    X<span class="op">=</span>np.ascontiguousarray(X) </span>
+<span id="cb20-175"><a href="#cb20-175" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-176"><a href="#cb20-176" aria-hidden="true" tabindex="-1"></a>    <span class="co"># LOOP OVER HYPER-PARAM</span></span>
+<span id="cb20-177"><a href="#cb20-177" aria-hidden="true" tabindex="-1"></a>    params<span class="op">=</span>[]<span class="op">;</span> sil_scores<span class="op">=</span>[]</span>
+<span id="cb20-178"><a href="#cb20-178" aria-hidden="true" tabindex="-1"></a>    sil_max<span class="op">=-</span><span class="dv">10</span></span>
+<span id="cb20-179"><a href="#cb20-179" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> param <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>,nmax<span class="op">+</span><span class="dv">1</span>):</span>
+<span id="cb20-180"><a href="#cb20-180" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span>(algo<span class="op">==</span><span class="st">"birch"</span>):</span>
+<span id="cb20-181"><a href="#cb20-181" aria-hidden="true" tabindex="-1"></a>            model <span class="op">=</span> sklearn.cluster.Birch(n_clusters<span class="op">=</span>param).fit(X)</span>
+<span id="cb20-182"><a href="#cb20-182" aria-hidden="true" tabindex="-1"></a>            labels<span class="op">=</span>model.predict(X)</span>
+<span id="cb20-183"><a href="#cb20-183" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-184"><a href="#cb20-184" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span>(algo<span class="op">==</span><span class="st">"ag"</span>):</span>
+<span id="cb20-185"><a href="#cb20-185" aria-hidden="true" tabindex="-1"></a>            model <span class="op">=</span> sklearn.cluster.AgglomerativeClustering(n_clusters<span class="op">=</span>param).fit(X)</span>
+<span id="cb20-186"><a href="#cb20-186" aria-hidden="true" tabindex="-1"></a>            labels<span class="op">=</span>model.labels_</span>
+<span id="cb20-187"><a href="#cb20-187" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-188"><a href="#cb20-188" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span>(algo<span class="op">==</span><span class="st">"dbscan"</span>):</span>
+<span id="cb20-189"><a href="#cb20-189" aria-hidden="true" tabindex="-1"></a>            param<span class="op">=</span><span class="fl">0.5</span><span class="op">*</span>(param<span class="op">-</span><span class="dv">1</span>)</span>
+<span id="cb20-190"><a href="#cb20-190" aria-hidden="true" tabindex="-1"></a>            model <span class="op">=</span> sklearn.cluster.DBSCAN(eps<span class="op">=</span>param,min_samples <span class="op">=</span> <span class="dv">2</span>).fit(X)</span>
+<span id="cb20-191"><a href="#cb20-191" aria-hidden="true" tabindex="-1"></a>            labels<span class="op">=</span>model.labels_</span>
+<span id="cb20-192"><a href="#cb20-192" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-193"><a href="#cb20-193" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span>(algo<span class="op">==</span><span class="st">"kmeans"</span>):</span>
+<span id="cb20-194"><a href="#cb20-194" aria-hidden="true" tabindex="-1"></a>            model <span class="op">=</span> sklearn.cluster.KMeans(n_clusters<span class="op">=</span>param).fit(X)</span>
+<span id="cb20-195"><a href="#cb20-195" aria-hidden="true" tabindex="-1"></a>            labels<span class="op">=</span>model.predict(X)</span>
+<span id="cb20-196"><a href="#cb20-196" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-197"><a href="#cb20-197" aria-hidden="true" tabindex="-1"></a>        <span class="cf">try</span>:</span>
+<span id="cb20-198"><a href="#cb20-198" aria-hidden="true" tabindex="-1"></a>            sil_scores.append(sklearn.metrics.silhouette_score(X,labels))</span>
+<span id="cb20-199"><a href="#cb20-199" aria-hidden="true" tabindex="-1"></a>            params.append(param)</span>
+<span id="cb20-200"><a href="#cb20-200" aria-hidden="true" tabindex="-1"></a>        <span class="cf">except</span>:</span>
+<span id="cb20-201"><a href="#cb20-201" aria-hidden="true" tabindex="-1"></a>            <span class="cf">continue</span> </span>
+<span id="cb20-202"><a href="#cb20-202" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-203"><a href="#cb20-203" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span>(i_print): <span class="bu">print</span>(param,sil_scores[<span class="op">-</span><span class="dv">1</span>])</span>
+<span id="cb20-204"><a href="#cb20-204" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb20-205"><a href="#cb20-205" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span>(sil_scores[<span class="op">-</span><span class="dv">1</span>]<span class="op">&gt;</span>sil_max):</span>
+<span id="cb20-206"><a href="#cb20-206" aria-hidden="true" tabindex="-1"></a>             opt_param<span class="op">=</span>param</span>
+<span id="cb20-207"><a href="#cb20-207" aria-hidden="true" tabindex="-1"></a>             sil_max<span class="op">=</span>sil_scores[<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb20-208"><a href="#cb20-208" aria-hidden="true" tabindex="-1"></a>             opt_labels<span class="op">=</span>labels</span>
+<span id="cb20-209"><a href="#cb20-209" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-210"><a href="#cb20-210" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"OPTIMAL PARAMETER ="</span>,opt_param)</span>
+<span id="cb20-211"><a href="#cb20-211" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-212"><a href="#cb20-212" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(i_plot):</span>
+<span id="cb20-213"><a href="#cb20-213" aria-hidden="true" tabindex="-1"></a>        fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb20-214"><a href="#cb20-214" aria-hidden="true" tabindex="-1"></a>        ax.plot(params, sil_scores, <span class="st">"-o"</span>)  </span>
+<span id="cb20-215"><a href="#cb20-215" aria-hidden="true" tabindex="-1"></a>        ax.<span class="bu">set</span>(xlabel<span class="op">=</span><span class="st">'Hyper-parameter'</span>, ylabel<span class="op">=</span><span class="st">'Silhouette'</span>)</span>
+<span id="cb20-216"><a href="#cb20-216" aria-hidden="true" tabindex="-1"></a>        plt.show()</span>
+<span id="cb20-217"><a href="#cb20-217" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-218"><a href="#cb20-218" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> opt_labels</span>
+<span id="cb20-219"><a href="#cb20-219" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-220"><a href="#cb20-220" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-223"><a href="#cb20-223" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb20-224"><a href="#cb20-224" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-polar3</span></span>
+<span id="cb20-225"><a href="#cb20-225" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: Silhouette Method:Find the Optimal Group Size</span></span>
+<span id="cb20-226"><a href="#cb20-226" aria-hidden="true" tabindex="-1"></a>opt_labels<span class="op">=</span>maximize_silhouette(X,algo<span class="op">=</span><span class="st">"kmeans"</span>,nmax<span class="op">=</span><span class="dv">15</span>, i_plot<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb20-227"><a href="#cb20-227" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-228"><a href="#cb20-228" aria-hidden="true" tabindex="-1"></a>From the Figure 3, K= 2 if we choose 'Silhouette Method'.</span>
+<span id="cb20-229"><a href="#cb20-229" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-230"><a href="#cb20-230" aria-hidden="true" tabindex="-1"></a><span class="fu">##### K-Means:Final results</span></span>
+<span id="cb20-233"><a href="#cb20-233" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb20-234"><a href="#cb20-234" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-polar4</span></span>
+<span id="cb20-235"><a href="#cb20-235" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: Silhouette Method:Find the Optimal Group Size</span></span>
+<span id="cb20-236"><a href="#cb20-236" aria-hidden="true" tabindex="-1"></a>plot(X,opt_labels)</span>
+<span id="cb20-237"><a href="#cb20-237" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-238"><a href="#cb20-238" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-239"><a href="#cb20-239" aria-hidden="true" tabindex="-1"></a>From the results, the effect of clustering is relatively satisfactory, but it only divides the data into two major categories, and for some special outliner data are also grouped into the same category, which is not conducive to the analysis of special cases.</span>
+<span id="cb20-240"><a href="#cb20-240" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-241"><a href="#cb20-241" aria-hidden="true" tabindex="-1"></a><span class="fu">##### Hyper-parameter tuning for AgglomerativeClustering, silhouette method</span></span>
+<span id="cb20-244"><a href="#cb20-244" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb20-245"><a href="#cb20-245" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-polar5</span></span>
+<span id="cb20-246"><a href="#cb20-246" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: Silhouette Method:Find the Optimal parameter</span></span>
+<span id="cb20-247"><a href="#cb20-247" aria-hidden="true" tabindex="-1"></a>opt_labels<span class="op">=</span>maximize_silhouette(X,algo<span class="op">=</span><span class="st">"ag"</span>,nmax<span class="op">=</span><span class="dv">15</span>, i_plot<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb20-248"><a href="#cb20-248" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-249"><a href="#cb20-249" aria-hidden="true" tabindex="-1"></a><span class="fu">##### AgglomerativeClustering:Final results</span></span>
+<span id="cb20-252"><a href="#cb20-252" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb20-253"><a href="#cb20-253" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-polar6</span></span>
+<span id="cb20-254"><a href="#cb20-254" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: AgglomerativeClustering:Cluster data</span></span>
+<span id="cb20-255"><a href="#cb20-255" aria-hidden="true" tabindex="-1"></a>plot(X,opt_labels)</span>
+<span id="cb20-256"><a href="#cb20-256" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-257"><a href="#cb20-257" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-258"><a href="#cb20-258" aria-hidden="true" tabindex="-1"></a>As seen in Figure 6, there is a linear relationship between price differences and trading volume. As the difference between the opening price and the closing price increases, the trading volume of the cryptocurrency for the day increases slightly.</span>
+<span id="cb20-259"><a href="#cb20-259" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-260"><a href="#cb20-260" aria-hidden="true" tabindex="-1"></a>The Agglomerative Clustering results(figure 6) show some obvious outliers, and by looking at the dates of these data points one can infer whether there were any major events that occurred on that day.</span>
+<span id="cb20-261"><a href="#cb20-261" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-262"><a href="#cb20-262" aria-hidden="true" tabindex="-1"></a><span class="fu">##### Hyper-parameter tuning for DBSCAN, silhouette method</span></span>
+<span id="cb20-265"><a href="#cb20-265" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb20-266"><a href="#cb20-266" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-polar7</span></span>
+<span id="cb20-267"><a href="#cb20-267" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: Silhouette Method:Find the Optimal parameter</span></span>
+<span id="cb20-268"><a href="#cb20-268" aria-hidden="true" tabindex="-1"></a>opt_labels<span class="op">=</span>maximize_silhouette(X,algo<span class="op">=</span><span class="st">"dbscan"</span>,nmax<span class="op">=</span><span class="dv">15</span>, i_plot<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb20-269"><a href="#cb20-269" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-270"><a href="#cb20-270" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-271"><a href="#cb20-271" aria-hidden="true" tabindex="-1"></a>From the Figure 7, K= 2 if we choose 'Silhouette Method'.</span>
+<span id="cb20-272"><a href="#cb20-272" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-273"><a href="#cb20-273" aria-hidden="true" tabindex="-1"></a><span class="fu">##### DBSCAN:Final results</span></span>
+<span id="cb20-276"><a href="#cb20-276" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb20-277"><a href="#cb20-277" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-polar8</span></span>
+<span id="cb20-278"><a href="#cb20-278" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: DBSCAN:Cluster data</span></span>
+<span id="cb20-279"><a href="#cb20-279" aria-hidden="true" tabindex="-1"></a>plot(X,opt_labels)</span>
+<span id="cb20-280"><a href="#cb20-280" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-281"><a href="#cb20-281" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-282"><a href="#cb20-282" aria-hidden="true" tabindex="-1"></a>From the results, the effect of clustering is not very satisfactory, and there is no clear boundary for all classified data, just dividing the outliner into a new group.</span>
+<span id="cb20-283"><a href="#cb20-283" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-284"><a href="#cb20-284" aria-hidden="true" tabindex="-1"></a><span class="fu">## Results</span></span>
+<span id="cb20-285"><a href="#cb20-285" aria-hidden="true" tabindex="-1"></a>The optimal number of clusters for K-means is 2, so the method divides the entire data set into two groups. DBSCAN also divides the dataset into two groups, but one of them contains only one data point. These two classification methods are not particularly good. In figure 4 and figure 8, there are some obvious outliers and noises. However, K-means divides these outliers into a cluster with the data points below that match the market pattern, which can lead to incorrect analysis and judgment of the market volume.</span>
+<span id="cb20-286"><a href="#cb20-286" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-287"><a href="#cb20-287" aria-hidden="true" tabindex="-1"></a>AgglomerativeClustering divides the data sets into 3 groups. This is an ideal result. Because this method clearly groups outliers from the dataset into a new group, it allows us to clearly identify unusual trades in the market from the grouping.</span>
+<span id="cb20-288"><a href="#cb20-288" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-289"><a href="#cb20-289" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-290"><a href="#cb20-290" aria-hidden="true" tabindex="-1"></a><span class="fu">## Conclusions</span></span>
+<span id="cb20-293"><a href="#cb20-293" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb20-294"><a href="#cb20-294" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-polar9</span></span>
+<span id="cb20-295"><a href="#cb20-295" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: BTC-Market Price</span></span>
+<span id="cb20-296"><a href="#cb20-296" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> PIL <span class="im">import</span> Image</span>
+<span id="cb20-297"><a href="#cb20-297" aria-hidden="true" tabindex="-1"></a>myImage <span class="op">=</span> Image.<span class="bu">open</span>(<span class="st">'..//../501-project-website/images/clustering/volumn.png'</span>)</span>
+<span id="cb20-298"><a href="#cb20-298" aria-hidden="true" tabindex="-1"></a>myImage</span>
+<span id="cb20-299"><a href="#cb20-299" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-300"><a href="#cb20-300" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-301"><a href="#cb20-301" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-302"><a href="#cb20-302" aria-hidden="true" tabindex="-1"></a>From figure 9, we can have the inference that the greater the variation in market prices during a day, the greater the volume of trading. Price variation is positively correlated with volume. The volatility of the market price over a certain period of time is determined by the traders who are bidding at the time. The greater the difference between the highest and lowest prices, the more people are making more demand for trades in that time period.A larger price range leads to more trading opportunities and the chance to make higher profits. People will be more likely to trade for higher profits.</span>
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+</body></html>

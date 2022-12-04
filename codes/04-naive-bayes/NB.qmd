@@ -1,0 +1,382 @@
+---
+title: "Data Gathering "
+format: 
+  html:
+    code-fold: true
+    smooth-scroll: true
+    theme: 
+      light: cosmo
+      dark: darkly 
+execute:
+  echo: false
+jupyter: python3
+---
+
+
+## Text Data: Naive-Bayes Python:
+
+
+#### Code Website
+
+[Code for Naïve Bayes (NB) in Python with Labeled Text Data](https://github.com/anly501/anly-501-project-T1an-T1an/tree/main/codes/04-naive-bayes)
+
+#### Context
+It is important for sentiment analysis of tweets. Text data is unstructured data. Unlike structured data, People cannot immediately get preliminary information from unstructured data. Sentiment analysis of tweets can be used to initially determine the user's evaluation of a particular thing.
+
+Sentiment analysis, sometimes referred to as opinion mining, is a technique used in natural language processing (NLP) to determine if data is positive, negative, or neutral. Sentiment analysis on text data is popular among companies to monitor how their brands and products are perceived by consumers through online reviews and to better understand their target market and target population.
+
+Sentiment analysis is first performed on clean data. By using textblob package to analyze each twitter. And remove all unnecessary data such as emoticons, punctuation, etc.
+The stopwords are also removed.
+Data tokenization is also conducted.
+The number of token occurrences in each document is counted.
+The figure below shows the distribution of positive and negative words.
+
+#### Code and Methodology
+```{python}
+#| tags: [hide-output]
+import re
+import time
+import string
+import warnings
+import nltk
+
+from nltk.tokenize import sent_tokenize, word_tokenize
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
+from nltk.stem import WordNetLemmatizer
+from nltk.stem.porter import *
+from nltk.classify import NaiveBayesClassifier
+from wordcloud import WordCloud
+
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import f1_score, confusion_matrix, accuracy_score
+from sklearn.svm import SVC
+from sklearn.naive_bayes import GaussianNB
+
+# To mock web-browser and scrap tweets
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+
+# To consume Twitter's API
+import tweepy
+from tweepy import OAuthHandler 
+
+# To identify the sentiment of text
+from textblob import TextBlob
+from textblob.sentiments import NaiveBayesAnalyzer
+from textblob.np_extractors import ConllExtractor
+
+import os
+from sklearn.feature_extraction.text import CountVectorizer
+import numpy as np
+import json
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+from nltk.tokenize import TweetTokenizer
+from nltk.corpus import stopwords#python -m nltk.downloader stopwords
+import string
+
+import nltk
+from nltk.corpus import stopwords
+from  nltk.stem import SnowballStemmer
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.metrics import classification_report
+nltk.download('omw-1.4', quiet=True)
+# ignoring all the warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
+warnings.filterwarnings("ignore", category=FutureWarning)
+# downloading stopwords corpus
+nltk.download('stopwords', quiet=True)
+nltk.download('wordnet', quiet=True)
+nltk.download('vader_lexicon', quiet=True)
+nltk.download('averaged_perceptron_tagger', quiet=True)
+nltk.download('movie_reviews', quiet=True)
+nltk.download('punkt', quiet=True)
+nltk.download('conll2000', quiet=True)
+nltk.download('brown', quiet=True)
+stopwords = set(stopwords.words("english"))
+
+tweets_df=pd.read_csv('../../data/01-modified-data/twitter_text_data.csv')
+tweets_df=tweets_df.rename(columns = {'text':'tweets'})
+#tweets_df
+```
+
+
+```{python}
+#| tags: [hide-output]
+def fetch_sentiment_using_textblob(text):
+    analysis = TextBlob(text)
+    return 'pos' if analysis.sentiment.polarity >= 0 else 'neg'
+
+sentiments_using_textblob = tweets_df.tweets.apply(lambda tweet: fetch_sentiment_using_textblob(tweet))
+pd.DataFrame(sentiments_using_textblob.value_counts())
+tweets_df['attitude'] = sentiments_using_textblob
+```
+
+```{python}
+#| tags: [hide-output]
+#data cleaning 
+def remove_pattern(text, pattern_regex):
+    r = re.findall(pattern_regex, text)
+    for i in r:
+        text = re.sub(i, '', text)
+    
+    return text 
+```
+
+```{python}
+#| tags: [hide-output]
+tweets_df['clean_tweets'] = np.vectorize(remove_pattern)(tweets_df['tweets'], "@[\w]*: | *RT*")
+tweets_df['final_tweets'] = tweets_df['clean_tweets'].str.replace("[^a-zA-Z# ]", "")
+stopwords_set = set(stopwords)
+cleaned_tweets = []
+
+
+for index, row in tweets_df.iterrows():
+    
+    words_without_stopwords = [word for word in row.final_tweets.split() if not word in stopwords_set and '#' not in word.lower()]
+    
+    cleaned_tweets.append(' '.join(words_without_stopwords))
+    
+tweets_df['final_tweets'] = cleaned_tweets
+tokenized_tweet = tweets_df['final_tweets'].apply(lambda x: x.split())
+word_lemmatizer = WordNetLemmatizer()
+
+tokenized_tweet = tokenized_tweet.apply(lambda x: [word_lemmatizer.lemmatize(i) for i in x])
+for i, tokens in enumerate(tokenized_tweet):
+    tokenized_tweet[i] = ' '.join(tokens)
+
+tweets_df['final_tweets'] = tokenized_tweet
+```
+
+```{python}
+#| tags: [hide-output]
+cleaned_tweets = []
+
+for index, row in tweets_df.iterrows():
+    # Here we are filtering out all the words that contains link
+    words_without_links = [word for word in row.final_tweets.split() if 'http' not in word]
+    cleaned_tweets.append(' '.join(words_without_links))
+
+tweets_df['final_tweets'] = cleaned_tweets
+```
+
+```{python}
+#| echo: true
+#| label: fig-1
+#| fig-cap: histogram of Twitter Text Data
+sns.countplot(tweets_df['attitude'],label='Count').set(title='Attitude histogram')
+```
+
+The figure-1 shows that the majority of tweets have a positive attitude towards cryptocurrencies, even though the overall price of cryptocurrencies is on a downward trend and there is instability in it.
+
+The tweets marked with a positive attitude are marked as 0 and those marked with a negative attitude are marked as 1. In this way, Labeled Text Data is obtained.
+
+```{python}
+tweets_df['label']=np.where(tweets_df['attitude']=='pos',0,1)
+#tweets_df.to_csv (r'..//../data/01-modified-data/cleaned_twitter.csv', index = False, header=True)
+```
+
+```{python}
+vectorizer = CountVectorizer()
+X = vectorizer.fit_transform(tweets_df['final_tweets'])
+X=X.toarray()
+y=tweets_df['label']
+```
+
+```{python}
+#seperate dataset to train and test data
+import random
+x_train,x_test,y_train,y_test=train_test_split(X,y,test_size=0.2,random_state=66)
+```
+
+```{python}
+#separate data two training data and test data
+import random
+x_train,x_test,y_train,y_test=train_test_split(X,y,test_size=0.2,random_state=66)
+```
+```{python}
+model = MultinomialNB()
+model.fit(x_train, y_train)
+yp_test=model.predict(x_test)
+cm_matrix=confusion_matrix(y_test,yp_test)
+#cm_matrix
+```
+In this section, Naive-Bayes classifier model was choosen to classify currency data and text data. The Naive-Bayes classifier model is a basic and simple classification algorithm, but it is very powerful. This algorithm has a stable accuracy and it is fast when applied to large data. The results of the algorithm are straightforward and can be easily interpreted.
+
+After training the NB model with the training data and testing the test data, The data set was first divided into a training set and a test set. The training set is 80% of the total data and the test set is 20% of the data set.
+the figure-2 below represents the confusion matrix by using a heat-map, because it is more straightforward and concise.
+```{python}
+#| echo: true
+#| label: fig-2
+#| fig-cap: Heatmap Result of Text Data
+print(f'Accuracy Score - {accuracy_score(y_test, yp_test)}')
+f, ax1 = plt.subplots(figsize = (12, 10))
+ax1=sns.heatmap(cm_matrix,cmap="RdBu",annot=True,square=True,cbar_kws={'shrink': 0.6})
+plt.show()
+```
+
+The top left block represents True Positive: the predicted result is true and the actual value is also true.
+
+The lower right block represents True Negative: the predicted result is false and the actual value is also false.
+
+The bottom left block represents False Positive: the predicted result is true, but the actual value is false.
+
+The upper right block represents False Negative: the predicted value is false, but the actual value is true.
+
+
+Because the data set is unbalanced at the beginning. The number of positive words is much higher than the number of negative words. The final prediction accuracy is 0.77. From the figure below, we can see that our prediction accuracy is much higher for positive attitudes tweets, but worse for negative attitudes tweets.
+
+```{python}
+#| echo: true
+#| label: tbl-1
+#| tbl-cap: Accuracy Result Table
+print(classification_report(y_test,yp_test))
+#report_summ = classification_report(y_test,yp_test)
+#report_summ = pd.DataFrame(report_summ)
+```
+
+#### World Clouds
+Word Clouds can provide a quick and informative summary, and it can help us have a simple view of the words contained in the different attitudes of tweets.
+
+```{python}
+#| echo: true
+#| label: fig-3
+#| fig-cap: World Cloud :Positive Word
+#pos word
+postive_words = ' '.join([text for text in tweets_df['final_tweets'][tweets_df.attitude == 'pos']])
+wordcloud = WordCloud(width=800, height=500, random_state=21, max_font_size=100, relative_scaling=0.5).generate(postive_words)
+plt.figure(figsize=(10, 10))
+plt.imshow(wordcloud)
+plt.show()
+```
+
+```{python}
+#| echo: true
+#| label: fig-4
+#| fig-cap: World Cloud :Negative Word
+#neg word
+negitve_words = ' '.join([text for text in tweets_df['final_tweets'][tweets_df.attitude == 'neg']])
+wordcloud = WordCloud(width=800, height=500, random_state=21, max_font_size=100, relative_scaling=0.5).generate(negitve_words)
+plt.figure(figsize=(10, 10))
+plt.imshow(wordcloud)
+plt.show()
+```
+
+
+## Currency Data: Naive-Bayes Python:
+
+#### Code Website
+
+[Code for Naïve Bayes (NB) in Python with Currency Data](https://github.com/anly501/anly-501-project-T1an-T1an/tree/main/codes/04-naive-bayes)
+
+#### Context
+First a new label was defined for further analysis. I chose bitcoinand use the formula: (close price - open price)/open price to create the new lable. This formula shows how the price of a cryptocurrency fluctuates during the day. If the result of the formula is greater than 0.3, a new label is added and the classification of bitcoin for that day is 1. If the result of the formula is less than 0.3, the classification of bitcoin for that day is 0. If the value obtained from the formula is greater than 0.3, then it means that the price of the cryptocurrency has changed significantly on that day. If the value obtained from the formula is less than 0.3, then it means that the price of the cryptocurrency has not changed too much on that day.
+```{python}
+from sklearn.datasets import load_iris
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import pandas as  pd
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+from sklearn.naive_bayes import GaussianNB
+import warnings
+warnings.filterwarnings('ignore')
+```
+
+```{python}
+raw_data= pd.read_csv("../../data/01-modified-data/cleaned_currency.csv")
+btc=raw_data[raw_data['exchange']=='BTC/USD']
+
+
+def cal_momentum(df):
+    n = len(df)
+    arr = []
+    for i in range(0,5):
+        arr.append('NaN')
+    for j in range(5,n):
+        momentum = df.close[j] - df.close[j-5] #Equation for momentum
+        arr.append(momentum)
+    return arr
+
+mom=cal_momentum(btc)
+btc['Momentum'] =mom
+
+data_pctchange=btc.close.pct_change()
+btc['Return'] = data_pctchange
+
+def ROI(df,n):
+    m = len(df)
+    arr = []
+    for i in range(0,n):
+        arr.append('N')
+    for j in range(n,m):
+        roi= (df.close[j] - df.close[j-n])/df.close[j-n] 
+        arr.append(roi)
+    return arr
+
+ROI30=ROI(btc,30)
+btc['ROI-30D']=ROI30
+
+#Function to Classify each day as a 1 or a 0
+def class_y(df):
+    n = len(df)
+    arr = []
+    for i in range(0,len(df)-1):
+        if (100*((df.close[i+1]-df.open[i+1])/df.open[i+1]))>=.3:
+            arr.append(1)
+        else:
+            arr.append(0)
+    arr.append('0')
+    return arr
+
+class_btc=class_y(btc)
+
+#Add Class to our dataframe
+btc['class'] = class_btc
+```
+
+```{python}
+btc.head()
+```
+
+After processing the data in python, the data is exported and analyzed with r. The first 30 columns of the data have some values of NA, so those rows containing NA are removed. The 'label' column and other columns are divided into two parts. The data is also normalized and all values range from -3 to +3.
+
+The number of each label was first counted in r, as shown in the Figure-5 below.
+```{python}
+#| echo: true
+#| label: fig-5
+#| fig-cap: World Cloud:Negative Word
+from PIL import Image
+
+im = Image.open(r"../../501-project-website/images/naive-bayes/count_level_r.png") 
+im
+```
+
+Paired plots were generated to provide a preliminary view of the relationship between all variables.
+```{python}
+#| echo: true
+#| label: fig-6
+#| fig-cap: Currency Data:Paired Plot
+im2 = Image.open(r"../../501-project-website/images/naive-bayes/pairs_plot_r.png") 
+im2
+```
+From Figure-6, we can see that there is a strong linear relationship between the closing price of cryptocurrencies and M20 and M5, while ROI.30D has a slight linear relationship with Momentum and the closing price. The relationship between the other variables is not  easily obtained from the Paired Plot.
+
+There are many packages in R to analyze the data using the NB algorithm. Here I used the package e1071. The data set was first divided into a training set and a test set. The training set is 80% of the total data and the test set is 20% of the data set.
+
+After analysing the classification by using the NB model, the confusion matrix is shown in the figure below. The accuracy of the model for label 0 is 0.82, which is a relatively good result. However, the accuracy for label 1 is only 0.18. The overall accuracy of the model is 0.5737.
+
+```{python}
+#| echo: true
+#| label: fig-7
+#| fig-cap: Currency Data:Result Table
+im3 = Image.open(r"../../501-project-website/images/naive-bayes/confusion_matrix_r.png") 
+im3
+```
+
+## Conclusion
+The NB model is more appropriate for analyzing text data. The accuracy of 0.77 is a high accuracy rate. However, when the model is applied to classify currency data, the prediction accuracy is 0.81 for label 0 (the difference between the opening and closing price of the day is less than 0.3), but very low for label 1 (the difference between the opening and closing price of the day is more than 0.3).

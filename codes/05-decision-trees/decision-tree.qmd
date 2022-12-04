@@ -73,7 +73,13 @@ print('The number of 1 in the label is', y_1)
 ```
 
 ```{python}
-def generate_label_data(class_labels, weights,N=334):
+import numpy as np
+import random
+from collections import Counter
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import precision_recall_fscore_support
+
+def generate_label_data(class_labels, weights,N=10000):
     
 
     y=random.choices(class_labels, weights = weights, k = N)
@@ -83,20 +89,23 @@ def generate_label_data(class_labels, weights,N=334):
     print("probability of labels:",np.fromiter(Counter(y).values(), dtype=float)/len(y)) # counts the elements' frequency
     return y
 
-#TEST
-y_ram=generate_label_data([0,1],[0.56,0.44],334)
+def random_classifier(y_data):
+    ypred=[];
+    max_label=np.max(y_data); #print(max_label)
+    for i in range(0,len(y_data)):
+        ypred.append(int(np.floor((max_label+1)*np.random.uniform(0,1))))
+
+    print("-----RANDOM CLASSIFIER-----")
+    print("count of prediction:",Counter(ypred).values()) # counts the elements' frequency
+    print("probability of prediction:",np.fromiter(Counter(ypred).values(), dtype=float)/len(y_data)) # counts the elements' frequency
+    print("accuracy",accuracy_score(y_data, ypred))
+    print("percision, recall, fscore,",precision_recall_fscore_support(y_data, ypred))
+
+print("\nBINARY CLASS:  NON-UNIFORM LOAD")
+y_ram=generate_label_data([0,1],[0.56,0.44],10000)
+random_classifier(y_ram)
 ```
 
-```{python}
-#| label: tbl-planets
-#| tbl-cap: Classification Report Matrix
-from sklearn.metrics import accuracy_score
-y_pred = y_ram
-y_true = y
-class_report_ran=classification_report(y_true,y_pred, output_dict=True)
-class_report_ran=pd.DataFrame(class_report_ran).transpose()
-class_report_ran
-```
 
 #### Feature Selection
 

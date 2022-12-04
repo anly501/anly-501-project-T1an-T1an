@@ -1,0 +1,253 @@
+---
+title: "Exploring Data"
+format: 
+  html:
+    smooth-scroll: true
+    code-fold: true
+    code-tools: true
+    theme: 
+      light: cosmo
+      dark: darkly 
+jupyter: python3
+---
+
+```{python}
+#| echo: false
+from PIL import Image
+myImage = Image.open('../../501-project-website/images/EDA/eda.png')
+myImage
+```
+*Picture from TOWARDS AI*
+
+## FTX Market Analysis 
+Success in any financial market requires people to identify reliable investments. When a virtual currency is undervalued, it makes sense to buy it. If it's overvalued, maybe it's time to sell. Data scientists can programmatically execute decisions based on the predictions of trained models. By fully analyzing the market and comparing the market prices of multiple virtual currency coins, the best virtual currency for investment is identified.
+
+### Dataset Overview
+
+Build portfolios with virtual currency information and historical virtual currency prices. Rank virtual currencies from the highest to the lowest expected return and evaluate them based on the difference in returns between the highest and lowest virtual currencies. Below is a brief overview and descriptive statistics of the variables in the data.
+
+
+
+```{python}
+#| label: tbl-1
+#| tbl-cap: Descriptive Statistics of FTX Dataset
+import requests
+import pandas as pd
+import numpy as np
+import datetime
+pd.set_option('display.float_format',lambda x : '%.2f'%x)
+import warnings
+warnings.filterwarnings('ignore')
+import plotly.graph_objects as go #pip install plotly==5.10.0
+import plotly_express as px#pip install plotly_express==0.4.0
+import gc
+import matplotlib.colors
+import seaborn as sns
+from plotly.subplots import make_subplots
+from plotly.offline import init_notebook_mode
+from datetime import datetime, timedelta
+from sklearn.model_selection import TimeSeriesSplit
+from sklearn.metrics import mean_squared_error,mean_absolute_error
+from decimal import ROUND_HALF_UP, Decimal
+import plotly.figure_factory as ff
+final_v1 = pd.read_csv('../../data/01-modified-data/cleaned_currency.csv')
+ds=final_v1.describe()
+ds=pd.DataFrame(ds)
+ds
+```
+
+The quantile of information from Table-1 summarizes the price range of ten cryptocurrencies, which includes the opening price, closing price, high price, low price, daily trading volume, five-day average closing price and 20-day average closing price.
+
+```{python}
+#| label: fig-charts
+#| fig-cap: FTX Market Overview
+colors=['blue','red','green']
+final_v1["Return"] = final_v1.groupby("exchange")["open"].pct_change(1)
+train_date=final_v1.date.unique()
+returns=final_v1.groupby('date')['Return'].mean().mul(100).rename('Average Return')
+close_avg=final_v1.groupby('date')['close'].mean().rename('Closing Price')
+vol_avg=final_v1.groupby('date')['volume'].mean().rename('Volume')
+
+fig = make_subplots(rows=3, cols=1, 
+                    shared_xaxes=True)
+for i, j in enumerate([returns, close_avg, vol_avg]):
+    fig.add_trace(go.Scatter(x=train_date, y=j, mode='lines',
+                             name=j.name, marker_color=colors[i]), row=i+1, col=1)
+fig.update_xaxes(rangeslider_visible=False,
+                 rangeselector=dict(
+                     buttons=list([
+                         dict(count=6, label="6m", step="month", stepmode="backward"),
+                         dict(count=1, label="1y", step="year", stepmode="backward"),
+                         dict(count=2, label="2y", step="year", stepmode="backward"),
+                         dict(step="all")])),
+                 row=1,col=1)
+fig.update_layout(title='FTX Market Average Stock Return, Closing Price, and Shares Traded', 
+                  hovermode='x unified', height=700, 
+                  yaxis1=dict(title='Coin Return (%)', ticksuffix='%'), 
+                  yaxis2_title='Closing Price (USD)', yaxis3_title='Shares Traded (USD)',
+                  showlegend=False)
+fig.show()
+```
+
+The chart above shows the market's average currency returns, closing prices and shares traded since September 2021. While there has been a lot of volatility over the past years, the number of coins traded in early 2022 is slightly lower than in 2021. Returns in 2022 are down 0.3% relative to 2021. The price peaked in November 2021, after which the overall price trend was downward although the price recovered in March 2022. Trading volume peaked in late March 2022 and May 2022, specifically because of the LUNA price break and ETH chain merger, which led to high volatility in the market and investors' willingness to trade at that time.
+
+```{python}
+#| label: fig-charts1
+#| fig-cap: Yearly Average Coin Returns
+final_v1['date'] = pd.to_datetime(final_v1['date'],errors='coerce')
+final_v1['Year'] = final_v1['date'].dt.year
+years = {year: pd.DataFrame() for year in final_v1.Year.unique()[::-1]}
+for key in years.keys():
+    df=final_v1[final_v1.Year == key]
+    years[key] = df.groupby('exchange')['Return'].mean().mul(100).rename("Avg_return_{}".format(key))
+df=pd.concat((years[i].to_frame() for i in years.keys()), axis=1)
+df=df.sort_values(by="Avg_return_2021")
+
+fig = make_subplots(rows=1, cols=2, shared_yaxes=True)
+for i, col in enumerate(df.columns):
+    x = df[col]
+    mask = x<=0
+    fig.add_trace(go.Bar(x=x[mask], y=df.index[mask],orientation='h', 
+                         text=x[mask], texttemplate='%{text:.2f}%',textposition='auto',
+                         hovertemplate='Average Return in %{y} exchange = %{x:.4f}%',
+                         marker=dict(color='red', opacity=0.7),name=col[-4:]), 
+                  row=1, col=i+1)
+    fig.add_trace(go.Bar(x=x[~mask], y=df.index[~mask],orientation='h', 
+                         text=x[~mask], texttemplate='%{text:.2f}%', textposition='auto', 
+                         hovertemplate='Average Return in %{y} exchange = %{x:.4f}%',
+                         marker=dict(color='green', opacity=0.7),name=col[-4:]), 
+                  row=1, col=i+1)
+    fig.update_xaxes(range=(x.min()-.10,x.max()+.10), title='{} Returns'.format(col[-4:]), 
+                     showticklabels=False, row=1, col=i+1)
+fig.update_layout(template="plotly_white",title='Yearly Average Coin Returns', 
+                  hovermode='closest',
+                  height=600, width=800, showlegend=False)
+fig.show()
+
+```
+
+In 2021, almost half of the coins have positive returns on average, with AVAX/USD being the highest at about 1.41% overall, while in 2022, all coins have negative returns except DAI/USD, with SOL/USD being the lowest at about -0.52% overall. dai is a stablecoin on the Ethereum blockchain whose value is maintained through a system of smart contracts and these Contracts incentivize decentralized participants to perform maintenance and governance functions to stay as close to $1 (USD) as possible. So the return of this coin has been stable at 0.5%.
+
+```{python}
+#| label: fig-charts2
+#| fig-cap: Return Distribution by each Coin
+
+pal = ['hsl('+str(h)+',50%'+',50%)' for h in np.linspace(0, 360, 18)]
+fig = go.Figure()
+for i, sector in enumerate(df.index[::-1]):
+    y_data=final_v1[final_v1['exchange']==sector]['Return']
+    
+    fig.add_trace(go.Box(y=y_data*100, name=sector,
+                         marker_color=pal[i], showlegend=False))
+fig.update_layout(title='Return Distribution by each Coin',
+                  yaxis=dict(title='Coin Return (%)',ticksuffix='%'),
+                  margin=dict(b=150), height=750, width=900)
+fig.show()
+
+```
+
+While the majority of the sector's returns are in the 20% and -30% range, this demonstrates the high-risk, high-reward nature of virtual currencies. The disparity in returns is particularly pronounced for coins that are particularly popular with investors. With the exception of the stablecoin DAI, it can be seen that for the likes of ETH and BTC, the difference in returns as a market bellwether is relatively small. However, the coins all have a number of outliers, with returns in the UNI and DOGE sectors ranging from as high as 26% to as low as -31% for AVAX. The chart below shows the price trend of Market.
+
+
+
+```{python}
+#| label: fig-1
+#| fig-cap: closed price over time (except BTC and ETH)
+
+ex_data=final_v1[(final_v1['exchange']!='BTC/USD')&(final_v1['exchange']!='ETH/USD')]
+all_price=px.line(data_frame=ex_data,x='date',y='close',color='exchange',title='All Crypto closed Price Over Time(except BTC and ETH)')
+all_price.update_yaxes(title_text="Close Price (USD)")
+all_price.show()
+```
+
+
+Sentiment in the cryptocurrency market is often influenced by various factors, such as expert predictions or political events. However, when analyzed in a broader time frame, it turns out that the price of most cryptocurrencies, ETH, may depend mainly on the valuation of Bitcoin. And for the most frequently traded BTC and ETH, both have much higher prices than other coins. For example, on December 3, 2022, the price of BTC is $16,913 and ETH is $1,252, but the price of DOGE is only $0.1006. This is not good for data visualization, so excluding BTC and ETH from the chart above will give a better view of the price changes of other coins.
+
+Each currency is priced lower in 2022 than it was in 2021. Especially the higher priced coins have seen their prices drop even more. the highest price for SOL was $258 and the lowest price was $31, a drop of 87%. For popular and frequently traded coins, such as DOGE, the price fluctuations are relatively small. But the prices of the recorded coins, all of them will rise or fall at the same time because of the external economic market downturn and investment panic.
+
+
+```{python}
+#| label: fig-charts111
+#| fig-cap: BTC and ETH price
+#| fig-subcap: 
+#|   - "BTC price by FTX"
+#|   - "ETH price by FTX"
+#| layout-ncol: 2
+
+btc=final_v1[(final_v1['exchange']=='BTC/USD')]
+btc
+fig_btc = go.Figure(go.Candlestick(x=btc.index,
+  open=btc['open'],
+  high=btc['high'],
+  low=btc['low'],
+  close=btc['close']))
+fig_btc.add_trace(go.Scatter(x=btc.index, 
+                         y=btc['M5'], 
+                         opacity=0.7, 
+                         line=dict(color='blue', width=2), 
+                         name='MA5'))
+fig_btc.add_trace(go.Scatter(x=btc.index, 
+                         y=btc['M20'], 
+                         opacity=0.7, 
+                         line=dict(color='orange', width=2), 
+                         name='MA20'))
+
+fig_btc.update_layout(title="BTC price by FTX")
+fig_btc.update_xaxes(title_text="Date")
+fig_btc.update_yaxes(title_text="Price (USD)")                 
+fig_btc.show()
+
+eth=final_v1[(final_v1['exchange']=='ETH/USD')]
+fig_eth = go.Figure(go.Candlestick(x=eth.index,
+  open=eth['open'],
+  high=eth['high'],
+  low=eth['low'],
+  close=eth['close']))
+
+fig_eth.update_layout(title="ETH price by FTX")
+fig_eth.update_xaxes(title_text="Date")
+fig_eth.update_yaxes(title_text="Price (USD)") 
+fig_eth.show()
+```
+
+In the candlestick charts above, the boxes represent the daily spread between the open and close prices and the lines represent the spread between the low and high prices. The color of the boxes indicates whether the close price was greater or lower than the open price, with green indicating a higher closing price on that day and red indicating a lower closing price. In late April, the market saw a consecutive 30-day period where the close price was greater than the open price.
+
+Based on the price fluctuation trends of BTC and ETH in the chart above, the correlation between the performance of BTC and ETH is currently significantly higher than the correlation between the value of BTC and other altcoins. Ether will always have some correlation with Bitcoin because "Bitcoin is king and usually the others will follow in the market". This phenomenon is like in the commodities market where gold is the leading asset and its price changes follow the other metals. When it comes to the cryptocurrency market, the bitcoin price is really a barometer of investor sentiment towards digital currencies in general. Therefore, if it changes due to systemic factors affecting the market, the price of ETH could change in the same direction as the price of BTC.
+
+```{python}
+#| label: fig-charts1a
+#| fig-cap: Coin Correlation
+df_pivot=final_v1.pivot_table(index='date', columns='exchange', values='close').reset_index()
+corr=df_pivot.corr().round(2)
+mask=np.triu(np.ones_like(corr, dtype=bool))
+c_mask = np.where(~mask, corr, 100)
+c=[]
+for i in c_mask.tolist()[1:]:
+    c.append([x for x in i if x != 100])
+    
+cor=c[::-1]
+x=corr.index.tolist()[:-1]
+y=corr.columns.tolist()[1:][::-1]
+fig=ff.create_annotated_heatmap(z=cor, x=x, y=y, 
+                                hovertemplate='Correlation between %{x} and %{y} Coin = %{z}',
+                                colorscale='viridis', name='')
+fig.update_layout(template="plotly_white", title='Coin Correlation',height=800,width=900,
+                  yaxis=dict(showgrid=False, autorange='reversed'),
+                  xaxis=dict(showgrid=False))
+fig.show()
+```
+
+The chart above shows that the correlation between cryptocurrencies has really strengthened in the past year. The possible reason for this change could be that the ethereum network was not a very successful year. In the cryptocurrency market, price changes for most coins usually happen at the same time. The golden rule for any investor is portfolio diversification, which is usually achieved by acquiring low correlation assets. If the price of one of these assets rises, the other is likely to fall. The investor takes profits in the first case and waits for the value of the asset to increase in the second case. The average correlation between the major altcoins in the data is 0.9. This means that in 90% of cases, cryptocurrencies such as ETH, XRP, BTC,LINK, DOGE and UNI grow and fall at the same time. Therefore, it may not make sense to use them to diversify your portfolio. For investors, the excessive interdependence of assets creates an obstacle to effective portfolio diversification.
+
+##  Twitter Analysis
+
+The words correlation plot below shows that the correlation beteen each words we choose.
+```{python}
+#| label: fig-charts1aa
+#| fig-cap: Correlation Plot of Twitter
+from PIL import Image
+myImagea = Image.open('../../501-project-website/images/EDA/heatmap.jpg')
+myImagea
+```
+
+The correlation between different words in the text data can be found in Figure-7. Only a very few words have some correlation among them, while most words do not have much correlation among them.

@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.242">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Naive Bayes</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="navie_bayes_2_files/libs/clipboard/clipboard.min.js"></script>
+<script src="navie_bayes_2_files/libs/quarto-html/quarto.js"></script>
+<script src="navie_bayes_2_files/libs/quarto-html/popper.min.js"></script>
+<script src="navie_bayes_2_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="navie_bayes_2_files/libs/quarto-html/anchor.min.js"></script>
+<link href="navie_bayes_2_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="navie_bayes_2_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="navie_bayes_2_files/libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="navie_bayes_2_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="navie_bayes_2_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="navie_bayes_2_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="navie_bayes_2_files/libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<style>html{ scroll-behavior: smooth; }</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+        <script type="text/javascript">
+        window.PlotlyConfig = {MathJaxConfig: 'local'};
+        if (window.MathJax) {MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}
+        if (typeof require !== 'undefined') {
+        require.undef("plotly");
+        requirejs.config({
+            paths: {
+                'plotly': ['https://cdn.plot.ly/plotly-2.9.0.min']
+            }
+        });
+        require(['plotly'], function(Plotly) {
+            window._Plotly = Plotly;
+        });
+        }
+        </script>
+        
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Naive Bayes</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<div class="cell" data-execution_count="1">
+<div class="cell-output cell-output-display" data-execution_count="1">
+<p><img src="navie_bayes_2_files/figure-html/cell-2-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p><em>Picture from DIVE INTO DEEP LEARING</em></p>
+<section id="text-data-naive-bayes-python" class="level2">
+<h2 class="anchored" data-anchor-id="text-data-naive-bayes-python">Text Data: Naive-Bayes Python:</h2>
+<section id="context" class="level3">
+<h3 class="anchored" data-anchor-id="context">Context</h3>
+<p>It is important for sentiment analysis of tweets. Text data is unstructured data. Unlike structured data, People cannot immediately get preliminary information from unstructured data. Sentiment analysis of tweets can be used to initially determine the user’s evaluation of a particular thing.</p>
+<p>Sentiment analysis, sometimes referred to as opinion mining, is a technique used in natural language processing (NLP) to determine if data is positive, negative, or neutral. Sentiment analysis on text data is popular among companies to monitor how their brands and products are perceived by consumers through online reviews and to better understand their target market and target population.</p>
+<p>Sentiment analysis is first performed on clean data. By using textblob package to analyze each twitter. And remove all unnecessary data such as emoticons, punctuation, etc. The stopwords are also removed. Data tokenization is also conducted. The number of token occurrences in each document is counted. The figure below shows the distribution of positive and negative words.</p>
+</section>
+<section id="code-and-methodology" class="level3">
+<h3 class="anchored" data-anchor-id="code-and-methodology">Code and Methodology</h3>
+<div class="cell" data-execution_count="7">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#sns.countplot(tweets_df['attitude'],label='Count').set(title='Attitude histogram')</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>plotly.offline.init_notebook_mode(connected<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly.express <span class="im">as</span> px</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>names <span class="op">=</span>[<span class="st">'Positive Attitude'</span>, <span class="st">'Negetive Attitude'</span>]</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>random_x<span class="op">=</span>[<span class="dv">885</span>,<span class="dv">143</span>]</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> px.pie(values<span class="op">=</span>random_x, names<span class="op">=</span>names,title<span class="op">=</span><span class="st">'Attitude of Twitter Text Data'</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>fig.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div id="fig-1" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+
+<div>                            <div id="cb69f945-9d3c-4ab6-bf93-cd6cf888ca29" class="plotly-graph-div" style="height:525px; width:100%;"></div>            <script type="text/javascript">                require(["plotly"], function(Plotly) {                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById("cb69f945-9d3c-4ab6-bf93-cd6cf888ca29")) {                    Plotly.newPlot(                        "cb69f945-9d3c-4ab6-bf93-cd6cf888ca29",                        [{"domain":{"x":[0.0,1.0],"y":[0.0,1.0]},"hovertemplate":"label=%{label}<br>value=%{value}<extra></extra>","labels":["Positive Attitude","Negetive Attitude"],"legendgroup":"","name":"","showlegend":true,"values":[885,143],"type":"pie"}],                        {"template":{"data":{"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"heatmapgl":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmapgl"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergl"}],"scattermapbox":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermapbox"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"#E5ECF6","showlakes":true,"showland":true,"subunitcolor":"white"},"hoverlabel":{"align":"left"},"hovermode":"closest","mapbox":{"style":"light"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"bgcolor":"#E5ECF6","radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","gridwidth":2,"linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white"},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","gridwidth":2,"linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white"},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","gridwidth":2,"linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white"}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"ternary":{"aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"bgcolor":"#E5ECF6","caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","zerolinewidth":2}}},"legend":{"tracegroupgap":0},"title":{"text":"Attitude of Twitter Text Data"}},                        {"responsive": true}                    ).then(function(){
+                            
+var gd = document.getElementById('cb69f945-9d3c-4ab6-bf93-cd6cf888ca29');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })                };                });            </script>        </div>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1: piechart of Twitter Text Data</figcaption><p></p>
+</figure>
+</div>
+</div>
+<p>The figure-1 shows that the majority of tweets have a positive attitude towards cryptocurrencies, even though the overall price of cryptocurrencies is on a downward trend and there is instability in it.</p>
+<p>The tweets marked with a positive attitude are marked as 0 and those marked with a negative attitude are marked as 1. In this way, Labeled Text Data is obtained.</p>
+<p>In this section, Naive-Bayes classifier model was choosen to classify currency data and text data. The Naive-Bayes classifier model is a basic and simple classification algorithm, but it is very powerful. This algorithm has a stable accuracy and it is fast when applied to large data. The results of the algorithm are straightforward and can be easily interpreted.</p>
+<p>After training the NB model with the training data and testing the test data, The data set was first divided into a training set and a test set. The training set is 80% of the total data and the test set is 20% of the data set. the figure-2 below represents the confusion matrix by using a heat-map, because it is more straightforward and concise.</p>
+<div class="cell" data-execution_count="13">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'Accuracy Score - </span><span class="sc">{</span>accuracy_score(y_test, yp_test)<span class="sc">}</span><span class="ss">'</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>f, ax1 <span class="op">=</span> plt.subplots(figsize <span class="op">=</span> (<span class="dv">8</span>, <span class="dv">6</span>))</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>ax1<span class="op">=</span>sns.heatmap(cm_matrix,cmap<span class="op">=</span><span class="st">"RdBu"</span>,annot<span class="op">=</span><span class="va">True</span>,square<span class="op">=</span><span class="va">True</span>,cbar_kws<span class="op">=</span>{<span class="st">'shrink'</span>: <span class="fl">0.6</span>})</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Accuracy Score - 0.7718446601941747</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div id="fig-2" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="navie_bayes_2_files/figure-html/fig-2-output-2.png" width="554" height="476" class="figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;2: Heatmap Result of Text Data</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The top left block represents True Positive: the predicted result is true and the actual value is also true.</p>
+<p>The lower right block represents True Negative: the predicted result is false and the actual value is also false.</p>
+<p>The bottom left block represents False Positive: the predicted result is true, but the actual value is false.</p>
+<p>The upper right block represents False Negative: the predicted value is false, but the actual value is true.</p>
+<p>Because the data set is unbalanced at the beginning. The number of positive words is much higher than the number of negative words. The final prediction accuracy is 0.77. From the figure below, we can see that our prediction accuracy is much higher for positive attitudes tweets, but worse for negative attitudes tweets.</p>
+<table class="table">
+<caption>Accuracy Result Table</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;"></th>
+<th style="text-align: left;">precision</th>
+<th>recall</th>
+<th style="text-align: center;">f1-score</th>
+<th style="text-align: center;">support</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">0.94</td>
+<td>0.77</td>
+<td style="text-align: center;">0.85</td>
+<td style="text-align: center;">172</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">0.40</td>
+<td>0.76</td>
+<td style="text-align: center;">0.53</td>
+<td style="text-align: center;">34</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">accuracy</td>
+<td style="text-align: left;"></td>
+<td></td>
+<td style="text-align: center;">0.77</td>
+<td style="text-align: center;">206</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">macro avg</td>
+<td style="text-align: left;">0.67</td>
+<td>0.77</td>
+<td style="text-align: center;">0.69</td>
+<td style="text-align: center;">206</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">weighted avg</td>
+<td style="text-align: left;">0.85</td>
+<td>0.77</td>
+<td style="text-align: center;">0.69</td>
+<td style="text-align: center;">206</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="world-clouds" class="level3">
+<h3 class="anchored" data-anchor-id="world-clouds">World Clouds</h3>
+<p>Word Clouds can provide a quick and informative summary, and it can help us have a simple view of the words contained in the different attitudes of tweets.</p>
+<div class="cell" data-execution_count="14">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#pos word</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>postive_words <span class="op">=</span> <span class="st">' '</span>.join([text <span class="cf">for</span> text <span class="kw">in</span> tweets_df[<span class="st">'final_tweets'</span>][tweets_df.attitude <span class="op">==</span> <span class="st">'pos'</span>]])</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>wordcloud <span class="op">=</span> WordCloud(width<span class="op">=</span><span class="dv">800</span>, height<span class="op">=</span><span class="dv">500</span>, random_state<span class="op">=</span><span class="dv">21</span>, max_font_size<span class="op">=</span><span class="dv">100</span>, relative_scaling<span class="op">=</span><span class="fl">0.5</span>).generate(postive_words)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">10</span>))</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>plt.imshow(wordcloud)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="fig-3" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="navie_bayes_2_files/figure-html/fig-3-output-1.png" width="798" height="511" class="figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;3: World Cloud :Positive Word</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="15">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#neg word</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>negitve_words <span class="op">=</span> <span class="st">' '</span>.join([text <span class="cf">for</span> text <span class="kw">in</span> tweets_df[<span class="st">'final_tweets'</span>][tweets_df.attitude <span class="op">==</span> <span class="st">'neg'</span>]])</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>wordcloud <span class="op">=</span> WordCloud(width<span class="op">=</span><span class="dv">800</span>, height<span class="op">=</span><span class="dv">500</span>, random_state<span class="op">=</span><span class="dv">21</span>, max_font_size<span class="op">=</span><span class="dv">100</span>, relative_scaling<span class="op">=</span><span class="fl">0.5</span>).generate(negitve_words)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">10</span>))</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>plt.imshow(wordcloud)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="fig-4" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="navie_bayes_2_files/figure-html/fig-4-output-1.png" width="798" height="511" class="figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;4: World Cloud :Negative Word</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="code-website" class="level3">
+<h3 class="anchored" data-anchor-id="code-website">Code Website</h3>
+<p><a href="https://github.com/anly501/anly-501-project-T1an-T1an/tree/main/codes/04-naive-bayes">Code for Naïve Bayes (NB) in Python with Labeled Text Data</a></p>
+</section>
+</section>
+<section id="currency-data-naive-bayes-python" class="level2">
+<h2 class="anchored" data-anchor-id="currency-data-naive-bayes-python">Currency Data: Naive-Bayes Python:</h2>
+<section id="context-1" class="level3">
+<h3 class="anchored" data-anchor-id="context-1">Context</h3>
+<p>First a new label was defined for further analysis. I chose bitcoinand use the formula: (close price - open price)/open price to create the new lable. This formula shows how the price of a cryptocurrency fluctuates during the day. If the result of the formula is greater than 0.3, a new label is added and the classification of bitcoin for that day is 1. If the result of the formula is less than 0.3, the classification of bitcoin for that day is 0. If the value obtained from the formula is greater than 0.3, then it means that the price of the cryptocurrency has changed significantly on that day. If the value obtained from the formula is less than 0.3, then it means that the price of the cryptocurrency has not changed too much on that day.</p>
+<div class="cell" data-execution_count="18">
+<div class="cell-output cell-output-display" data-execution_count="18">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>date</th>
+      <th>open</th>
+      <th>high</th>
+      <th>low</th>
+      <th>close</th>
+      <th>volume</th>
+      <th>exchange</th>
+      <th>M20</th>
+      <th>M5</th>
+      <th>Momentum</th>
+      <th>Return</th>
+      <th>ROI-30D</th>
+      <th>class</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2021-09-01</td>
+      <td>47121.0</td>
+      <td>49131.0</td>
+      <td>46521.0</td>
+      <td>48846.0</td>
+      <td>4.844957e+08</td>
+      <td>BTC/USD</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>N</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2021-09-02</td>
+      <td>48846.0</td>
+      <td>50407.0</td>
+      <td>48623.0</td>
+      <td>49273.0</td>
+      <td>6.025992e+08</td>
+      <td>BTC/USD</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.008742</td>
+      <td>N</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2021-09-03</td>
+      <td>49273.0</td>
+      <td>51083.0</td>
+      <td>48340.0</td>
+      <td>50024.0</td>
+      <td>7.812154e+08</td>
+      <td>BTC/USD</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.015242</td>
+      <td>N</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2021-09-04</td>
+      <td>50025.0</td>
+      <td>50564.0</td>
+      <td>49387.0</td>
+      <td>49936.0</td>
+      <td>3.602553e+08</td>
+      <td>BTC/USD</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>-0.001759</td>
+      <td>N</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2021-09-05</td>
+      <td>49936.0</td>
+      <td>51928.0</td>
+      <td>49463.0</td>
+      <td>51807.0</td>
+      <td>4.353527e+08</td>
+      <td>BTC/USD</td>
+      <td>NaN</td>
+      <td>49977.2</td>
+      <td>NaN</td>
+      <td>0.037468</td>
+      <td>N</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<p>After processing the data in python, the data is exported and analyzed with r. The first 30 columns of the data have some values of NA, so those rows containing NA are removed. The ‘label’ column and other columns are divided into two parts. The data is also normalized and all values range from -3 to +3.</p>
+<p>The number of each label was first counted in r, as shown in the Figure-5 below.</p>
+<div class="cell" data-execution_count="19">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> PIL <span class="im">import</span> Image</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>im <span class="op">=</span> Image.<span class="bu">open</span>(<span class="vs">r"../../501-project-website/images/naive-bayes/count_level_r.png"</span>) </span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>im</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="19">
+<div id="fig-5" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="navie_bayes_2_files/figure-html/fig-5-output-1.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;5: World Cloud:Negative Word</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Paired plots were generated to provide a preliminary view of the relationship between all variables.</p>
+<div class="cell" data-execution_count="20">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>im2 <span class="op">=</span> Image.<span class="bu">open</span>(<span class="vs">r"../../501-project-website/images/naive-bayes/pairs_plot_r.png"</span>) </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>im2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="20">
+<div id="fig-6" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="navie_bayes_2_files/figure-html/fig-6-output-1.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;6: Currency Data:Paired Plot</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>From Figure-6, we can see that there is a strong linear relationship between the closing price of cryptocurrencies and M20 and M5, while ROI.30D has a slight linear relationship with Momentum and the closing price. The relationship between the other variables is not easily obtained from the Paired Plot.</p>
+<p>There are many packages in R to analyze the data using the NB algorithm. Here I used the package e1071. The data set was first divided into a training set and a test set. The training set is 80% of the total data and the test set is 20% of the data set.</p>
+<p>After analysing the classification by using the NB model, the confusion matrix is shown in the figure below. The accuracy of the model for label 0 is 0.82, which is a relatively good result. However, the accuracy for label 1 is only 0.18. The overall accuracy of the model is 0.5737.</p>
+<table class="table">
+<caption>Currency Data:Result Table</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">test label</th>
+<th style="text-align: left;">test result 0</th>
+<th>1</th>
+<th style="text-align: center;">Row Total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">29</td>
+<td>5</td>
+<td style="text-align: center;">34</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">21</td>
+<td>6</td>
+<td style="text-align: center;">27</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">Column Total</td>
+<td style="text-align: left;">50</td>
+<td>11</td>
+<td style="text-align: center;">61</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">Probability</td>
+<td style="text-align: left;">0.82</td>
+<td>0.18</td>
+<td style="text-align: center;">1</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="code-website-1" class="level3">
+<h3 class="anchored" data-anchor-id="code-website-1">Code Website</h3>
+<p><a href="https://github.com/anly501/anly-501-project-T1an-T1an/tree/main/codes/04-naive-bayes">Code for Naïve Bayes (NB) in Python with Currency Data</a></p>
+</section>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>The Navie Bayes model is more appropriate for analyzing text data. The accuracy of 0.77 is a high accuracy rate. However, when the model is applied to classify currency data, the prediction accuracy is 0.81 for label 0 (the difference between the opening and closing price of the day is less than 0.3), but very low for label 1 (the difference between the opening and closing price of the day is more than 0.3).</p>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+<script src="navie_bayes_2_files/libs/quarto-html/zenscroll-min.js"></script>
+</body></html>
