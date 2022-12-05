@@ -86,16 +86,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </style>
 
 
-<script src="decision-tree_files/libs/clipboard/clipboard.min.js"></script>
-<script src="decision-tree_files/libs/quarto-html/quarto.js"></script>
-<script src="decision-tree_files/libs/quarto-html/popper.min.js"></script>
-<script src="decision-tree_files/libs/quarto-html/tippy.umd.min.js"></script>
-<script src="decision-tree_files/libs/quarto-html/anchor.min.js"></script>
-<link href="decision-tree_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="decision-tree_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="decision-tree_files/libs/bootstrap/bootstrap.min.js"></script>
-<link href="decision-tree_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="decision-tree_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="decision-tree-2_files/libs/clipboard/clipboard.min.js"></script>
+<script src="decision-tree-2_files/libs/quarto-html/quarto.js"></script>
+<script src="decision-tree-2_files/libs/quarto-html/popper.min.js"></script>
+<script src="decision-tree-2_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="decision-tree-2_files/libs/quarto-html/anchor.min.js"></script>
+<link href="decision-tree-2_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="decision-tree-2_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="decision-tree-2_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="decision-tree-2_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="decision-tree-2_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
@@ -126,13 +126,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </header>
 
-<section id="method-decision-tree" class="level3">
-<h3 class="anchored" data-anchor-id="method-decision-tree">Method: Decision Tree</h3>
-<p>A decision tree is a predictive model used in machine learning; it depicts the mapping relationship between object attributes and object values. Each leaf node in the tree corresponds to the value of the item represented by the path from the root node to that leaf node, whereas each diverging path in the tree represents a potential attribute value. Data mining methods that typically employ decision trees include data analysis and prediction.</p>
-<p>My data contains multiple columns with numerical values, such as open price, close price, volumn, etc. Our labels are divided into 0 and 1. 1 means that the price of the cryptocurrency moved more than 0.3 on the day, and 0 means that the price of the cryptocurrency moved less than 0.3.</p>
-<p>Since the data sample is not very large, decision trees can be used to analyze small and medium-sized data. Technical teams and stakeholders may easily understand a decision tree model since it is so obvious.</p>
-<p><em>Library packages</em></p>
 <div class="cell" data-execution_count="1">
+<div class="cell-output cell-output-display" data-execution_count="1">
+<p><img src="decision-tree-2_files/figure-html/cell-2-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p><em>Picture from Flickr/thomas</em></p>
+<section id="method-decision-tree" class="level2">
+<h2 class="anchored" data-anchor-id="method-decision-tree">Method: Decision Tree</h2>
+<p>A decision tree is a predictive model used in machine learning; it depicts the mapping relationship between object attributes and object values. Each leaf node in the tree corresponds to the value of the item represented by the path from the root node to that leaf node, whereas each diverging path in the tree represents a potential attribute value. Data mining methods that typically employ decision trees include data analysis and prediction.</p>
+<p>My data contains multiple columns with numerical values, such as open price, close price, volume, etc. Our labels are divided into 0 and 1. 1 means that the price of the cryptocurrency moved more than 0.3 on the day, and 0 means that the price of the cryptocurrency moved less than 0.3.</p>
+<p>Since the data sample is not very large, decision trees can be used to analyze small and medium-sized data. Technical teams and stakeholders may easily understand a decision tree model since it is more obvious.</p>
+<section id="code-and-methodology" class="level3">
+<h3 class="anchored" data-anchor-id="code-and-methodology">Code and Methodology</h3>
+<p><strong>Library packages</strong></p>
+<div class="cell" data-execution_count="2">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -152,7 +160,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn <span class="im">import</span> metrics <span class="co">#Import scikit-learn metrics module for accuracy calculation</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div class="cell" data-execution_count="2">
+<div class="cell" data-execution_count="3">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>cur <span class="op">=</span> pd.read_csv(<span class="st">'../../data/01-modified-data/x_naive_bayes_r.csv'</span>)</span>
@@ -172,13 +180,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell-output cell-output-display">
 <div id="fig-polar" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
-<p><img src="decision-tree_files/figure-html/fig-polar-output-1.png" width="805" height="698" class="figure-img"></p>
+<p><img src="decision-tree-2_files/figure-html/fig-polar-output-1.png" width="805" height="698" class="figure-img"></p>
 <p></p><figcaption class="figure-caption">Figure&nbsp;1: Heatmap</figcaption><p></p>
 </figure>
 </div>
 </div>
 </div>
-<div class="cell" data-execution_count="3">
+<p>Figure-1 shows some basic relationships between all variables and these relationships provide brief summary information. Open price, close price, M5, and M20 have a significantly strong relation with each other, but volume does not. Volume has a slightly negative relationship with the return, which is quite interesting. It is not true that the higher the transaction volume, the higher the return on investment. Only wise choices will bring good returns to most investors.</p>
+<div class="cell" data-execution_count="4">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> pd.read_csv(<span class="st">'../../data/01-modified-data/y_naive_bayes_r.csv'</span>)</span>
@@ -191,16 +200,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell-output cell-output-display">
 <div id="fig-polar1" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
-<p><img src="decision-tree_files/figure-html/fig-polar1-output-1.png" width="558" height="465" class="figure-img"></p>
+<p><img src="decision-tree-2_files/figure-html/fig-polar1-output-1.png" width="558" height="465" class="figure-img"></p>
 <p></p><figcaption class="figure-caption">Figure&nbsp;2: Distribution of Class Labels</figcaption><p></p>
 </figure>
 </div>
 </div>
 </div>
-<p>Figure 2 shows the distribution of the class labels. Theoretically, if our model is accurate enough, the distribution of the class labels of our predictions will be very close to figure 2.</p>
-<section id="baseline-model-for-comparison" class="level4">
-<h4 class="anchored" data-anchor-id="baseline-model-for-comparison">Baseline Model for Comparison</h4>
-<div class="cell" data-execution_count="4">
+<p>Figure 2 shows the distribution of the class labels. The instability of the cryptocurrency market can also be verified in fig-2. The number of days with a volatility price greater than 0.3 and the number of days with a volatility price less than 0.3 are essentially the same over a period of almost one year. And unlike the cryptocurrency market, in the U.S. stock market, when the S&amp;P 500 index falls 7% or 13% from the previous day’s closing price, trading in the national securities market is suspended for 15 minutes, and when the S&amp;P 500 index falls 20% from the previous day’s closing price, trading is halted for the day. However, the cryptocurrency market does not have a Circuit breaker, so the cryptocurrency market is a high-risk but also high-return investment option. Theoretically, if our model is accurate enough, the distribution of the class labels of our predictions will be very close to the result in figure 2.</p>
+</section>
+<section id="baseline-model-for-comparison" class="level3">
+<h3 class="anchored" data-anchor-id="baseline-model-for-comparison">Baseline Model for Comparison</h3>
+<div class="cell" data-execution_count="5">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>y_0 <span class="op">=</span> y[y[<span class="st">'label'</span>] <span class="op">==</span> <span class="dv">0</span>].count().values</span>
@@ -213,7 +223,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 The number of 1 in the label is [146]</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="5">
+<div class="cell" data-execution_count="6">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> generate_label_data(class_labels, weights,N<span class="op">=</span><span class="dv">334</span>):</span>
@@ -231,12 +241,12 @@ The number of 1 in the label is [146]</code></pre>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>-----GENERATING DATA-----
-unique entries: dict_keys([1, 0])
-count of labels: dict_values([148, 186])
-probability of labels: [0.44311377 0.55688623]</code></pre>
+unique entries: dict_keys([0, 1])
+count of labels: dict_values([185, 149])
+probability of labels: [0.55389222 0.44610778]</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="6">
+<div class="cell" data-execution_count="7">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> accuracy_score</span>
@@ -246,12 +256,12 @@ probability of labels: [0.44311377 0.55688623]</code></pre>
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>class_report_ran<span class="op">=</span>pd.DataFrame(class_report_ran).transpose()</span>
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>class_report_ran</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="6">
-<div id="tbl-planets" class="anchored">
+<div class="cell-output cell-output-display" data-execution_count="7">
+<div id="tbl-planets1" class="anchored">
 
 <div>
 
-<table class="dataframe table table-sm table-striped"><caption>Table&nbsp;1:  Classification Report Matrix </caption>
+<table class="dataframe table table-sm table-striped"><caption>Table&nbsp;1:  Random Classfier:Classification Report Matrix </caption>
   <thead>
     <tr>
       <th></th>
@@ -264,38 +274,38 @@ probability of labels: [0.44311377 0.55688623]</code></pre>
   <tbody>
     <tr>
       <th>0</th>
-      <td>0.602151</td>
-      <td>0.595745</td>
-      <td>0.598930</td>
-      <td>188.000000</td>
+      <td>0.556757</td>
+      <td>0.547872</td>
+      <td>0.552279</td>
+      <td>188.0</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>0.486486</td>
-      <td>0.493151</td>
-      <td>0.489796</td>
-      <td>146.000000</td>
+      <td>0.429530</td>
+      <td>0.438356</td>
+      <td>0.433898</td>
+      <td>146.0</td>
     </tr>
     <tr>
       <th>accuracy</th>
-      <td>0.550898</td>
-      <td>0.550898</td>
-      <td>0.550898</td>
-      <td>0.550898</td>
+      <td>0.500000</td>
+      <td>0.500000</td>
+      <td>0.500000</td>
+      <td>0.5</td>
     </tr>
     <tr>
       <th>macro avg</th>
-      <td>0.544319</td>
-      <td>0.544448</td>
-      <td>0.544363</td>
-      <td>334.000000</td>
+      <td>0.493143</td>
+      <td>0.493114</td>
+      <td>0.493089</td>
+      <td>334.0</td>
     </tr>
     <tr>
       <th>weighted avg</th>
-      <td>0.551591</td>
-      <td>0.550898</td>
-      <td>0.551225</td>
-      <td>334.000000</td>
+      <td>0.501143</td>
+      <td>0.500000</td>
+      <td>0.500532</td>
+      <td>334.0</td>
     </tr>
   </tbody>
 </table>
@@ -303,10 +313,13 @@ probability of labels: [0.44311377 0.55688623]</code></pre>
 </div>
 </div>
 </div>
+<p>For the baseline model for comparison, a random classifier was generated. This dataset only has two labels, which are 0 and 1(0 means that the price change of the cryptocurrency for the day is less than 0.3, and 1 means that the price change of the cryptocurrency for the day is greater than 0.3), and this label is a binary classifier. The probability of 0 is 0.56, and the probability of 0 is 0.44.</p>
+<p>From The accuracy of the Random classifier is about 0.5. If the accuracy of the final model is higher than 0.5, the accuracy of the model is acceptable.</p>
 </section>
-<section id="feature-selection" class="level4">
-<h4 class="anchored" data-anchor-id="feature-selection">Feature Selection</h4>
-<div class="cell" data-execution_count="7">
+<section id="feature-selection" class="level3">
+<h3 class="anchored" data-anchor-id="feature-selection">Feature Selection</h3>
+<p>There are many variables in the data set. Too many variables can bring noise into our data. This noise can lead to overfitting of the final model results. Overfitting results are not accurate enough and can cause us to overestimate the accuracy of the final model. Feature selection also reduces the number of variables to be selected and reduces the running time required for the code. The runtime in small data may not change much after feature selection, but the impact of feature selection can be significant when the model is applied to large data. It is also clear from Figure -1 that not all variables have a significant relationship with each other.</p>
+<div class="cell" data-execution_count="8">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">#find features : Tree-based feature selection</span></span>
@@ -326,13 +339,13 @@ probability of labels: [0.44311377 0.55688623]</code></pre>
 <span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>res <span class="op">=</span> [X_new[<span class="dv">0</span>],X_new[<span class="dv">1</span>]]</span>
 <span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>res</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="7">
-<pre><code>[array([0.66402251, 0.43397893, 1.72230528, 0.161694  ]),
- array([ 0.62620066, -0.46276834,  1.89393111,  0.062606  ])]</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<pre><code>[array([0.66402251, 0.43397893, 0.37309507, 1.72230528, 0.161694  ]),
+ array([ 0.62620066, -0.46276834,  0.37962476,  1.89393111,  0.062606  ])]</code></pre>
 </div>
 </div>
-<p>After finding the best feature(s), only variable ‘close’ was chosen.</p>
-<div class="cell" data-execution_count="8">
+<p>Even though many variables can be selected, only the variable ‘close’ was chosen after finding the best feature(s). The closing price can be used to classify the daily price fluctuations of cryptocurrencies.</p>
+<div class="cell" data-execution_count="9">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>feature_cols <span class="op">=</span> [<span class="st">'close'</span>]</span>
@@ -345,14 +358,14 @@ probability of labels: [0.44311377 0.55688623]</code></pre>
 <div class="cell-output cell-output-display">
 <div id="fig-polar2" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
-<p><img src="decision-tree_files/figure-html/fig-polar2-output-1.png" width="472" height="473" class="figure-img"></p>
+<p><img src="decision-tree-2_files/figure-html/fig-polar2-output-1.png" width="472" height="473" class="figure-img"></p>
 <p></p><figcaption class="figure-caption">Figure&nbsp;3: Pairplot</figcaption><p></p>
 </figure>
 </div>
 </div>
 </div>
-<p><em>Split dataset into training set and test set</em></p>
-<div class="cell" data-execution_count="9">
+<p><strong>Split dataset into training set and test set</strong></p>
+<div class="cell" data-execution_count="10">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">1234</span>)</span>
@@ -374,9 +387,10 @@ y_test.shape        : (101, 1)</code></pre>
 </div>
 </div>
 </section>
-<section id="model-tuning" class="level4">
-<h4 class="anchored" data-anchor-id="model-tuning">Model Tuning</h4>
-<div class="cell" data-execution_count="10">
+<section id="model-tuning" class="level3">
+<h3 class="anchored" data-anchor-id="model-tuning">Model Tuning</h3>
+<p>Initial models often have the common problem of overfitting or underfitting and the initial results of the model are not optimal, so model tuning is necessary to be applied. In order to prevent overfitting or underfitting of the model, the values of different depths of tree are compared and the value that minimizes the test MAE error and maximizes the accuracy of the model is derived.</p>
+<div class="cell" data-execution_count="11">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> mean_absolute_percentage_error</span>
@@ -432,7 +446,7 @@ hyperparam = 30
  test error: 0.42574257425742573</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="11">
+<div class="cell" data-execution_count="12">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate plot</span></span>
@@ -452,13 +466,13 @@ hyperparam = 30
 <div class="cell-output cell-output-display">
 <div id="fig-polar3" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
-<p><img src="decision-tree_files/figure-html/fig-polar3-output-2.png" width="593" height="428" class="figure-img"></p>
+<p><img src="decision-tree-2_files/figure-html/fig-polar3-output-2.png" width="593" height="428" class="figure-img"></p>
 <p></p><figcaption class="figure-caption">Figure&nbsp;4: MAE vs Dept of Tree</figcaption><p></p>
 </figure>
 </div>
 </div>
 </div>
-<div class="cell" data-execution_count="12">
+<div class="cell" data-execution_count="13">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Setup arrays to store train and test accuracies</span></span>
@@ -493,14 +507,14 @@ hyperparam = 30
 <div class="cell-output cell-output-display">
 <div id="fig-polar4" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
-<p><img src="decision-tree_files/figure-html/fig-polar4-output-1.png" width="601" height="448" class="figure-img"></p>
+<p><img src="decision-tree-2_files/figure-html/fig-polar4-output-1.png" width="601" height="448" class="figure-img"></p>
 <p></p><figcaption class="figure-caption">Figure&nbsp;5: Testing&amp;Training Avvuracy vs Dept of Tree</figcaption><p></p>
 </figure>
 </div>
 </div>
 </div>
-<p>From fig4 and fig5, the model has the best accuracy when max_depth = 10.</p>
-<div class="cell" data-execution_count="13">
+<p>From fig-4 and fig-5, the model has the best accuracy when max_depth = 10. The accuracy of the training set always increases when the values of the depth of the tree increase, hence we only need to consider which values of the depth of the tree can cause the max training accuracy. the model also has the least test MAE error, Hence max_depth = 10 will be chosen for further analysis.</p>
+<div class="cell" data-execution_count="14">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create Decision Tree classifer object</span></span>
@@ -519,8 +533,8 @@ hyperparam = 30
 <pre><code>Accuracy: 0.58</code></pre>
 </div>
 </div>
-<p><em>Training &amp; Testing errors</em></p>
-<div class="cell" data-execution_count="14">
+<p><strong>Training &amp; Testing errors</strong></p>
+<div class="cell" data-execution_count="15">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># INITIALIZE MODEL </span></span>
@@ -543,8 +557,8 @@ hyperparam = 30
  test error: 0.42</code></pre>
 </div>
 </div>
-<p><em>Plots of the Decision Tree</em></p>
-<div class="cell" data-execution_count="15">
+<p><strong>Plots of the Decision Tree</strong></p>
+<div class="cell" data-execution_count="16">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.tree <span class="im">import</span> export_graphviz</span>
@@ -560,16 +574,16 @@ hyperparam = 30
 <span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>graph.write_png(<span class="st">'../../501-project-website/images/decision-tree/decision-tree-currency.png'</span>)</span>
 <span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>Image(graph.create_png())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="15">
+<div class="cell-output cell-output-display" data-execution_count="16">
 <div id="fig-polar5" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
-<p><img src="decision-tree_files/figure-html/fig-polar5-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="decision-tree-2_files/figure-html/fig-polar5-output-1.png" class="img-fluid figure-img"></p>
 <p></p><figcaption class="figure-caption">Figure&nbsp;6: Decision Tree</figcaption><p></p>
 </figure>
 </div>
 </div>
 </div>
-<div class="cell" data-execution_count="16">
+<div class="cell" data-execution_count="17">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> accuracy_score</span>
@@ -586,16 +600,16 @@ hyperparam = 30
 <span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"POSITIVE PRECISION (Y=1):"</span>,precision_score(y_data,y_pred,pos_label<span class="op">=</span><span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p><em>Classification Report Matrix</em></p>
-<div class="cell" data-execution_count="17">
+<p><strong>Classification Report Matrix</strong></p>
+<div class="cell" data-execution_count="18">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>class_report_test<span class="op">=</span>classification_report(y_test,yp_test, output_dict<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>class_report_test<span class="op">=</span>pd.DataFrame(class_report_test).transpose()</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>class_report_test</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="17">
-<div id="tbl-planets1" class="anchored">
+<div class="cell-output cell-output-display" data-execution_count="18">
+<div id="tbl-planets2" class="anchored">
 
 <div>
 
@@ -652,15 +666,15 @@ hyperparam = 30
 </div>
 </div>
 </section>
-<section id="final-results" class="level4">
-<h4 class="anchored" data-anchor-id="final-results">Final Results</h4>
-<p>The accuracy after running the random classifier is 0.50. From table 1, the final result is provided. The model accuracy is 0.58, which is slightly higher than the accuracy from the random classifier, and the error rate is 0.42. This accuracy is not good enough because the price of crypocurrency changed dramatically in recent month which is quite difficult to predict.</p>
 </section>
-<section id="conclusions" class="level4">
-<h4 class="anchored" data-anchor-id="conclusions">Conclusions</h4>
+<section id="final-results" class="level2">
+<h2 class="anchored" data-anchor-id="final-results">Final Results</h2>
+<p>The accuracy after running the random classifier is about 0.50. From table 1, the final result is provided. The model accuracy is 0.58, which is slightly higher than the accuracy from the random classifier, and the error rate is 0.42. This accuracy is not good enough because the price of cryptocurrency changed dramatically in recent months so the price of most cryptocurrency is quite difficult to predict.</p>
+</section>
+<section id="conclusions" class="level2">
+<h2 class="anchored" data-anchor-id="conclusions">Conclusions</h2>
 <p>Over the past year, the price of cryptocurrencies has been very volatile, so the accuracy of our model is not very high. Epidemic factors and changes in graphics card prices also have uncontrollable price movements on cryptocurrencies.</p>
-<p>There is a difference between cryptocurrencies and stocks. We can predict the stock market through company annual reports, market data and government policies, but the entire cryptocurrency market can fluctuate dramatically even by a single tweet. This trend also indicates that cryptocurrencies are not a good investment.</p>
-</section>
+<p>There is a difference between cryptocurrencies and stocks. We can predict the stock market through company annual reports, market data, and government policies, but the entire cryptocurrency market can fluctuate dramatically even by a single tweet. This trend also indicates that cryptocurrencies are not a good investment.</p>
 </section>
 
 </main>

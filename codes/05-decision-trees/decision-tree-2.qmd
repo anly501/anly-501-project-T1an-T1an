@@ -5,7 +5,15 @@ format:
     code-fold: true
 jupyter: python3
 ---
-### Method: Decision Tree
+```{python}
+#| echo: false
+from PIL import Image
+myImage = Image.open('../../501-project-website/images/decision-tree/cover.jpeg')
+myImage
+```
+*Picture from Flickr/thomas*
+
+## Method: Decision Tree
 
 A decision tree is a predictive model used in machine learning; it depicts the mapping relationship between object attributes and object values. Each leaf node in the tree corresponds to the value of the item represented by the path from the root node to that leaf node, whereas each diverging path in the tree represents a potential attribute value. Data mining methods that typically employ decision trees include data analysis and prediction.
 
@@ -13,7 +21,9 @@ My data contains multiple columns with numerical values, such as open price, clo
 
 Since the data sample is not very large, decision trees can be used to analyze small and medium-sized data. Technical teams and stakeholders may easily understand a decision tree model since it is more obvious.
 
-*Library packages*
+### Code and Methodology 
+
+**Library packages**
 ```{python}
 import pandas as pd
 import numpy as np
@@ -66,7 +76,7 @@ plt.show()
 Figure 2 shows the distribution of the class labels. The instability of the cryptocurrency market can also be verified in fig-2. The number of days with a volatility price greater than 0.3 and the number of days with a volatility price less than 0.3 are essentially the same over a period of almost one year. And unlike the cryptocurrency market, in the U.S. stock market, when the S&P 500 index falls 7% or 13% from the previous day's closing price, trading in the national securities market is suspended for 15 minutes, and when the S&P 500 index falls 20% from the previous day's closing price, trading is halted for the day. However, the cryptocurrency market does not have a Circuit breaker, so the cryptocurrency market is a high-risk but also high-return investment option. Theoretically, if our model is accurate enough, the distribution of the class labels of our predictions will be very close to the result in figure 2. 
 
 
-#### Baseline Model for Comparison
+### Baseline Model for Comparison
 ```{python}
 y_0 = y[y['label'] == 0].count().values
 y_1 = y[y['label'] == 1].count().values
@@ -105,7 +115,7 @@ For the baseline model for comparison, a random classifier was generated. This d
 
 From The accuracy of the Random classifier is about 0.5. If the accuracy of the final model is higher than 0.5, the accuracy of the model is acceptable. 
 
-#### Feature Selection
+### Feature Selection
  There are many variables in the data set. Too many variables can bring noise into our data. This noise can lead to overfitting of the final model results. Overfitting results are not accurate enough and can cause us to overestimate the accuracy of the final model. Feature selection also reduces the number of variables to be selected and reduces the running time required for the code. The runtime in small data may not change much after feature selection, but the impact of feature selection can be significant when the model is applied to large data. It is also clear from Figure -1 that not all variables have a significant relationship with each other.
 ```{python}
 #find features : Tree-based feature selection
@@ -141,9 +151,7 @@ plt.show()
 ```
 
 
-
-
-*Split dataset into training set and test set*
+**Split dataset into training set and test set**
 ```{python}
 np.random.seed(1234)
 from sklearn.model_selection import train_test_split
@@ -159,7 +167,7 @@ print("y_test.shape		:",y_test.shape)
 
 
 
-#### Model Tuning
+### Model Tuning
 Initial models often have the common problem of overfitting or underfitting and the initial results of the model are not optimal, so model tuning is necessary to be applied. In order to prevent overfitting or underfitting of the model, the values of different depths of tree are compared and the value that minimizes the test MAE error and maximizes the accuracy of the model is derived.
 
 ```{python}
@@ -270,9 +278,7 @@ score = metrics.accuracy_score(y_test, y_pred)
 print("Accuracy:",round(score,2))
 ```
 
-
-
-*Training & Testing errors*
+**Training & Testing errors**
 ```{python}
 # INITIALIZE MODEL 
 model = DecisionTreeClassifier(criterion="gini", max_depth=10)
@@ -290,8 +296,7 @@ print(" train error:",round(err1,2))
 print(" test error:" ,round(err2,2))
 ```
 
-
-*Plots of the Decision Tree*
+**Plots of the Decision Tree**
 
 ```{python}
 #| label: fig-polar5
@@ -325,7 +330,7 @@ def confusion_plot(y_data,y_pred):
     print("POSITIVE PRECISION (Y=1):",precision_score(y_data,y_pred,pos_label=1))
 ```
 
-*Classification Report Matrix*
+**Classification Report Matrix**
 ```{python}
 
 #| label: tbl-planets2
@@ -336,10 +341,10 @@ class_report_test
 ```
 
 
-#### Final Results
+## Final Results
 The accuracy after running the random classifier is about 0.50. From table 1, the final result is provided. The model accuracy is 0.58, which is slightly higher than the accuracy from the random classifier, and the error rate is 0.42. This accuracy is not good enough because the price of cryptocurrency changed dramatically in recent months so the price of most cryptocurrency is quite difficult to predict.
 
-#### Conclusions
+## Conclusions
 Over the past year, the price of cryptocurrencies has been very volatile, so the accuracy of our model is not very high. Epidemic factors and changes in graphics card prices also have uncontrollable price movements on cryptocurrencies.
 
 

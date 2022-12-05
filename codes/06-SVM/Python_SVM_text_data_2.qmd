@@ -83,6 +83,7 @@ sns.displot(data['label'])
 plt.show()
 
 ```
+Figure-1 shows the frequency of tweets with negative attitudes and tweets with positive attitudes. The number of tweets with positive attitudes is much higher than the number of tweets with negative attitudes, and the number of positive attitudes is about 6 times higher than the number of negative attitudes. This shows that although the overall market trend of crypto is not stable, the majority of people still have a positive attitude towards cryptocurrency from the data.
 
 #### Step 4: Normalized data
 
@@ -256,6 +257,8 @@ From the classification report for test data and the consusion matrix, the accur
 From the above SVM model, we can see that the model is very effective in predicting sentiment analysis. After collecting a certain amount of data, the SVM model is more accurate than the NB model but is relatively time-consuming. 
 
 SVM is a very powerful model and performs well on a variety of datasets. SVM allows decision bounds to be complex, even if the data has only a few features. It performs well on data with few features and many features, but does not perform well for scaling the number of samples. Running SVM on data with up to 10,000 samples may perform well, but if the amount of data reaches 1,000,000 rows or even larger, there may be challenges in terms of runtime and memory usage. another disadvantage of SVM is that pre-processing the data and tuning the parameters requires great care. For example, random forests require little or no preprocessing.
+
+Although the cryptocurrency market is highly risky, its advantages such as transaction speed, transaction costs, accessibility, security, etc. still make it a popular investment choice for many investors. Most of the investors are still positive about it.
 
 ### Pro and Cons
 
