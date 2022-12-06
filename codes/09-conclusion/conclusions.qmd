@@ -1,0 +1,73 @@
+---
+title: "Project Conclusion"
+format: 
+  html:
+    smooth-scroll: true
+    code-fold: true
+    theme: 
+      light: cosmo
+      dark: darkly 
+jupyter: python3
+---
+
+```{python}
+#| echo: false
+from PIL import Image
+myImage = Image.open('../../501-project-website/images/conlcusions/cover.png')
+myImage
+```
+*Picture from KRIPTOMAT*
+
+## Overview
+
+Since their rise in 2009, the number of cryptocurrencies has exploded, and there are now more than 2,000 of them. Some of the “mainstream” cryptocurrencies include Bitcoin, Ether, and Litecoin, all of which are among the most traded and highest market-capitalized cryptocurrencies in the world. Like all cryptocurrencies, mainstream coins are digital assets that use computer technology and complex mathematics to protect and validate transactions. Unlike traditional currencies, cryptocurrencies are not currently issued or backed by a central authority. Instead, they operate in computer networks and are based on blockchain technology that perpetuates transaction records and has a “consensus mechanism” that makes it impossible to change the records without network consensus.
+
+The price of cryptocurrencies can fluctuate dramatically, and there are multiple factors that can cause this volatility. Speculation can have a significant impact on cryptocurrency prices. Bitcoin's experienced a major bull market in 2017, with prices rising from around $1,000 to nearly $20,000, but a crash in 2018 could reflect the role of speculation.
+But for today's cryptocurrencies, are the issuers issuing safe currency? Have prices fallen to a level that justifies re-buying? Cryptocurrencies are defined as speculative assets with no basis for valuation. For the remaining speculators, whether or not they are prepared for a possible systemic crisis is the question that should be considered.
+
+
+Cryptocurrencies can be very sensitive to news stories. News ranging from the CEO of JPMorgan Chase calling bitcoin a "fraud" to the network being hacked can have an impact on the price of bitcoin. Similarly, economic and political events affecting fiat currencies may cause traders to lose confidence in these more traditional transactions and turn to cryptocurrencies, driving up prices. There is also a risk of a run on cryptocurrencies. The dollar price of bitcoin is down 77% from its peak in November 2021. The price of bitcoin was nearly decimated when LUNA fell in May 2022. The price of bitcoin has sunk more than 20% since the November 2022 hedge fund issues tied to FTX, which triggered a run on FTX. These are all risks to face when investing in cryptocurrencies.
+
+
+Cross-border regulation must keep pace with the rapid growth of cryptocurrencies. This is a complex issue due to the decentralized nature of cryptocurrencies, with international disagreement centered on the legality of the currency's identity, and even whether cryptocurrencies should be outlawed is debated. As more and more cryptocurrencies enter the market, the status of existing mainstream coins may be changed, supported by faster and more efficient networks. Events in the cryptocurrency market in 2022 also suggest the need for stricter government regulation of stablecoins through legislation. The risks that digital assets pose to investors. After the collapse of the FTX exchange, billions of dollars of customer funds were lost and investors suffered greatly.
+
+## Answers about Topic
+
+### Cryptocurrency Market
+
+#### Investment Recommendations
+It is important for investors to maintain a diversified portfolio that includes several different types of investments to reduce their overall risk, but as seen in the previous FTX data for the correlation of ten coins, the average correlation between the major altcoins is 0.9. This means that in 90% of cases cryptocurrencies grow and decline. Over the past year, the price of cryptocurrencies has been very volatile, so the accuracy of the model is not very high. For investors, the excessive interdependence of assets presents an obstacle to effective portfolio diversification. It also increases investment risk.
+
+#### The Impact of COVID-19
+
+An in-depth study of the top 10 coins on the FTX exchange, based on daily volume changes in different coins on the FTX exchange. These volumes have a small downward trend in the number of coins traded from 2021 to 2022. Trading volumes peaked in late March and May 2022. Specifically, due to the LUNA price break and the ETH chain merger, those events led to high market volatility and changed investors' willingness to trade at that time. Thus, it seems that the epidemic had little impact on the language virtual currency market.
+
+#### Policy and People's Will
+
+Each country has passed or is working on its own cryptocurrency legislation. Analyzing people's opinions about virtual currencies on mainstream U.S. social media Twitter, overall, 86.1% of people have a positive attitude about it.
+
+#### Volatility
+
+The price of cryptocurrencies has been very volatile from 2021 to mid-2022. The decision tree model has an accuracy of 0.58, which is slightly more accurate than the stochastic classifier, with an error rate of 0.42. this accuracy is not good enough because the price of cryptocurrencies has changed dramatically in the last month, which is quite difficult to predict.
+
+Given the lack of understanding and rules, current trading is highly speculative. Investors are betting on prices going up or down, and these speculative bets create sudden inflows or outflows that lead to high volatility. Cryptocurrencies are not controlled by any entity in the traditional sense like fiat currencies, stocks, or bonds. As cryptocurrencies become more popular and accepted, more investors will understand the factors that influence their movement. Until then, much of the movement is speculative in nature, as investors buy or sell based on sentiment. That is why the volatility of virtual currencies is very high and unpredictable.
+
+
+### Cryptocurrency Fature
+
+In terms of price trends, Bitcoin and Ethereum are down more than 50% from their all-time highs at the end of 2021. The entire cryptocurrency market is essentially at a standstill. For the current market trend, cryptocurrency prices are likely to fall further. The U.S. government is increasingly expressing interest in new regulations for cryptocurrencies. Interest in cryptocurrencies remains high: it is a hot topic not only for investors, but also in pop culture.
+
+
+## Conclusion
+
+U.S. officials have shown particular interest in the regulation of stablecoins, especially after the recent Terra Luna collapse. in May, the cryptocurrency market went into freefall, causing the stablecoin TerraUSD (UST) to devalue from the U.S. dollar, which in turn caused its linked cryptocurrency, Luna, to also collapse. Especially after the catastrophic events in the FTX exchange cryptocurrency market, it is clear that strict regulation may soon be on the horizon. Hopefully, the addition of government regulation to the market will result in less systemic losses for investors.
+
+## Acknowledgements
+
+First, I would like to acknowledge Professor James Hickman,  Professor Ben Houghton, and all TA members, for their thoughtful comments and suggestions on this project. In addition, I would also like to thank DSAN and all members for all of their thoughtful guidance. Finally, I cannot forget to thank my family and friends for all their unconditional support during this very intense academic year.
+```{python}
+#| echo: false
+myImage2 = Image.open('../../501-project-website/images/conlcusions/thankyou.png')
+myImage2 = myImage2.resize((1500, 1))
+myImage2
+```
